@@ -1,4 +1,4 @@
-import { MEDAL_COLORS, MEDAL_NAMES, REGION_COLORS, countryName, countryUrl, esc, uniUrl } from "../core.js";
+import { MEDAL_COLORS, MEDAL_NAMES, REGION_COLORS, countryName, countryUrl, esc, medalStrip, uniUrl } from "../core.js";
 import { categoryAxis, colors, donut, plot, valueAxis } from "../charts.js";
 import { card, chartCard, filterRows, filters, grid, startPage, table } from "../shell.js";
 
@@ -39,18 +39,15 @@ startPage({
       const c = colors();
       const a = grid(holder);
 
-      const top = list.slice(0, Math.min(state.top, 20)).reverse();
-      plot(chartCard(a, { title: "Las grandes potencias", span: 7, height: Math.max(360, top.length * 26 + 50) }), {
-        tooltip: { trigger: "axis", axisPointer: { type: "shadow" } },
-        grid: { left: 8, right: 18, top: 8, bottom: 34, containLabel: true },
-        xAxis: valueAxis({ minInterval: 1 }),
-        yAxis: categoryAxis(top.map((e) => { const n = label(e.key); return n.length > 28 ? `${n.slice(0, 27)}…` : n; }), { axisLabel: { color: c.ink, interval: 0 } }),
-        series: MEDALS.map((m) => ({ name: MEDAL_NAMES[m], type: "bar", stack: "m", barMaxWidth: 18, itemStyle: { color: MEDAL_COLORS[m] }, data: top.map((e) => e[m]) })),
-      }, { onClick: (p) => { location.href = link(top[p.dataIndex].key); } });
+      const top = list.slice(0, Math.min(state.top, 20));
+      card(a, {
+        title: "Las grandes potencias", span: 7,
+        html: `<ol class="medal-rows">${top.map((e) => `<li><a href="${link(e.key)}"><span class="nm">${esc(label(e.key))}</span><span class="medals">${medalStrip(e, 17)}</span></a></li>`).join("")}</ol>`,
+      });
 
       const byRegion = new Map();
       for (const r of awards) byRegion.set(r.region, (byRegion.get(r.region) ?? 0) + 1);
-      donut(chartCard(a, { title: "Medallas por región", span: 5, height: Math.max(360, top.length * 26 + 50) }),
+      donut(chartCard(a, { title: "Medallas por región", span: 5, height: 460 }),
         [...byRegion].sort((x, y) => y[1] - x[1]).map(([region, value]) => ({ name: data.regions[region] ?? region, value, itemStyle: { color: REGION_COLORS[region] } })),
         { center: String(awards.length) });
 

@@ -1,10 +1,10 @@
 // Data loading and the derived indexes every page reads.
+import { fold } from "./fuzzy.js";
+
+export { fold };
 
 export const esc = (text) =>
   String(text).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
-
-export const fold = (text) =>
-  text.normalize("NFD").replace(/\p{M}/gu, "").toLowerCase();
 
 export const avg = (values) => (values.length ? values.reduce((sum, v) => sum + v, 0) / values.length : 0);
 
@@ -93,6 +93,15 @@ export const medalCounts = (rows) => ({
   silver: rows.filter((r) => r.medal === "silver").length,
   bronze: rows.filter((r) => r.medal === "bronze").length,
 });
+
+const MEDAL_RIBBONS = { gold: "#af3227", silver: "#2f6aa3", bronze: "#6d222e" };
+
+// One small medal with its ribbon.
+export const medalIcon = (kind, size = 20) => `<svg class="medal" width="${size}" height="${Math.round(size * 1.3)}" viewBox="0 0 20 26" role="img" aria-label="${MEDAL_NAMES[kind]}"><title>${MEDAL_NAMES[kind]}</title><path d="M5 0h4l3 9H8zM15 0h-4L8 9h4z" fill="${MEDAL_RIBBONS[kind]}"/><circle cx="10" cy="16.5" r="8.5" fill="${MEDAL_COLORS[kind]}" stroke="#0003"/><circle cx="10" cy="16.5" r="5.8" fill="none" stroke="#fff8" stroke-width="1.2"/><path d="m10 12.6 1.2 2.5 2.7.4-2 1.9.5 2.7-2.4-1.3-2.4 1.3.5-2.7-2-1.9 2.7-.4z" fill="#fff" fill-opacity=".85"/></svg>`;
+
+// Every medal of a record, gold first.
+export const medalStrip = (counts, size = 20) => ["gold", "silver", "bronze"]
+  .map((kind) => medalIcon(kind, size).repeat(counts[kind] ?? 0)).join("");
 
 const CREST_COLORS = [
   ["#4984be", "#fbf4e4"], ["#af3227", "#fbf4e4"], ["#fdb830", "#2b0d12"],

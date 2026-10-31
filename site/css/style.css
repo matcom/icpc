@@ -93,7 +93,7 @@ th, td { padding: 5px 8px; border-bottom: 1px solid var(--line); text-align: lef
 th { color: var(--dim); font-weight: 400; position: sticky; top: 0; background: var(--panel); }
 .n { text-align: right; font-variant-numeric: tabular-nums; }
 td small { color: var(--dim); }
-.tablew td:last-child { min-width: 170px; }
+.tablew td:last-child:not(.n) { min-width: 170px; }
 td a { text-decoration-color: var(--line); text-underline-offset: 3px; }
 
 .champs { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 8px; }

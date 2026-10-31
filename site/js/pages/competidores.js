@@ -1,4 +1,4 @@
-import { MEDAL_COLORS, MEDAL_NAMES, countryName, countryUrl, crest, esc, medalCounts, params, personUrl, uniUrl } from "../core.js";
+import { countryName, countryUrl, crest, esc, medalCounts, medalStrip, params, personUrl, uniUrl } from "../core.js";
 import { categoryAxis, colors, donut, plot, rankBars, valueAxis } from "../charts.js";
 import { card, chartCard, grid, kpis, startPage, table } from "../shell.js";
 
@@ -47,7 +47,6 @@ startPage({
     head.innerHTML = "<h1>Competidores</h1><p>Quiénes han pisado más finales. Usa el buscador para encontrar a cualquiera.</p>";
     view.append(head);
     const people = [...data.people.values()];
-    const c = colors();
     const score = (p) => { const m = medalCounts(p.rows); return m.gold * 1e4 + m.silver * 100 + m.bronze; };
     const uniqueYears = (p) => new Set(p.rows.map((r) => r.year)).size;
     kpis(view, [
@@ -60,13 +59,10 @@ startPage({
     const byFinals = [...people].sort((x, y) => uniqueYears(y) - uniqueYears(x) || score(y) - score(x)).slice(0, 20);
     rankBars(chartCard(a, { title: "Más finales", span: 4, height: 520 }), byFinals.map((p) => ({ label: p.name, value: uniqueYears(p), url: personUrl(p.key) })));
     const medalists = [...people].filter((p) => score(p) > 0).sort((x, y) => score(y) - score(x)).slice(0, 20);
-    plot(chartCard(a, { title: "Más medallas", span: 5, height: 520 }), {
-      tooltip: { trigger: "axis", axisPointer: { type: "shadow" } },
-      grid: { left: 8, right: 16, top: 8, bottom: 34, containLabel: true },
-      xAxis: valueAxis({ minInterval: 1 }),
-      yAxis: categoryAxis(medalists.map((p) => p.name).reverse(), { axisLabel: { color: c.ink, interval: 0 } }),
-      series: ["gold", "silver", "bronze"].map((m) => ({ name: MEDAL_NAMES[m], type: "bar", stack: "x", barMaxWidth: 16, itemStyle: { color: MEDAL_COLORS[m] }, data: medalists.map((p) => medalCounts(p.rows)[m]).reverse() })),
-    }, { onClick: (p) => { location.href = personUrl(medalists[medalists.length - 1 - p.dataIndex].key); } });
+    card(a, {
+      title: "Más medallas", span: 5,
+      html: `<ol class="medal-rows">${medalists.map((p) => `<li><a href="${personUrl(p.key)}"><span class="nm">${esc(p.name)}</span><span class="medals">${medalStrip(medalCounts(p.rows), 20)}</span></a></li>`).join("")}</ol>`,
+    });
     const histogram = new Map();
     people.forEach((p) => histogram.set(uniqueYears(p), (histogram.get(uniqueYears(p)) ?? 0) + 1));
     donut(chartCard(a, { title: "Finales por persona", span: 3, height: 520 }), [...histogram].sort((x, y) => x[0] - y[0]).map(([k, value]) => ({ name: `${k}`, value })));

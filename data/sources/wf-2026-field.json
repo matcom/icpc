@@ -1,0 +1,1193 @@
+{
+ "source": "https://codeforces.com/blog/entry/149719",
+ "fetched": "2026-10-31",
+ "note": "Community list: Asia East is empty and Europe is partial.",
+ "teams": [
+  {
+   "region": "ne",
+   "country": "Russia",
+   "university": "HSE University",
+   "team": "FFTilted",
+   "members": [
+    "teraqqq",
+    "Kirill22",
+    "Ormlis"
+   ],
+   "list_rating": 3646.28
+  },
+  {
+   "region": "ne",
+   "country": "Russia",
+   "university": "ITMO University",
+   "team": "HFTilted",
+   "members": [
+    "300iq",
+    "Kirkon",
+    "andreyDagger"
+   ],
+   "list_rating": 3319.83
+  },
+  {
+   "region": "ne",
+   "country": "Russia",
+   "university": "Nizhny Novgorod Branch of HSE University",
+   "team": "Muffix Sassif",
+   "members": [
+    "sevlll777",
+    "crazyilian",
+    "tem_shett"
+   ],
+   "list_rating": 2925.39
+  },
+  {
+   "region": "ne",
+   "country": "Russia",
+   "university": "Central University",
+   "team": "Central Podpivasy",
+   "members": [
+    "FairyWinx",
+    "ArSarapkin",
+    "ArtAlex"
+   ],
+   "list_rating": 2652.93
+  },
+  {
+   "region": "ne",
+   "country": "Russia",
+   "university": "MIPT",
+   "team": "MrZver",
+   "members": [
+    "danya111",
+    "polosatic",
+    "grishared"
+   ],
+   "list_rating": 2633.53
+  },
+  {
+   "region": "ne",
+   "country": "Russia",
+   "university": "SPb SU",
+   "team": "I See Personal Computer",
+   "members": [
+    "Taechka",
+    "mofeyTEA",
+    "machine_solution"
+   ],
+   "list_rating": 2533.18
+  },
+  {
+   "region": "ne",
+   "country": "Georgia",
+   "university": "Free University of Tbilisi",
+   "team": "Tbilisi FreeUni 1",
+   "members": [
+    "Peasant",
+    "OldBrilliantMate",
+    "JunkieDonkey"
+   ],
+   "list_rating": 2454.28
+  },
+  {
+   "region": "ne",
+   "country": "Azerbaijan",
+   "university": "ADA University",
+   "team": "ADA 2",
+   "members": [
+    "Tahirliyev",
+    "e_n1cat_",
+    "TheSahib"
+   ],
+   "list_rating": 2440.47
+  },
+  {
+   "region": "ne",
+   "country": "Russia",
+   "university": "National Research Nuclear University MEPhl",
+   "team": "Sneaky Random In The Pocket",
+   "members": [
+    "Andrew-13",
+    "heesooyaam",
+    "M1chael_Petrov"
+   ],
+   "list_rating": 2438.84
+  },
+  {
+   "region": "ne",
+   "country": "Kazakhstan",
+   "university": "Nazarbayev University",
+   "team": "clearly straight guys",
+   "members": [
+    "seduneon",
+    "kenzhik",
+    "fractal"
+   ],
+   "list_rating": 2388.26
+  },
+  {
+   "region": "ne",
+   "country": "Belarus",
+   "university": "Belarusian State University of Informatics and Radioelectronics",
+   "team": "Krambambulya",
+   "members": [
+    "Senior",
+    "ivxxn",
+    "NLteQFik"
+   ],
+   "list_rating": 2117.46
+  },
+  {
+   "region": "aw",
+   "country": "India",
+   "university": "IIT Kharagpur",
+   "team": "Div4Maxxers",
+   "members": [
+    "Dominater069",
+    "Aryan-Raina",
+    "_ar07"
+   ],
+   "list_rating": 3167.46
+  },
+  {
+   "region": "aw",
+   "country": "Iran",
+   "university": "Sharif University of Technology",
+   "team": "lp1 on fire",
+   "members": [
+    "ymmparsa",
+    "alireza_kaviani",
+    "amirhoseinfar1385"
+   ],
+   "list_rating": 3114.96
+  },
+  {
+   "region": "aw",
+   "country": "India",
+   "university": "IIT Indore",
+   "team": "dinoxors",
+   "members": [
+    "sai-17",
+    "_AdiYadav_",
+    "Ruthvik2835"
+   ],
+   "list_rating": 2505.2
+  },
+  {
+   "region": "aw",
+   "country": "India",
+   "university": "IIT BHU",
+   "team": "not qualified",
+   "members": [
+    "kingmessi",
+    "BiggestOtaku",
+    "a.out"
+   ],
+   "list_rating": 2502.18
+  },
+  {
+   "region": "aw",
+   "country": "India",
+   "university": "IIT Delhi",
+   "team": "TOURISTS",
+   "members": [
+    "Arnav_Singhal1",
+    "lucky__389",
+    "Soumil69"
+   ],
+   "list_rating": 2479.95
+  },
+  {
+   "region": "aw",
+   "country": "India",
+   "university": "IIIT Hyderabad",
+   "team": "lazy three",
+   "members": [
+    "Faizal",
+    "tanaygad",
+    "h2rsh"
+   ],
+   "list_rating": 2441.27
+  },
+  {
+   "region": "aw",
+   "country": "India",
+   "university": "IIIT Bangalore",
+   "team": "team",
+   "members": [
+    "DNR",
+    "Final_Track",
+    "serialcomder"
+   ],
+   "list_rating": 2439.33
+  },
+  {
+   "region": "aw",
+   "country": "India",
+   "university": "IIT Roorkee",
+   "team": "hehe i do cp",
+   "members": [
+    "shorya1835",
+    "D1orite",
+    "AKSLEGION"
+   ],
+   "list_rating": 2426.88
+  },
+  {
+   "region": "aw",
+   "country": "India",
+   "university": "IIT Hyderabad",
+   "team": "Slendermen",
+   "members": [
+    "weirdflexbutok",
+    "SaltyDonut",
+    "hemanth6"
+   ],
+   "list_rating": 2388.21
+  },
+  {
+   "region": "aw",
+   "country": "India",
+   "university": "IIT Bombay",
+   "team": "SegFault@IITB",
+   "members": [
+    "kamyak",
+    "aditya_neer",
+    "abhijain565aj"
+   ],
+   "list_rating": 2323.49
+  },
+  {
+   "region": "aw",
+   "country": "Bangladesh",
+   "university": "University of Engineering and Technology",
+   "team": "BUET_Silver_hawks",
+   "members": [
+    "AIF_is_carving",
+    "Shafin_Ahmed",
+    "Falcon_76"
+   ],
+   "list_rating": 2276.65
+  },
+  {
+   "region": "aw",
+   "country": "India",
+   "university": "IIIT-Delhi",
+   "team": "Weak Testcase",
+   "members": [
+    "p1k4",
+    "jatin123258",
+    "PQ2876"
+   ],
+   "list_rating": 2133.27
+  },
+  {
+   "region": "aw",
+   "country": "Pakistan",
+   "university": "FAST NUCES Khi",
+   "team": "ChaiWalay",
+   "members": [
+    "Musaddiq",
+    "Ashar-Usmani",
+    "minhaj03"
+   ],
+   "list_rating": 2093.28
+  },
+  {
+   "region": "aa",
+   "country": "Egypt",
+   "university": "Arab Academy for Science, Technology and Maritime Transport",
+   "team": "IFANYE",
+   "members": [
+    "AbdelmagedNour",
+    "ismailfateen",
+    "yahia"
+   ],
+   "list_rating": 2724.3
+  },
+  {
+   "region": "aa",
+   "country": "Syria",
+   "university": "Syrian Virtual University",
+   "team": "Watermelon Juice Slayer",
+   "members": [
+    "FetFot",
+    "Wael_Zaiback",
+    "Mohanad_Nahhal"
+   ],
+   "list_rating": 2534.66
+  },
+  {
+   "region": "aa",
+   "country": "Syria",
+   "university": "Aleppo University",
+   "team": "Guess The Imposter",
+   "members": [
+    "ApraCadabra",
+    "MOUFLESS",
+    "ALAov"
+   ],
+   "list_rating": 2528.5
+  },
+  {
+   "region": "aa",
+   "country": "Syria",
+   "university": "Homs University",
+   "team": "Moz on Tree",
+   "members": [
+    "A.D.",
+    "BabaVoss",
+    "THE_THUNDERSTORM_BEGINS"
+   ],
+   "list_rating": 2400.85
+  },
+  {
+   "region": "aa",
+   "country": "Syria",
+   "university": "Damascus University",
+   "team": "Shhh, You're In The Presence of Le Fishe!",
+   "members": [
+    "EyadBT",
+    "Hosen_ba",
+    "JaberSH1"
+   ],
+   "list_rating": 2387.08
+  },
+  {
+   "region": "aa",
+   "country": "Palestine",
+   "university": "Birzeit University",
+   "team": "Free Palestine",
+   "members": [
+    "Wawi",
+    "HIJAZ",
+    "Satoru"
+   ],
+   "list_rating": 2369.27
+  },
+  {
+   "region": "aa",
+   "country": "Egypt",
+   "university": "Alex-FE",
+   "team": "Hexa-Sha3-Sword",
+   "members": [
+    "Yahia_Emara",
+    "morasha3",
+    "taha06"
+   ],
+   "list_rating": 2344.71
+  },
+  {
+   "region": "aa",
+   "country": "Egypt",
+   "university": "Sohag University",
+   "team": "Accepted eeeh b2olak 3ayzen E3faa",
+   "members": [
+    "Ahmed_Ashraf_f",
+    "Georgegg",
+    "AnasMaged"
+   ],
+   "list_rating": 2329.57
+  },
+  {
+   "region": "aa",
+   "country": "Egypt",
+   "university": "Mansoura-FE",
+   "team": "El-Coach Tooor ICPC por favor",
+   "members": [
+    "Kareem_Elgoker",
+    "_Sherbiny",
+    "Hamed_"
+   ],
+   "list_rating": 2329.37
+  },
+  {
+   "region": "aa",
+   "country": "Egypt",
+   "university": "CU-FCAI",
+   "team": "Adham 7akim w Momen 7alawany",
+   "members": [
+    "Mina7akim",
+    "momen159",
+    "Mysterious109"
+   ],
+   "list_rating": 2312.74
+  },
+  {
+   "region": "aa",
+   "country": "Egypt",
+   "university": "Menofia University",
+   "team": "L3nt-ElManifa",
+   "members": [
+    "Sersawy",
+    "Khalwsh",
+    "-Ahmed_-_Elsayed-"
+   ],
+   "list_rating": 2206.5
+  },
+  {
+   "region": "aa",
+   "country": "Egypt",
+   "university": "SVU Qena",
+   "team": "Hbdnaha W El Judge 3daha",
+   "members": [
+    "AL70SSAIN",
+    "AhmedElseyoufi",
+    "Omar__Fawzy"
+   ],
+   "list_rating": 2154.67
+  },
+  {
+   "region": "na",
+   "country": "United States of America",
+   "university": "Massachusetts Institute of Technology",
+   "team": "Monkey Is Typing",
+   "members": [
+    "OddImage",
+    "zhoukangyang",
+    "JohnVictor"
+   ],
+   "list_rating": 3880.1
+  },
+  {
+   "region": "na",
+   "country": "United States of America",
+   "university": "University of Maryland",
+   "team": "UMD Red",
+   "members": [
+    "Tlatoani",
+    "kondasujay2",
+    "Owstin"
+   ],
+   "list_rating": 3047.23
+  },
+  {
+   "region": "na",
+   "country": "United States of America",
+   "university": "Arizona State University",
+   "team": "Second Wind",
+   "members": [
+    "BenjaminJ",
+    "tgossett",
+    "sahajrastogi"
+   ],
+   "list_rating": 2833.64
+  },
+  {
+   "region": "na",
+   "country": "Canada",
+   "university": "University of Waterloo",
+   "team": "UWaterloo Black",
+   "members": [
+    "kevinyang",
+    "McPqndq",
+    "SirTechnical"
+   ],
+   "list_rating": 2818.3
+  },
+  {
+   "region": "na",
+   "country": "United States of America",
+   "university": "University of Illinois Urbana–Champaign",
+   "team": "Ciallo ～(∠・ω< )⌒★!!!!",
+   "members": [
+    "lqs2015",
+    "char",
+    "LetianPie"
+   ],
+   "list_rating": 2807.97
+  },
+  {
+   "region": "na",
+   "country": "United States of America",
+   "university": "Carnegie Mellon University",
+   "team": "CMU-Team 07",
+   "members": [
+    "sunnuozhou",
+    "feecle6418",
+    "?"
+   ],
+   "list_rating": 2794.6
+  },
+  {
+   "region": "na",
+   "country": "United States of America",
+   "university": "University of Chicago",
+   "team": "pocpocpoc",
+   "members": [
+    "fextivity",
+    "VHPro",
+    "Francesco4203"
+   ],
+   "list_rating": 2721.99
+  },
+  {
+   "region": "na",
+   "country": "United States of America",
+   "university": "Georgia Institute of Technology",
+   "team": "GT 299",
+   "members": [
+    "kevin",
+    "zacharychao",
+    "czjxyz"
+   ],
+   "list_rating": 2683.38
+  },
+  {
+   "region": "na",
+   "country": "United States of America",
+   "university": "Michigan State University",
+   "team": "MSU Spartans",
+   "members": [
+    "minhcool",
+    "Voir",
+    "duchung"
+   ],
+   "list_rating": 2620.94
+  },
+  {
+   "region": "na",
+   "country": "United States of America",
+   "university": "University of Central Florida",
+   "team": "UCF Triangulate",
+   "members": [
+    "SeptaCube",
+    "Alg01",
+    "brianush1"
+   ],
+   "list_rating": 2611.32
+  },
+  {
+   "region": "na",
+   "country": "United States of America",
+   "university": "Stanford University",
+   "team": "Stanford Aquila",
+   "members": [
+    "lethan3",
+    "bitset",
+    "spycoderyt"
+   ],
+   "list_rating": 2603.9
+  },
+  {
+   "region": "na",
+   "country": "United States of America",
+   "university": "Texas A&M University",
+   "team": "implementation school",
+   "members": [
+    "minhnguyenxuan60",
+    "jlass_",
+    "Andwerp"
+   ],
+   "list_rating": 2575.82
+  },
+  {
+   "region": "na",
+   "country": "Canada",
+   "university": "University of Toronto",
+   "team": "UofT Blue",
+   "members": [
+    "Wobert",
+    "lookcook",
+    "bill_lin"
+   ],
+   "list_rating": 2519.51
+  },
+  {
+   "region": "na",
+   "country": "Canada",
+   "university": "University of Alberta",
+   "team": "Alberta Azure",
+   "members": [
+    "asiad",
+    "DigitalVest",
+    "jxu"
+   ],
+   "list_rating": 2477.63
+  },
+  {
+   "region": "na",
+   "country": "Canada",
+   "university": "University of British Columbia",
+   "team": "Diamond Dust",
+   "members": [
+    "Ryazimn",
+    "cran",
+    "SnowLucario_Z"
+   ],
+   "list_rating": 2470.54
+  },
+  {
+   "region": "na",
+   "country": "United States of America",
+   "university": "University of Washington",
+   "team": "Jiakrico",
+   "members": [
+    "spike1236",
+    "Rico64",
+    "jia"
+   ],
+   "list_rating": 2432.01
+  },
+  {
+   "region": "na",
+   "country": "United States of America",
+   "university": "University of California, Santa Barbara",
+   "team": "UCSB WA",
+   "members": [
+    "ezraft",
+    "diss_quack",
+    "lce4113"
+   ],
+   "list_rating": 2426.4
+  },
+  {
+   "region": "na",
+   "country": "United States of America",
+   "university": "University of Minnesota",
+   "team": "Mad-is-sun",
+   "members": [
+    "WipeyTabletku",
+    "lahlah",
+    "dajeff"
+   ],
+   "list_rating": 2319.19
+  },
+  {
+   "region": "eu",
+   "country": "Hungary",
+   "university": "Eötvös Loránd University",
+   "team": "Big as Hectic Dreaming",
+   "members": [
+    "peti1234",
+    "Peti",
+    "ZsibbadtKubikus"
+   ],
+   "list_rating": 3265.93
+  },
+  {
+   "region": "eu",
+   "country": "The Netherlands",
+   "university": "Delft University of Technology",
+   "team": "Segfault go BRRRR",
+   "members": [
+    "BLOBVISGOD",
+    "Karuk",
+    "jeroenodb"
+   ],
+   "list_rating": 3240.49
+  },
+  {
+   "region": "eu",
+   "country": "United Kingdom",
+   "university": "University of Cambridge",
+   "team": "bruhopen",
+   "members": [
+    "p0tato",
+    "snowysecret",
+    "kevinxiehk"
+   ],
+   "list_rating": 2915.08
+  },
+  {
+   "region": "eu",
+   "country": "Germany",
+   "university": "Karlsruhe Institute of Technology",
+   "team": "Infinite L∞pers",
+   "members": [
+    "burg113",
+    "FIorian",
+    "gloria_mundi"
+   ],
+   "list_rating": 2894.04
+  },
+  {
+   "region": "eu",
+   "country": "Turkey",
+   "university": "Middle East Technical University",
+   "team": "TBA",
+   "members": [
+    "tolbi",
+    "yutabi",
+    "destructive_criticism"
+   ],
+   "list_rating": 2774.61
+  },
+  {
+   "region": "eu",
+   "country": "Switzerland",
+   "university": "ETH Zürich",
+   "team": "Ctrl+Alt+DelETHe",
+   "members": [
+    "VesselinMarkovich",
+    "jumpmelon",
+    "Tudy006"
+   ],
+   "list_rating": 2672.44
+  },
+  {
+   "region": "eu",
+   "country": "Austria",
+   "university": "University of Vienna",
+   "team": "Austrian Avalanche",
+   "members": [
+    "mightyrock",
+    "n11k",
+    "nitram"
+   ],
+   "list_rating": 2586.13
+  },
+  {
+   "region": "eu",
+   "country": "Czech Republic",
+   "university": "Charles University",
+   "team": "MFF UK 1",
+   "members": [
+    "JiriKalvoda",
+    "Svizel_pritula",
+    "SK1PY"
+   ],
+   "list_rating": 2478.5
+  },
+  {
+   "region": "ap",
+   "country": "Japan",
+   "university": "The University of Osaka",
+   "team": "The Revenge of shinchan",
+   "members": [
+    "KowerKoint",
+    "krit3379",
+    "Nachia"
+   ],
+   "list_rating": 3564.26
+  },
+  {
+   "region": "ap",
+   "country": "Taiwan",
+   "university": "National Taiwan University",
+   "team": "std_abs",
+   "members": [
+    "BurnedChicken",
+    "syl123456",
+    "abc864197532"
+   ],
+   "list_rating": 3453.22
+  },
+  {
+   "region": "ap",
+   "country": "Singapore",
+   "university": "National University of Singapore",
+   "team": "Strong Zero",
+   "members": [
+    "yuto1115",
+    "tqbfjotld",
+    "errorgorn"
+   ],
+   "list_rating": 3272.06
+  },
+  {
+   "region": "ap",
+   "country": "South Korea",
+   "university": "Seoul National University",
+   "team": "Just use CRT",
+   "members": [
+    "platter",
+    "kizen",
+    "leinad2"
+   ],
+   "list_rating": 3150.41
+  },
+  {
+   "region": "ap",
+   "country": "Japan",
+   "university": "Keio University",
+   "team": "Rinshan Solution",
+   "members": [
+    "honamikoto",
+    "PCTprobability",
+    "harurun4635"
+   ],
+   "list_rating": 3127.25
+  },
+  {
+   "region": "ap",
+   "country": "Japan",
+   "university": "Institute of Science Tokyo",
+   "team": "AMATSUKAZE",
+   "members": [
+    "shobonvip",
+    "noya2",
+    "Rice_tawara459"
+   ],
+   "list_rating": 2877.14
+  },
+  {
+   "region": "ap",
+   "country": "South Korea",
+   "university": "KAIST",
+   "team": "Fox is cute",
+   "members": [
+    "SongC",
+    "azberjibiou",
+    "Serin"
+   ],
+   "list_rating": 2831.98
+  },
+  {
+   "region": "ap",
+   "country": "Thailand",
+   "university": "Chulalongkorn University",
+   "team": "Here for the Free Snacks",
+   "members": [
+    "ttamx",
+    "markthitrin",
+    "thawin.ice"
+   ],
+   "list_rating": 2831.62
+  },
+  {
+   "region": "ap",
+   "country": "South Korea",
+   "university": "Yonsei University",
+   "team": "Endgame",
+   "members": [
+    "Serendipity__",
+    "plast",
+    "JYJin"
+   ],
+   "list_rating": 2804.7
+  },
+  {
+   "region": "ap",
+   "country": "Japan",
+   "university": "The University of Tokyo",
+   "team": "SSQS",
+   "members": [
+    "YoshikaMiyafuji",
+    "sounansya",
+    "QCFium"
+   ],
+   "list_rating": 2735.67
+  },
+  {
+   "region": "ap",
+   "country": "Vietnam",
+   "university": "University of Engineering and Technology — VNU",
+   "team": "infinity",
+   "members": [
+    "trungnotchung",
+    "bachbeo2007",
+    "HollwoQ_Pelw"
+   ],
+   "list_rating": 2716.73
+  },
+  {
+   "region": "ap",
+   "country": "Taiwan",
+   "university": "National Yang Ming Chiao Tung University",
+   "team": "NYCU_CartesianTreeII",
+   "members": [
+    "Aestivate",
+    "Misuki",
+    "ScottChou"
+   ],
+   "list_rating": 2590.63
+  },
+  {
+   "region": "ap",
+   "country": "Vietnam",
+   "university": "University of Science, VNU-HCM",
+   "team": "HCMUS-ThaiFamily",
+   "members": [
+    "ConNuoiAnhThai",
+    "ConRuotAnhThai",
+    "ConRiengAnhThai"
+   ],
+   "list_rating": 2530.05
+  },
+  {
+   "region": "ap",
+   "country": "South Korea",
+   "university": "Hanyang University",
+   "team": "NJG",
+   "members": [
+    "ogura_yui",
+    "jsj0412",
+    "Kleder"
+   ],
+   "list_rating": 2435.24
+  },
+  {
+   "region": "ap",
+   "country": "Vietnam",
+   "university": "National Economics University",
+   "team": "NEU.Anarchaos",
+   "members": [
+    "thangdz2k7",
+    "uchihahahaha",
+    "__pooh__"
+   ],
+   "list_rating": 2427.82
+  },
+  {
+   "region": "ap",
+   "country": "Australia",
+   "university": "UNSW Sydney",
+   "team": "); DROP TABLE Teams;--",
+   "members": [
+    "CactusProgrammer",
+    "caterpillow",
+    "horiseun"
+   ],
+   "list_rating": 2421.12
+  },
+  {
+   "region": "ap",
+   "country": "Japan",
+   "university": "Kyoto University",
+   "team": "bogosort",
+   "members": [
+    "tatesoto",
+    "jastaway",
+    "?"
+   ],
+   "list_rating": 2165.76
+  },
+  {
+   "region": "ap",
+   "country": "Australia",
+   "university": "University of Melbourne",
+   "team": "Uniformly Random Name",
+   "members": [
+    "?",
+    "?",
+    "?"
+   ],
+   "list_rating": null
+  },
+  {
+   "region": "la",
+   "country": "Brazil",
+   "university": "UNICAMP",
+   "team": "Naim continua dentro de nós",
+   "members": [
+    "defnotmee",
+    "LoboLobo",
+    "enzopsm"
+   ],
+   "list_rating": 2681.3
+  },
+  {
+   "region": "la",
+   "country": "Argentina",
+   "university": "UNC",
+   "team": "Helicóptero",
+   "members": [
+    "Edu175",
+    "Jeresalen",
+    "46657526buscaR"
+   ],
+   "list_rating": 2481.06
+  },
+  {
+   "region": "la",
+   "country": "Brazil",
+   "university": "UFMG",
+   "team": "ooga booga",
+   "members": [
+    "mathiasgw",
+    "perchuts",
+    "gustavocruz"
+   ],
+   "list_rating": 2443.66
+  },
+  {
+   "region": "la",
+   "country": "Mexico",
+   "university": "UP Bonaterra",
+   "team": "Igloo Zone",
+   "members": [
+    "LoganGD",
+    "Murinho",
+    "El_Roge"
+   ],
+   "list_rating": 2432.6
+  },
+  {
+   "region": "la",
+   "country": "Brazil",
+   "university": "UFCG",
+   "team": "8e6d0497880e3db3b3b093f517c13f9f",
+   "members": [
+    "jackson.souza",
+    "Pedrinho_Eu",
+    "holanda2103"
+   ],
+   "list_rating": 2378.35
+  },
+  {
+   "region": "la",
+   "country": "Mexico",
+   "university": "ESCOM IPN",
+   "team": "hmmmmmmmmm?",
+   "members": [
+    "Jose_17",
+    "Remgagagali727",
+    "Leonardo_Toral"
+   ],
+   "list_rating": 2287.89
+  },
+  {
+   "region": "la",
+   "country": "Chile",
+   "university": "UChile",
+   "team": "sin globito no hay fiesta",
+   "members": [
+    "m1tu",
+    "dariasc",
+    "MartinRT"
+   ],
+   "list_rating": 2276.82
+  },
+  {
+   "region": "la",
+   "country": "Brazil",
+   "university": "UDESC",
+   "team": "é sempre o XOR",
+   "members": [
+    "emoreira",
+    "nzo",
+    "joaozao"
+   ],
+   "list_rating": 2264.48
+  },
+  {
+   "region": "la",
+   "country": "Argentina",
+   "university": "UNR",
+   "team": "Red-Black Tree",
+   "members": [
+    "Maezra6",
+    "Franchu",
+    "Username4132"
+   ],
+   "list_rating": 2251.02
+  },
+  {
+   "region": "la",
+   "country": "Brazil",
+   "university": "UnB",
+   "team": "É só fazer",
+   "members": [
+    "arthur_9548",
+    "MagePetrus",
+    "duduFreire"
+   ],
+   "list_rating": 2249.76
+  },
+  {
+   "region": "la",
+   "country": "Peru",
+   "university": "UNI FIIS",
+   "team": "SaleEnOdeUno",
+   "members": [
+    "Teranj",
+    "NekoRolly",
+    "RReyes2612"
+   ],
+   "list_rating": 2210.8
+  },
+  {
+   "region": "la",
+   "country": "Cuba",
+   "university": "UH",
+   "team": "UH Pop",
+   "members": [
+    "EduardoBrito",
+    "Ernest0_0Abreu",
+    "John314"
+   ],
+   "list_rating": 2165.25
+  },
+  {
+   "region": "la",
+   "country": "Argentina",
+   "university": "UNLP",
+   "team": "NaN (Need a Name)",
+   "members": [
+    "Joacoini",
+    "PekitaZ",
+    "joaco-gavernet"
+   ],
+   "list_rating": 2155.91
+  },
+  {
+   "region": "la",
+   "country": "Mexico",
+   "university": "UPGDL",
+   "team": "Testigos de Germán",
+   "members": [
+    "efishel",
+    "imlearningc",
+    "roostercross"
+   ],
+   "list_rating": 2149.0
+  },
+  {
+   "region": "la",
+   "country": "Colombia",
+   "university": "EAFIT",
+   "team": "Que bendición",
+   "members": [
+    "automac",
+    "juancs",
+    "elpepe123"
+   ],
+   "list_rating": 2085.53
+  },
+  {
+   "region": "la",
+   "country": "Brazil",
+   "university": "UFPE",
+   "team": "las4s e pelados",
+   "members": [
+    "joaovictor20",
+    "pgoq",
+    "icaro_nunes"
+   ],
+   "list_rating": 2033.68
+  },
+  {
+   "region": "la",
+   "country": "Costa Rica",
+   "university": "ITCR-Alajuela",
+   "team": "No name yet",
+   "members": [
+    "Kener_Castillo",
+    "aleC_aleC",
+    "hacaravaca"
+   ],
+   "list_rating": 1899.42
+  },
+  {
+   "region": "la",
+   "country": "Argentina",
+   "university": "UBA",
+   "team": "Los Catastróficos",
+   "members": [
+    "NicoRicci",
+    "empaktus",
+    "BrunZo"
+   ],
+   "list_rating": 1886.91
+  }
+ ],
+ "confirmed": [
+  {
+   "university": "University of Warsaw",
+   "source": "https://en.uw.edu.pl/?p=41900"
+  },
+  {
+   "university": "University of Wroclaw",
+   "source": "https://uwr.edu.pl/en/?p=371971"
+  }
+ ]
+}

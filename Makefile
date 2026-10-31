@@ -1,7 +1,10 @@
-.PHONY: data serve test
+.PHONY: data ratings serve test
 
 data:
-	python3 scripts/build_data.py
+	uv run python scripts/build_data.py
+
+ratings:
+	uv run python scripts/refresh_ratings.py
 
 serve: data
 	python3 -m http.server 8000 --directory site --bind 127.0.0.1

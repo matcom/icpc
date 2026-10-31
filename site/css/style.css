@@ -188,3 +188,15 @@ footer { color: var(--dim); font-size: 14px; padding: 12px 0 20px; display: flex
   .kpi b { font-size: 21px; }
   .medal-rows a { grid-template-columns: minmax(0, 1fr); }
 }
+.chance-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(112px, 1fr)); gap: 8px; margin: 10px 0 14px; }
+.chance-cards div { padding: 10px; border: 1px solid var(--line); font-size: 13px; color: var(--dim); }
+.chance-cards b { display: block; font: 600 22px Cinzel, serif; color: var(--ink); }
+.place-slider { display: grid; gap: 6px; }
+.place-slider input { width: 100%; height: 30px; accent-color: var(--accent); }
+.region-chances { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; }
+.region-chances section { border: 1px solid var(--line); padding: 12px; min-width: 0; }
+.region-chances h3 { margin: 0 0 2px; font: 600 15px Cinzel, serif; }
+.region-chances p { margin: 0 0 8px; font-size: 13px; color: var(--dim); }
+.leader { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 2px 8px; margin-bottom: 7px; font-size: 13.5px; }
+.leader i { grid-column: 1 / -1; height: 5px; background: var(--accent); border-radius: 3px; }
+.leader small { color: var(--dim); }

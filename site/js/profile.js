@@ -2,8 +2,8 @@
 import { MEDAL_NAMES, TITLE_NAMES, esc, fold, medalIcon, personUrl, teamUrl, uniUrl } from "./core.js";
 
 export const forecastCallout = (forecast, field, year) => (forecast?.pct != null
-  ? `<div class="callout">Proyección ${year}: los ${forecast.cases} casos históricos más parecidos terminaron por el <b>puesto ${forecast.rank}</b> de ${field} (la mitad entre ${forecast.rank_best} y ${forecast.rank_worst}). El <b>${forecast.returns}%</b> volvió a la final al año siguiente.</div>`
-  : '<div class="callout">Sin proyección: hacen falta al menos dos finales con puesto conocido y una aparición en los últimos cinco años.</div>');
+  ? `<div class="callout">Proyección ${year}: <b>puesto ${forecast.rank}</b> de ${field} (la mitad de las simulaciones entre ${forecast.rank_best} y ${forecast.rank_worst})${forecast.kind === "presumed" ? `, si asiste; su plaza es supuesta (${Math.round(forecast.attend * 100)} %)` : ""}. <a href="predicciones.html">Ver probabilidades</a>.</div>`
+  : `<div class="callout">Sin proyección: no consta en el campo previsto de la final ${year}.</div>`);
 
 export function medalDonut(el, counts) {
   el.style.height = "auto";

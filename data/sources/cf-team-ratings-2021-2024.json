@@ -1,0 +1,3514 @@
+{
+ "2021": {
+  "source": "https://codeforces.com/blog/entry/102593",
+  "teams": [
+   {
+    "university": "University of Tokyo",
+    "members": [
+     "maroonrk",
+     "yutaka1999",
+     "HIR180"
+    ],
+    "rating": 3525.0983
+   },
+   {
+    "university": "Massachusetts Institute of Technology",
+    "members": [
+     "heuristica",
+     "matthew99",
+     "jerry"
+    ],
+    "rating": 3501.6966
+   },
+   {
+    "university": "Kyoto University",
+    "members": [
+     "heno239",
+     "Moririn2528",
+     "yamunaku"
+    ],
+    "rating": 3388.1317
+   },
+   {
+    "university": "HSE",
+    "members": [
+     "Maksim1744",
+     "isaf27",
+     "never_giveup"
+    ],
+    "rating": 3348.3856
+   },
+   {
+    "university": "Peking University",
+    "members": [
+     "WZYYN",
+     "panole",
+     "kczno1"
+    ],
+    "rating": 3301.6488
+   },
+   {
+    "university": "Swarthmore College",
+    "members": [
+     "Geothermal",
+     "nitrousoxide",
+     "silxi"
+    ],
+    "rating": 3056.3953
+   },
+   {
+    "university": "University of Oxford",
+    "members": [
+     "lumibons",
+     "geniucos",
+     "fanache99"
+    ],
+    "rating": 3045.5029
+   },
+   {
+    "university": "Seoul National University",
+    "members": [
+     "blackbori",
+     "dlalswp25",
+     "GyojunYoun"
+    ],
+    "rating": 3022.1824
+   },
+   {
+    "university": "University of Engineering and Technology — VNU",
+    "members": [
+     "user202729",
+     "ruanxiaoyu",
+     "negativez2"
+    ],
+    "rating": 2937.0804
+   },
+   {
+    "university": "ETH Zurich",
+    "members": [
+     "mango_lassi",
+     "YaoBIG",
+     "please_delete_account"
+    ],
+    "rating": 2932.8949
+   },
+   {
+    "university": "Moscow SU",
+    "members": [
+     "ch_egor",
+     "SendThemToHell",
+     "Andreikkaa"
+    ],
+    "rating": 2904.4526
+   },
+   {
+    "university": "International IT University",
+    "members": [
+     "998batrr",
+     "DinoReactor",
+     "Fortitude"
+    ],
+    "rating": 2892.6439
+   },
+   {
+    "university": "Purdue University",
+    "members": [
+     "Kuroni",
+     "Monogon",
+     "richzli"
+    ],
+    "rating": 2846.86
+   },
+   {
+    "university": "Zhejiang University",
+    "members": [
+     "Suika_predator",
+     "lwn_16",
+     "lxlxl"
+    ],
+    "rating": 2819.8405
+   },
+   {
+    "university": "SPb ITMO",
+    "members": [
+     "budalnik",
+     "josdas",
+     "romanasa"
+    ],
+    "rating": 2818.6761
+   },
+   {
+    "university": "University of Cambridge",
+    "members": [
+     "arvindf232",
+     "VladaMG98",
+     "Tutis"
+    ],
+    "rating": 2803.1625
+   },
+   {
+    "university": "KTH Royal Institute of Technology",
+    "members": [
+     "Xylofo",
+     "tobias.glimmerfors",
+     "nicode"
+    ],
+    "rating": 2714.0406
+   },
+   {
+    "university": "University of Wroclaw",
+    "members": [
+     "w0nsh",
+     "Fly_37",
+     "kobor"
+    ],
+    "rating": 2644.0188
+   },
+   {
+    "university": "Charles University in Prague",
+    "members": [
+     "Yongaron",
+     "adam_rajsky",
+     "MetB"
+    ],
+    "rating": 2576.7952
+   },
+   {
+    "university": "University of Bucharest",
+    "members": [
+     "alexandra_udristoiu",
+     "Stelutzu",
+     "Usu"
+    ],
+    "rating": 2521.1017
+   },
+   {
+    "university": "Alexandru Ioan Cuza University of Iasi",
+    "members": [
+     "denis2111",
+     "cristian1997",
+     "status_coding"
+    ],
+    "rating": 2373.904
+   },
+   {
+    "university": "Karlsruhe Institute of Technology",
+    "members": [
+     "AnotherRound",
+     "MZuenni",
+     "CeJotKa"
+    ],
+    "rating": 2275.0584
+   },
+   {
+    "university": "AAST",
+    "members": [
+     "Yousef_Salama",
+     "mahmoudbadawy",
+     "tamp_"
+    ],
+    "rating": 2626.56
+   },
+   {
+    "university": "Damascus University",
+    "members": [
+     "Baraa_Armoush",
+     "I-Love-Islam",
+     "Mohammad_Kartoumeh"
+    ],
+    "rating": 2460.3653
+   },
+   {
+    "university": "FCIS Ain Shams University",
+    "members": [
+     "BohotySenpai",
+     "IsaacMoris",
+     "Bedoo"
+    ],
+    "rating": 2362.0774
+   },
+   {
+    "university": "Al-Baath University",
+    "members": [
+     "Naseem17",
+     "Al-Merreikh",
+     "_Mugiwara_"
+    ],
+    "rating": 2326.9161
+   },
+   {
+    "university": "Tishreen University",
+    "members": [
+     "Kaitokid",
+     "KhaledFarhat",
+     "notAboAlmanalAnyMore"
+    ],
+    "rating": 2309.2253
+   },
+   {
+    "university": "Syrian Virtual University",
+    "members": [
+     "Zaher",
+     "Salim_Shebli",
+     "Adel_SaadEddin"
+    ],
+    "rating": 2273.8231
+   },
+   {
+    "university": "FE Alexandria University",
+    "members": [
+     "Ahmed_AIansary",
+     "Evro",
+     "Mohammed_Badawi"
+    ],
+    "rating": 2198.4592
+   },
+   {
+    "university": "American University of Beirut",
+    "members": [
+     "Charbel",
+     "0-jij-0",
+     "DaMiraCode"
+    ],
+    "rating": 2176.7287
+   },
+   {
+    "university": "Aleppo University",
+    "members": [
+     "Nihad_Nabelsi",
+     "Ali_ZaiBug",
+     "Mohamad_AboDan"
+    ],
+    "rating": 2068.585
+   },
+   {
+    "university": "Al-Azhar University",
+    "members": [
+     "Opa-Nset-Asmy",
+     "MuhammadAl-Halaby",
+     "Ahmad-Magdy"
+    ],
+    "rating": 2030.0421
+   },
+   {
+    "university": "GUC",
+    "members": [
+     "Khater",
+     "Omar_Tarek",
+     "MohamedK"
+    ],
+    "rating": 1923.699
+   },
+   {
+    "university": "El Shorouk Academy",
+    "members": [
+     "mohaned2014",
+     "SalahSalem",
+     "Peter_Mourad"
+    ],
+    "rating": 1906.6694
+   },
+   {
+    "university": "Nanjing University",
+    "members": [
+     "-skyline-",
+     "Roundgod",
+     "uuzlovetree"
+    ],
+    "rating": 2793.466
+   },
+   {
+    "university": "Shanghai Jiao Tong University",
+    "members": [
+     "-14",
+     "desprado2",
+     "AntiLeaf"
+    ],
+    "rating": 2674.9601
+   },
+   {
+    "university": "Beihang University",
+    "members": [
+     "Toxel",
+     "Prime21",
+     "5095187020216"
+    ],
+    "rating": 2581.495
+   },
+   {
+    "university": "Southeast University",
+    "members": [
+     "kimoyami",
+     "njupt_lyy",
+     "LiuRunkY"
+    ],
+    "rating": 2546.386
+   },
+   {
+    "university": "East China Normal University",
+    "members": [
+     "Xiejiadong",
+     "Kilo_5723",
+     "stonemasons"
+    ],
+    "rating": 2528.8102
+   },
+   {
+    "university": "National Taiwan University",
+    "members": [
+     "waynetuinfor",
+     "skylinebaby",
+     "edisonhello"
+    ],
+    "rating": 2801.7024
+   },
+   {
+    "university": "Tokyo Institute of Technology",
+    "members": [
+     "tatyam",
+     "goodbaton",
+     "mikit"
+    ],
+    "rating": 2799.8717
+   },
+   {
+    "university": "National University of Singapore",
+    "members": [
+     "MofK",
+     "Lomk",
+     "zhangguangxuan99"
+    ],
+    "rating": 2699.9083
+   },
+   {
+    "university": "University of New South Wales",
+    "members": [
+     "AngusRitossa",
+     "ralismark",
+     "PengsenMao"
+    ],
+    "rating": 2613.308
+   },
+   {
+    "university": "Universitas Indonesia",
+    "members": [
+     "yogahmad77",
+     "faustaadp",
+     "AlphaS"
+    ],
+    "rating": 2585.293
+   },
+   {
+    "university": "University of Science, VNU-HCM",
+    "members": [
+     "xuanquang1999",
+     "GreymaneSilverfang",
+     "ZigonK"
+    ],
+    "rating": 2578.1775
+   },
+   {
+    "university": "KAIST",
+    "members": [
+     "L0TUS",
+     "dillon0108",
+     "jh05013"
+    ],
+    "rating": 2486.437
+   },
+   {
+    "university": "Korea University",
+    "members": [
+     "cheetose",
+     "Ryute",
+     "knon0501"
+    ],
+    "rating": 2475.8095
+   },
+   {
+    "university": "Bina Nusantara University",
+    "members": [
+     "rfpermen",
+     "AVM.Martin",
+     "Ace_02"
+    ],
+    "rating": 2452.1177
+   },
+   {
+    "university": "National Yang Ming Chiao Tung University",
+    "members": [
+     "ToxicPie9",
+     "henotrix",
+     "alan8585"
+    ],
+    "rating": 2414.1251
+   },
+   {
+    "university": "Ateneo de Manila University",
+    "members": [
+     "TheLostCookie",
+     "Shisuko",
+     "leloy"
+    ],
+    "rating": 2388.5754
+   },
+   {
+    "university": "Sharif University of Technology",
+    "members": [
+     "Atreus",
+     "Kalam",
+     "Shayan.P"
+    ],
+    "rating": 2669.8994
+   },
+   {
+    "university": "IIT(BHU) Varanasi",
+    "members": [
+     "CoderAnshu",
+     "rivalq",
+     "DenOMINATOR"
+    ],
+    "rating": 2646.1017
+   },
+   {
+    "university": "IIT Guwahati",
+    "members": [
+     "EnEm",
+     "zeus_iitg",
+     "BrownieTK"
+    ],
+    "rating": 2538.8139
+   },
+   {
+    "university": "Dhirubhai Ambani Institute of Information and Communication Technology",
+    "members": [
+     "nishant403",
+     "Jaydeep999997",
+     "harshrajani460"
+    ],
+    "rating": 2536.9853
+   },
+   {
+    "university": "IIT Bombay",
+    "members": [
+     "BhaskarTM",
+     "TheOneYouWant",
+     "Shivam_18"
+    ],
+    "rating": 2530.0156
+   },
+   {
+    "university": "IIIT Hyderabad",
+    "members": [
+     "gaurav172",
+     "vivace_jr",
+     "shaanknight"
+    ],
+    "rating": 2444.1061
+   },
+   {
+    "university": "IIT Kanpur",
+    "members": [
+     "abhinavvv306",
+     "mohanraghug",
+     "Dragnoid99"
+    ],
+    "rating": 2380.7864
+   },
+   {
+    "university": "Birla Institute Of Technology And Science, Pilani",
+    "members": [
+     "geckods",
+     "Lain",
+     "lolok123"
+    ],
+    "rating": 2366.4321
+   },
+   {
+    "university": "Shahjalal University of Science and Technology",
+    "members": [
+     "YouKn0wWho",
+     "Raiden",
+     "steinum"
+    ],
+    "rating": 2355.4811
+   },
+   {
+    "university": "BUET",
+    "members": [
+     "Iftekhar_Hakim_K",
+     "noshin_faiza",
+     "Roll_Num_56"
+    ],
+    "rating": 2318.0731
+   },
+   {
+    "university": "University of Dhaka",
+    "members": [
+     "DrSwad",
+     "_timelord",
+     "Fiction"
+    ],
+    "rating": 2190.9752
+   },
+   {
+    "university": "Rajshahi University of Engineering & Technology",
+    "members": [
+     "Shefin_",
+     "tanus_era",
+     "Hasnaine_"
+    ],
+    "rating": 2170.3303
+   },
+   {
+    "university": "Jahangirnagar University",
+    "members": [
+     "the0dd1out",
+     "_c_k_r_",
+     "aniks2645"
+    ],
+    "rating": 2015.6321
+   },
+   {
+    "university": "North South University",
+    "members": [
+     "s_da_sailor",
+     "ms166",
+     "OneLastTime"
+    ],
+    "rating": 1952.701
+   },
+   {
+    "university": "American International University",
+    "members": [
+     "hafiz_samrat",
+     "AmdSadi",
+     "Mujahid"
+    ],
+    "rating": 1758.8224
+   },
+   {
+    "university": "Universidad de la Habana",
+    "members": [
+     "dmga44",
+     "Devil",
+     "RULO"
+    ],
+    "rating": 2557.4102
+   },
+   {
+    "university": "Universidade de Sao Paulo",
+    "members": [
+     "lucas3h",
+     "VLamarca",
+     "kokosha"
+    ],
+    "rating": 2521.6849
+   },
+   {
+    "university": "ITESM Campus Monterrey",
+    "members": [
+     "Diegogrc",
+     "eidan",
+     "freyes"
+    ],
+    "rating": 2478.3131
+   },
+   {
+    "university": "Universidad de Buenos Aires — FCEN",
+    "members": [
+     "Agua_Podrida",
+     "Mateo",
+     "stringa"
+    ],
+    "rating": 2439.8455
+   },
+   {
+    "university": "Universidade Federal de Campina Grande",
+    "members": [
+     "Emiso",
+     "joaom",
+     "figdan"
+    ],
+    "rating": 2415.8892
+   },
+   {
+    "university": "UNICAMP",
+    "members": [
+     "NaimSS",
+     "tdas",
+     "MatheusLealV"
+    ],
+    "rating": 2400.8945
+   },
+   {
+    "university": "Universidad Nacional de Córdoba — FaMAF",
+    "members": [
+     "MateoCV",
+     "SebaMarin",
+     "CarusoX"
+    ],
+    "rating": 2331.5881
+   },
+   {
+    "university": "Universidad Panamericana Bonaterra",
+    "members": [
+     "GustavoMG",
+     "kishtarn",
+     "tiojuan"
+    ],
+    "rating": 2253.2131
+   },
+   {
+    "university": "Universidad Simón Bolívar",
+    "members": [
+     "CrazyDiamond",
+     "totito",
+     "JoTaR"
+    ],
+    "rating": 2210.9164
+   },
+   {
+    "university": "Universidad Mayor de San Simón",
+    "members": [
+     "pacha2880",
+     "MickyOr",
+     "cr8"
+    ],
+    "rating": 2141.968
+   },
+   {
+    "university": "Universidad de Guadalajara CUCEI",
+    "members": [
+     "IvanBorquez",
+     "Franco1010",
+     "crystaalroo"
+    ],
+    "rating": 2137.8797
+   },
+   {
+    "university": "UFBA",
+    "members": [
+     "bfs.07",
+     "tysm",
+     "viniciusth"
+    ],
+    "rating": 2129.9291
+   },
+   {
+    "university": "EAFIT",
+    "members": [
+     "martinius",
+     "MesSimonFallon19",
+     "Scano"
+    ],
+    "rating": 1892.9033
+   },
+   {
+    "university": "University of Toronto",
+    "members": [
+     "Deemo",
+     "mattagar6",
+     "platers"
+    ],
+    "rating": 2646.0157
+   },
+   {
+    "university": "Carnegie Mellon University",
+    "members": [
+     "clam",
+     "Gilwall",
+     "cadenza"
+    ],
+    "rating": 2502.8886
+   },
+   {
+    "university": "University of California",
+    "members": [
+     "Suzukaze",
+     "zerotrac",
+     "kode_4_fun"
+    ],
+    "rating": 2449.3167
+   },
+   {
+    "university": "University of Central Florida",
+    "members": [
+     "lightseba",
+     "DanielW48",
+     "gigabuffoon"
+    ],
+    "rating": 2391.8653
+   },
+   {
+    "university": "University of Alberta",
+    "members": [
+     "IanDeHaan",
+     "AboveTS",
+     "JasonCannon"
+    ],
+    "rating": 2365.588
+   },
+   {
+    "university": "University of California, Los Angeles",
+    "members": [
+     "lucasxia01",
+     "arihant72600",
+     "jacob.b.zhang"
+    ],
+    "rating": 2327.7171
+   },
+   {
+    "university": "Georgia Institute of Technology",
+    "members": [
+     "smax",
+     "arvindr9",
+     "RandomKami"
+    ],
+    "rating": 2314.8234
+   },
+   {
+    "university": "University of Wisconsin-Madison",
+    "members": [
+     "AquaBlaze",
+     "bvd",
+     "ziyuan949"
+    ],
+    "rating": 2186.3853
+   },
+   {
+    "university": "The University of Texas at Dallas",
+    "members": [
+     "EMBailey",
+     "surajchip2",
+     "DedsecKnight"
+    ],
+    "rating": 2162.5817
+   },
+   {
+    "university": "St. Petersburg SU",
+    "members": [
+     "nikgaevoy",
+     "Kaban-5",
+     "tranquility"
+    ],
+    "rating": 2813.5252
+   },
+   {
+    "university": "Belarusian SU",
+    "members": [
+     "Septimelon",
+     "aleex",
+     "RED_INSIDE"
+    ],
+    "rating": 2749.6434
+   },
+   {
+    "university": "SPb HSE",
+    "members": [
+     "specia1",
+     "kokokostya",
+     "platypus179"
+    ],
+    "rating": 2711.4343
+   },
+   {
+    "university": "Moscow IPT",
+    "members": [
+     "Holidin",
+     "surokpro",
+     "maksim.gaponov"
+    ],
+    "rating": 2660.8732
+   },
+   {
+    "university": "Saratov SU",
+    "members": [
+     "awoo",
+     "vovuh",
+     "Neon"
+    ],
+    "rating": 2522.327
+   },
+   {
+    "university": "Suleyman Demirel University",
+    "members": [
+     "bthero",
+     "abunyawa",
+     "almas.kenes"
+    ],
+    "rating": 2483.8844
+   },
+   {
+    "university": "Tolyatti SU",
+    "members": [
+     "danya090699",
+     "toxzi",
+     "Denzel"
+    ],
+    "rating": 2476.2863
+   },
+   {
+    "university": "Kazan FU",
+    "members": [
+     "AcidWrongGod",
+     "lessmeaning",
+     "Ferume"
+    ],
+    "rating": 2469.409
+   },
+   {
+    "university": "Belarusian SUIR",
+    "members": [
+     "Vladik",
+     "Qwertenx",
+     "wilcot"
+    ],
+    "rating": 2380.1
+   },
+   {
+    "university": "NNSU",
+    "members": [
+     "Makcum888",
+     "Riladavin",
+     "Ekler"
+    ],
+    "rating": 2369.6643
+   },
+   {
+    "university": "Izhevsk STU",
+    "members": [
+     "ATSTNG",
+     "jvmusin",
+     "*No 3rd"
+    ],
+    "rating": 2176.0521
+   }
+  ]
+ },
+ "2022": {
+  "source": "https://codeforces.com/blog/entry/116946",
+  "teams": [
+   {
+    "university": "🥇🏆 ⭐ Peking University",
+    "members": [
+     "jiangly",
+     "yasugongshang",
+     "lyx_cjz"
+    ],
+    "rating": 3648.7543
+   },
+   {
+    "university": "🥇 ⭐ University of Oxford",
+    "members": [
+     "gamegame",
+     "Sorting",
+     "Ronnie007"
+    ],
+    "rating": 3397.7495
+   },
+   {
+    "university": "🥇 ⭐ Massachusetts Institute of Technology",
+    "members": [
+     "heuristica",
+     "antontrygubO_o",
+     "TLE"
+    ],
+    "rating": 3371.3219
+   },
+   {
+    "university": "Carnegie Mellon University",
+    "members": [
+     "conqueror_of_tourist",
+     "summitwei",
+     "int_jim"
+    ],
+    "rating": 3273.3584
+   },
+   {
+    "university": "🥉 The University of Tokyo",
+    "members": [
+     "yutaka1999",
+     "HIR180",
+     "yokozuna57"
+    ],
+    "rating": 3263.1843
+   },
+   {
+    "university": "🥉 Nanjing University of Posts and Telecommunications",
+    "members": [
+     "ugly2333",
+     "*? ?",
+     "*? ?"
+    ],
+    "rating": 3235.0
+   },
+   {
+    "university": "🥇 ⭐ Higher School of Economics",
+    "members": [
+     "isaf27",
+     "Maksim1744",
+     "dyrbulshchyl"
+    ],
+    "rating": 3125.1837
+   },
+   {
+    "university": "🥉 Tsinghua University",
+    "members": [
+     "cz_xuyixuan",
+     "FizzyDavid",
+     "ohweonfire"
+    ],
+    "rating": 3119.3404
+   },
+   {
+    "university": "Zhejiang University",
+    "members": [
+     "Sugar_fan",
+     "SSerxhs",
+     "l1ll5"
+    ],
+    "rating": 3105.0835
+   },
+   {
+    "university": "University of Cambridge",
+    "members": [
+     "arvindf232",
+     "Tutis",
+     "Gediminas"
+    ],
+    "rating": 3036.4559
+   },
+   {
+    "university": "🥈 UW Madison",
+    "members": [
+     "Subconscious",
+     "RobeZH",
+     "LUL____SEPLED1305"
+    ],
+    "rating": 2999.6152
+   },
+   {
+    "university": "Xi'an Jiaotong University",
+    "members": [
+     "nocriz",
+     "DistantYesterday",
+     "SunshinePie"
+    ],
+    "rating": 2982.0821
+   },
+   {
+    "university": "🥈 ⭐ Seoul National U",
+    "members": [
+     "dlalswp25",
+     "blackbori",
+     "GyojunYoun"
+    ],
+    "rating": 2930.6534
+   },
+   {
+    "university": "🥈 Taras Shevchenko National University of Kyiv",
+    "members": [
+     "KostasKostil",
+     "kostia244",
+     "VladProg"
+    ],
+    "rating": 2896.424
+   },
+   {
+    "university": "Georgia Tech",
+    "members": [
+     "xyz2606",
+     "chenjb",
+     "akaiNeko"
+    ],
+    "rating": 2885.3902
+   },
+   {
+    "university": "harbour.space university",
+    "members": [
+     "Meijer",
+     "MaksymOboznyi",
+     "sorry12000"
+    ],
+    "rating": 2585.293
+   },
+   {
+    "university": "Technical University Munich",
+    "members": [
+     "eriksuenderhauf",
+     "atacan",
+     "tob123"
+    ],
+    "rating": 2544.8011
+   },
+   {
+    "university": "Jagiellonian University",
+    "members": [
+     "teapotd",
+     "Piurko",
+     "trabbbart"
+    ],
+    "rating": 2529.7917
+   },
+   {
+    "university": "The German University in Cairo",
+    "members": [
+     "ZerooCool",
+     "YahiaSherif",
+     "Hemose"
+    ],
+    "rating": 2365.8612
+   },
+   {
+    "university": "Al-Baath University",
+    "members": [
+     "Mohanad_Nahhal",
+     "Vectors_Master",
+     "BabaVoss"
+    ],
+    "rating": 2301.8812
+   },
+   {
+    "university": "⭐ FCIS Ain Shams",
+    "members": [
+     "IsaacMoris",
+     "Mostafa_ELbadawy",
+     "islammohsen"
+    ],
+    "rating": 2274.7521
+   },
+   {
+    "university": "Assiut University",
+    "members": [
+     "AhmedEzzatG",
+     "karemo",
+     "Ahmed-Yasser"
+    ],
+    "rating": 2245.6487
+   },
+   {
+    "university": "American University of Beirut",
+    "members": [
+     "Charbel",
+     "ChaosAngel",
+     "0-jij-0"
+    ],
+    "rating": 2215.4044
+   },
+   {
+    "university": "Azhar University",
+    "members": [
+     "maghrabyJr_",
+     "abu-halimah",
+     "Ahmad-Magdy"
+    ],
+    "rating": 1999.601
+   },
+   {
+    "university": "Beijing Institute of Technology",
+    "members": [
+     "fallleaves01",
+     "OMG_link",
+     "smzzl"
+    ],
+    "rating": 2845.972
+   },
+   {
+    "university": "Nanjing University",
+    "members": [
+     "-skyline-",
+     "uuzlovetree",
+     "remoon"
+    ],
+    "rating": 2789.7748
+   },
+   {
+    "university": "Jinan University",
+    "members": [
+     "superguymj",
+     "reltiH233",
+     "*? ?"
+    ],
+    "rating": 2704.6783
+   },
+   {
+    "university": "The Chinese University of Hong Kong",
+    "members": [
+     "Joyemang",
+     "MooNight",
+     "forxen"
+    ],
+    "rating": 2690.1231
+   },
+   {
+    "university": "University of Electronic Science and Technology of China (UESTC)",
+    "members": [
+     "chen_zexing",
+     "whfym",
+     "cjj490168650"
+    ],
+    "rating": 2681.3225
+   },
+   {
+    "university": "Shanghai Jiaotong University",
+    "members": [
+     "Timsei",
+     "applese",
+     "tyler178"
+    ],
+    "rating": 2566.4512
+   },
+   {
+    "university": "Beihang University",
+    "members": [
+     "Serval",
+     "Oshwiciqwqq",
+     "200815147"
+    ],
+    "rating": 2552.2403
+   },
+   {
+    "university": "Sun Yat-Sen University",
+    "members": [
+     "Zayin",
+     "PureWhite",
+     "kqp"
+    ],
+    "rating": 2534.5393
+   },
+   {
+    "university": "University of Science and Technology of China",
+    "members": [
+     "LittleBeetle",
+     "_-_",
+     "PolyLoger"
+    ],
+    "rating": 2361.1811
+   },
+   {
+    "university": "Soongsil University",
+    "members": [
+     "Little_Bunny",
+     "JooDdae",
+     "edenooo"
+    ],
+    "rating": 2789.3759
+   },
+   {
+    "university": "KAIST",
+    "members": [
+     "Serin",
+     "est_stella",
+     "Onjo"
+    ],
+    "rating": 2704.0105
+   },
+   {
+    "university": "University of Engineering and Technology — VNU",
+    "members": [
+     "Gnoud__",
+     "ngfam",
+     "negativez2"
+    ],
+    "rating": 2649.5947
+   },
+   {
+    "university": "🥉 National Taiwan University",
+    "members": [
+     "2qbingxuan",
+     "moe.tsuki",
+     "oToToT"
+    ],
+    "rating": 2561.0773
+   },
+   {
+    "university": "University of Science, VNU-HCM",
+    "members": [
+     "SaoST",
+     "VHTung",
+     "Monarchuwu"
+    ],
+    "rating": 2519.1311
+   },
+   {
+    "university": "National Tsing Hua University",
+    "members": [
+     "Jeffrey",
+     "jeeeerrrpop",
+     "Yazmau"
+    ],
+    "rating": 2493.5595
+   },
+   {
+    "university": "UNSW Sydney",
+    "members": [
+     "AngusRitossa",
+     "Ali.Kh",
+     "dallasyan"
+    ],
+    "rating": 2491.2184
+   },
+   {
+    "university": "Hanoi University of Science and Technology",
+    "members": [
+     "6aren",
+     "TranLeHiep",
+     "toilanvd_HUST"
+    ],
+    "rating": 2485.5402
+   },
+   {
+    "university": "International University — VNU-HCM",
+    "members": [
+     "neko_nyaaaaaaaaaaaaaaaaa",
+     "YinLin",
+     "Kamejoko"
+    ],
+    "rating": 2482.9322
+   },
+   {
+    "university": "National Chiao Tung University",
+    "members": [
+     "henotrix",
+     "alan8585",
+     "ToxicPie9"
+    ],
+    "rating": 2343.0012
+   },
+   {
+    "university": "Bina Nusantara University",
+    "members": [
+     "Owmicron",
+     "ZeroScar",
+     "KerakTelor"
+    ],
+    "rating": 2281.0868
+   },
+   {
+    "university": "IIT(BHU) Varanasi",
+    "members": [
+     "CoderAnshu",
+     "rivalq",
+     "demoralizer"
+    ],
+    "rating": 2674.7326
+   },
+   {
+    "university": "IIT Madras",
+    "members": [
+     "KDVinit",
+     "Kira_1234",
+     "SaiAryan"
+    ],
+    "rating": 2544.2476
+   },
+   {
+    "university": "⭐ BUET",
+    "members": [
+     "SA01",
+     "upobir",
+     "irri"
+    ],
+    "rating": 2522.8088
+   },
+   {
+    "university": "University of Dhaka",
+    "members": [
+     "Alpha_Q",
+     "serotonin",
+     "aymanrasheed7"
+    ],
+    "rating": 2517.862
+   },
+   {
+    "university": "IIT Roorkee",
+    "members": [
+     "dnshgyl21",
+     "_deactivated_",
+     "_Enigma__"
+    ],
+    "rating": 2488.9839
+   },
+   {
+    "university": "IIT (ISM) Dhanbad",
+    "members": [
+     "yash_daga",
+     "JaySharma1048576",
+     "abhidot"
+    ],
+    "rating": 2483.9346
+   },
+   {
+    "university": "IIT Bhubaneswar",
+    "members": [
+     "sg0071729",
+     "ARPlT",
+     "ARegularCoder"
+    ],
+    "rating": 2417.703
+   },
+   {
+    "university": "BITS Pilani — Pilani Campus",
+    "members": [
+     "brobat",
+     "Lain",
+     "AdiAnand"
+    ],
+    "rating": 2405.3013
+   },
+   {
+    "university": "NIT Trichy",
+    "members": [
+     "gupta_nitin",
+     "rishabnahar2025",
+     "ritik_m"
+    ],
+    "rating": 2327.4967
+   },
+   {
+    "university": "RUET",
+    "members": [
+     "adnan_toky",
+     "Shefin_",
+     "thisIsMorningstar"
+    ],
+    "rating": 2327.1553
+   },
+   {
+    "university": "IIIT Hyderabad",
+    "members": [
+     "amul_agrawal",
+     "aditya.verma",
+     "arjo"
+    ],
+    "rating": 2326.0196
+   },
+   {
+    "university": "IIIT Delhi",
+    "members": [
+     "Priyansh31dec",
+     "parth20",
+     "Gaurav_Dawra"
+    ],
+    "rating": 2284.0329
+   },
+   {
+    "university": "IIT Patna",
+    "members": [
+     "pac-man21",
+     "croxo",
+     "Crocuta"
+    ],
+    "rating": 2270.5408
+   },
+   {
+    "university": "Universidad Nacional de Colombia",
+    "members": [
+     "mcqueencin",
+     "ahoraSoyPeor",
+     "JhonnyZaz"
+    ],
+    "rating": 2534.7441
+   },
+   {
+    "university": "⭐ ESCOM-IPN",
+    "members": [
+     "Marckess",
+     "begv",
+     "alaneos777"
+    ],
+    "rating": 2525.8147
+   },
+   {
+    "university": "Universidad Nacional de Córdoba — FaMAF",
+    "members": [
+     "MateoCV",
+     "CarusoX",
+     "helcsnewsxd"
+    ],
+    "rating": 2463.1501
+   },
+   {
+    "university": "University of Sao Paulo",
+    "members": [
+     "lucas3h",
+     "thilio",
+     "morete"
+    ],
+    "rating": 2456.9573
+   },
+   {
+    "university": "UFPE",
+    "members": [
+     "Gapzinho",
+     "beza",
+     "ijmg"
+    ],
+    "rating": 2409.2441
+   },
+   {
+    "university": "FCEN-UBA",
+    "members": [
+     "Agua_Podrida",
+     "Mateo",
+     "stringa"
+    ],
+    "rating": 2385.1506
+   },
+   {
+    "university": "Universidad Simón Bolívar",
+    "members": [
+     "CrazyDiamond",
+     "jesuswr",
+     "AngelVzla99"
+    ],
+    "rating": 2300.6918
+   },
+   {
+    "university": "University of Havana",
+    "members": [
+     "marcOS",
+     "ChandlerMTR",
+     "milaXD"
+    ],
+    "rating": 2220.1852
+   },
+   {
+    "university": "Universidade de São Paulo — Campus de São Carlos",
+    "members": [
+     "lucasturci",
+     "fakhoury",
+     "fredbr"
+    ],
+    "rating": 2203.4331
+   },
+   {
+    "university": "Universidad Tecnológica Nacional — FRSF",
+    "members": [
+     "lsantire",
+     "FedeNQ",
+     "Aristides"
+    ],
+    "rating": 2139.2968
+   },
+   {
+    "university": "UFCG",
+    "members": [
+     "joaom",
+     "figdan",
+     "Rennan"
+    ],
+    "rating": 2090.6306
+   },
+   {
+    "university": "Universidad de Guadalajara CUCEI",
+    "members": [
+     "IvanBorquez",
+     "Franco1010",
+     "crystaalroo"
+    ],
+    "rating": 2060.7652
+   },
+   {
+    "university": "Universidad de las Ciencias Informáticas",
+    "members": [
+     "teruel",
+     "Kosmo00",
+     "Mononoke001"
+    ],
+    "rating": 1962.4333
+   },
+   {
+    "university": "ITAM",
+    "members": [
+     "Guendabiaani",
+     "CaDe",
+     "diegoht"
+    ],
+    "rating": 1921.3753
+   },
+   {
+    "university": "Columbia University",
+    "members": [
+     "yangster67",
+     "askd",
+     "Nea1"
+    ],
+    "rating": 2665.7108
+   },
+   {
+    "university": "University of Waterloo",
+    "members": [
+     "pwypeanut",
+     "ChrisT",
+     "mariand"
+    ],
+    "rating": 2653.1673
+   },
+   {
+    "university": "Rutgers University",
+    "members": [
+     "jdurie",
+     "akifpatel",
+     "ki0apa"
+    ],
+    "rating": 2557.4336
+   },
+   {
+    "university": "Stanford University",
+    "members": [
+     "lucasxia01",
+     "miagkov",
+     "TheOneYouWant"
+    ],
+    "rating": 2430.7351
+   },
+   {
+    "university": "University of Alberta",
+    "members": [
+     "IanDeHaan",
+     "Johnson_Wu",
+     "Acceon"
+    ],
+    "rating": 2420.4841
+   },
+   {
+    "university": "University of Central Florida",
+    "members": [
+     "lightseba",
+     "DanielW48",
+     "gigabuffoon"
+    ],
+    "rating": 2366.3908
+   },
+   {
+    "university": "ITMO University",
+    "members": [
+     "iakovlev.zakhar",
+     "DishonoredRighteous",
+     "golikovnik"
+    ],
+    "rating": 2729.1591
+   },
+   {
+    "university": "🥈 Moscow IPT",
+    "members": [
+     "sadovan",
+     "receed",
+     "Jatana"
+    ],
+    "rating": 2711.4861
+   },
+   {
+    "university": "Belarusian State University",
+    "members": [
+     "gepardo",
+     "austrian_artist",
+     "minthe"
+    ],
+    "rating": 2648.851
+   },
+   {
+    "university": "Saint Petersburg State University",
+    "members": [
+     "Volkov_Ivan",
+     "UnstoppableChillMachine",
+     "D.Pavlenko"
+    ],
+    "rating": 2642.4833
+   },
+   {
+    "university": "Yerevan SU",
+    "members": [
+     "zidder",
+     "_LeMur_",
+     "altunyanv"
+    ],
+    "rating": 2626.2087
+   },
+   {
+    "university": "NRU HSE Saint Petersburg",
+    "members": [
+     "kokokostya",
+     "Eran",
+     "platypus179"
+    ],
+    "rating": 2605.0999
+   },
+   {
+    "university": "Moscow State University",
+    "members": [
+     "SendThemToHell",
+     "Andreikkaa",
+     "SashaKashina"
+    ],
+    "rating": 2599.5773
+   },
+   {
+    "university": "NUST MISIS",
+    "members": [
+     "qpEDop_MuXauJloBu4",
+     "Daryusz",
+     "Jen94kA_isMy_WAIFU"
+    ],
+    "rating": 2476.6925
+   },
+   {
+    "university": "Ural FU",
+    "members": [
+     "Friska",
+     "reshke",
+     "ArtyomTsepov"
+    ],
+    "rating": 2413.4808
+   },
+   {
+    "university": "International IT University",
+    "members": [
+     "NaughtyMorzh",
+     "Railgun",
+     "Arch_of_Triumph"
+    ],
+    "rating": 2365.327
+   },
+   {
+    "university": "Innopolis University",
+    "members": [
+     "RedMind",
+     "xTemur",
+     "khaled_ismaeel"
+    ],
+    "rating": 2320.1698
+   },
+   {
+    "university": "ADA University",
+    "members": [
+     "ibrahim001",
+     "ulvi000",
+     "angryprogramer321"
+    ],
+    "rating": 2188.4673
+   }
+  ]
+ },
+ "2023": {
+  "source": "https://codeforces.com/blog/entry/117183",
+  "teams": [
+   {
+    "university": "🥉 Tokyo Institute of Technology",
+    "members": [
+     "potato167",
+     "tatyam",
+     "noshi91"
+    ],
+    "rating": 3285.1506
+   },
+   {
+    "university": "🥇⭐ Harbour.space university",
+    "members": [
+     "353cerega",
+     "244mhq",
+     "998batrr"
+    ],
+    "rating": 3264.1711
+   },
+   {
+    "university": "🥇⭐ Peking University",
+    "members": [
+     "p_b_p_b",
+     "skip2004",
+     "Warriors_fsy"
+    ],
+    "rating": 3263.2425
+   },
+   {
+    "university": "🥈 Tsinghua University",
+    "members": [
+     "QAQAutoMaton",
+     "Cirno_9baka",
+     "A.K.E.E."
+    ],
+    "rating": 3220.7222
+   },
+   {
+    "university": "🥇🏆⭐  National Research University Higher School of Economics",
+    "members": [
+     "Ormlis",
+     "teraqqq",
+     "Kirill22"
+    ],
+    "rating": 3210.2056
+   },
+   {
+    "university": "🥈 Nanjing University",
+    "members": [
+     "gisp_zjz",
+     "Roundgod",
+     "triple__a"
+    ],
+    "rating": 3109.0583
+   },
+   {
+    "university": "🥇 Moscow Institute of Physics and Technology",
+    "members": [
+     "Kapt",
+     "Pechalka",
+     "Tikhon228"
+    ],
+    "rating": 3042.7252
+   },
+   {
+    "university": "Kyoto University",
+    "members": [
+     "heno239",
+     "yamunaku",
+     "Moririn2528"
+    ],
+    "rating": 2986.7832
+   },
+   {
+    "university": "University of Central Florida",
+    "members": [
+     "Xylenox",
+     "Meaf",
+     "NatInTheHat"
+    ],
+    "rating": 2970.9531
+   },
+   {
+    "university": "🥈⭐ University of Waterloo",
+    "members": [
+     "never_giveup",
+     "KevinWan",
+     "AQT"
+    ],
+    "rating": 2932.855
+   },
+   {
+    "university": "🥉 The University of Tokyo",
+    "members": [
+     "E869120",
+     "square1001",
+     "QCFium"
+    ],
+    "rating": 2929.5881
+   },
+   {
+    "university": "Sharif University of Technology",
+    "members": [
+     "Amoo_Safar",
+     "Keshi",
+     "AmShZ"
+    ],
+    "rating": 2904.8214
+   },
+   {
+    "university": "Saratov SU",
+    "members": [
+     "Brovko",
+     "shnirelman",
+     "Lankin"
+    ],
+    "rating": 2890.6209
+   },
+   {
+    "university": "Purdue University",
+    "members": [
+     "Kuroni",
+     "devinqu",
+     "richzli"
+    ],
+    "rating": 2884.329
+   },
+   {
+    "university": "KAIST",
+    "members": [
+     "Retro3014",
+     "Worteltje",
+     "mo_onrabbit2"
+    ],
+    "rating": 2862.9374
+   },
+   {
+    "university": "Jagiellonian University",
+    "members": [
+     "jacynkaa",
+     "YalG",
+     "Amtek"
+    ],
+    "rating": 2786.1209
+   },
+   {
+    "university": "Saarland University",
+    "members": [
+     "peltorator",
+     "Tc14",
+     "__j"
+    ],
+    "rating": 2763.8869
+   },
+   {
+    "university": "Neapolis University Pafos",
+    "members": [
+     "step_by_step",
+     "buyolitsez",
+     "GrandFruit"
+    ],
+    "rating": 2743.3726
+   },
+   {
+    "university": "Universidade do Porto",
+    "members": [
+     "KLPP",
+     "de_sousa",
+     "Haunted_Cpp"
+    ],
+    "rating": 2671.3373
+   },
+   {
+    "university": "Ecole Normale Supérieure",
+    "members": [
+     "nweeks",
+     "Arturgo",
+     "hugopm"
+    ],
+    "rating": 2644.0773
+   },
+   {
+    "university": "Università di Pisa",
+    "members": [
+     "TheScrasse",
+     "Kaey",
+     "Virv"
+    ],
+    "rating": 2630.0325
+   },
+   {
+    "university": "University of Oxford",
+    "members": [
+     "HackerMonk",
+     "Andyvanh1",
+     "hychyc"
+    ],
+    "rating": 2627.506
+   },
+   {
+    "university": "🥉 University of Warsaw",
+    "members": [
+     "Asymmetry",
+     "Markadiusz",
+     "tnowak"
+    ],
+    "rating": 2622.0007
+   },
+   {
+    "university": "University of Bergen",
+    "members": [
+     "magnus.hegdahl",
+     "lebarelue",
+     "AkihikOoOo"
+    ],
+    "rating": 2574.4198
+   },
+   {
+    "university": "ETH Zurich",
+    "members": [
+     "donentseto",
+     "theodor.moroianu",
+     "Macdu"
+    ],
+    "rating": 2566.2299
+   },
+   {
+    "university": "University of Bucharest",
+    "members": [
+     "alexandra_udristoiu",
+     "apostoldaniel854",
+     "popabogdannnn"
+    ],
+    "rating": 2491.3168
+   },
+   {
+    "university": "Al-Baath University",
+    "members": [
+     "Kaitokid",
+     "Baraa_Armoush",
+     "Naseem17"
+    ],
+    "rating": 2563.9066
+   },
+   {
+    "university": "AAST Cairo",
+    "members": [
+     "Eddard",
+     "Bedoo",
+     "Uzumaki_Narutoo"
+    ],
+    "rating": 2402.3629
+   },
+   {
+    "university": "Higher Institute of Computer Science Ariana",
+    "members": [
+     "SMIrrichto",
+     "ProofByWA",
+     "yassine_hajji_"
+    ],
+    "rating": 2259.4847
+   },
+   {
+    "university": "The German University in Cairo",
+    "members": [
+     "Pandemic",
+     "Ahmed_Hosssam",
+     "O_E"
+    ],
+    "rating": 2243.4512
+   },
+   {
+    "university": "Syrian Virtual University (SVU)",
+    "members": [
+     "AmmarDab3an",
+     "ahmad_alghadban",
+     "Hassan111"
+    ],
+    "rating": 2185.1029
+   },
+   {
+    "university": "FCAI Cairo",
+    "members": [
+     "Kofta",
+     "Ahmed_Salah7",
+     "Omar76"
+    ],
+    "rating": 2176.8765
+   },
+   {
+    "university": "⭐ HIAST",
+    "members": [
+     "Mahmoud_Haddad",
+     "LastDance_NotLastOfMe",
+     "Geo_Ghaffar"
+    ],
+    "rating": 2165.239
+   },
+   {
+    "university": "Assiut university",
+    "members": [
+     "MahmoudAshour",
+     "Ahmed_AbdAlmaboud",
+     "CoOoNaN"
+    ],
+    "rating": 2151.614
+   },
+   {
+    "university": "FCIS Ain Shams",
+    "members": [
+     "Abdelrahman_Etman",
+     "ziad.khobeiz",
+     "abdelrahman001"
+    ],
+    "rating": 2101.4071
+   },
+   {
+    "university": "Birzeit University",
+    "members": [
+     "Satoru",
+     "Basilhijaz",
+     "UserIsUndefined"
+    ],
+    "rating": 1944.4572
+   },
+   {
+    "university": "Aleppo University",
+    "members": [
+     "Ayham_Dabah",
+     "MD0",
+     "MeZoro"
+    ],
+    "rating": 1921.5277
+   },
+   {
+    "university": "Shanghai Jiao Tong University",
+    "members": [
+     "installb",
+     "czjxyz",
+     "AbelCat"
+    ],
+    "rating": 2656.3566
+   },
+   {
+    "university": "Beihang Unviersity",
+    "members": [
+     "JJLeo",
+     "2sozx",
+     "Bazoka13"
+    ],
+    "rating": 2554.4807
+   },
+   {
+    "university": "Huazhong University of Science and Technology",
+    "members": [
+     "yzyyylx",
+     "Weierstrass",
+     "GCCCCCCC"
+    ],
+    "rating": 2544.4181
+   },
+   {
+    "university": "University of Electronic Science and Technology of China (UESTC)",
+    "members": [
+     "Jelefy",
+     "verjun",
+     "liar_frisky"
+    ],
+    "rating": 2531.8335
+   },
+   {
+    "university": "Universitas Indonesia",
+    "members": [
+     "Pyqe",
+     "faustaadp",
+     "kiwii"
+    ],
+    "rating": 2846.7598
+   },
+   {
+    "university": "🥈⭐ Seoul National University",
+    "members": [
+     "kdh9949",
+     "harinboy",
+     "stabilizer_h"
+    ],
+    "rating": 2782.5869
+   },
+   {
+    "university": "National University of Singapore",
+    "members": [
+     "ruanxiaoyu",
+     "nvmdava",
+     "jefrai"
+    ],
+    "rating": 2744.9374
+   },
+   {
+    "university": "National Taiwan University",
+    "members": [
+     "briansu",
+     "baluteshih",
+     "icube"
+    ],
+    "rating": 2668.2836
+   },
+   {
+    "university": "Bina Nusantara University",
+    "members": [
+     "rfpermen",
+     "Zanite",
+     "vioalbert"
+    ],
+    "rating": 2628.2177
+   },
+   {
+    "university": "University of Science, VNU-HCM",
+    "members": [
+     "Yurushia",
+     "vinfat",
+     "hieplpvip"
+    ],
+    "rating": 2584.7892
+   },
+   {
+    "university": "University of Engineering and Technology VNU",
+    "members": [
+     "Normie28",
+     "firefoooox",
+     "rainbowbunny"
+    ],
+    "rating": 2567.863
+   },
+   {
+    "university": "Soongsil University",
+    "members": [
+     "edenooo",
+     "Justice_Hui",
+     "nlog"
+    ],
+    "rating": 2502.3673
+   },
+   {
+    "university": "NYCU",
+    "members": [
+     "Misuki",
+     "Emilan",
+     "_hq8398_"
+    ],
+    "rating": 2382.7585
+   },
+   {
+    "university": "Chulalongkorn University",
+    "members": [
+     "Lucina",
+     "PineapplesOnPizza",
+     "Mentholzzz"
+    ],
+    "rating": 2353.6327
+   },
+   {
+    "university": "University of Melbourne",
+    "members": [
+     "A05",
+     "Jarjit_sigh",
+     "nickcotforce"
+    ],
+    "rating": 2291.5566
+   },
+   {
+    "university": "IIT Patna",
+    "members": [
+     "AwakeAnay",
+     "TimeWarp101",
+     "100gods"
+    ],
+    "rating": 2452.129
+   },
+   {
+    "university": "IIT Indore",
+    "members": [
+     "nishkarsh",
+     "s_jaskaran_s",
+     "codebuster_10"
+    ],
+    "rating": 2445.8843
+   },
+   {
+    "university": "Jadavpur University",
+    "members": [
+     "DrearyJoke",
+     "Yomapeed",
+     "beedle"
+    ],
+    "rating": 2432.8936
+   },
+   {
+    "university": "IIT Kanpur",
+    "members": [
+     "satyam343",
+     "udhavvarma03",
+     "avi0000"
+    ],
+    "rating": 2390.3416
+   },
+   {
+    "university": "BUET",
+    "members": [
+     "Iftekhar_Hakim_K",
+     "mahdi.hasnat",
+     "Roll_Num_56"
+    ],
+    "rating": 2370.0796
+   },
+   {
+    "university": "IIT Madras",
+    "members": [
+     "Nisanth",
+     "Teja-Smart",
+     "blitztage"
+    ],
+    "rating": 2363.8088
+   },
+   {
+    "university": "BITS Hyderabad",
+    "members": [
+     "JeevanJyot",
+     "ExplodingFreeze",
+     "the_hyp0cr1t3"
+    ],
+    "rating": 2352.1288
+   },
+   {
+    "university": "IIT Bombay",
+    "members": [
+     "shadow9236",
+     "dumb_boi",
+     "ParthDwivedi"
+    ],
+    "rating": 2329.396
+   },
+   {
+    "university": "IIT Kharagpur",
+    "members": [
+     "RahulChugh",
+     "professor_flux",
+     "harsh639"
+    ],
+    "rating": 2324.2606
+   },
+   {
+    "university": "⭐ IIT Delhi",
+    "members": [
+     "tamajitbuba",
+     "islingr",
+     "magga"
+    ],
+    "rating": 2323.9371
+   },
+   {
+    "university": "IIT Jodhpur",
+    "members": [
+     "14ns",
+     "covid01",
+     "theartofwar"
+    ],
+    "rating": 2262.8607
+   },
+   {
+    "university": "GIKI",
+    "members": [
+     "h_squared",
+     "stakudog",
+     "Simba"
+    ],
+    "rating": 2226.6328
+   },
+   {
+    "university": "DA-IICT",
+    "members": [
+     "preet_25",
+     "bhavya_rajdev",
+     "Zeus_459"
+    ],
+    "rating": 2197.6458
+   },
+   {
+    "university": "Birla Institute Of Technology And Science, Pilani, Pilani Campus",
+    "members": [
+     "aniketjain0317",
+     "utk",
+     "AAK"
+    ],
+    "rating": 2189.2168
+   },
+   {
+    "university": "BRAC University",
+    "members": [
+     "arman_ferdous",
+     "ruhan.habib39",
+     "MH_Parag"
+    ],
+    "rating": 2162.5354
+   },
+   {
+    "university": "University of Dhaka",
+    "members": [
+     "_Kaizer_",
+     "_skb_",
+     "boringtofu"
+    ],
+    "rating": 2041.359
+   },
+   {
+    "university": "⭐ Universidad de Buenos Aires — FCEN",
+    "members": [
+     "reedef",
+     "CodigoL",
+     "Heibor"
+    ],
+    "rating": 2597.8366
+   },
+   {
+    "university": "UNICAMP",
+    "members": [
+     "yan.silva",
+     "NaimSS",
+     "tdas"
+    ],
+    "rating": 2566.1229
+   },
+   {
+    "university": "Havana University",
+    "members": [
+     "dmga44",
+     "Giga_Cronos",
+     "Leonardo16"
+    ],
+    "rating": 2526.8083
+   },
+   {
+    "university": "UFMG",
+    "members": [
+     "emaneru",
+     "brunomont",
+     "bernardo_amorim"
+    ],
+    "rating": 2440.0224
+   },
+   {
+    "university": "Pontificia Universidad Católica de Chile",
+    "members": [
+     "visho33",
+     "kovaxis",
+     "MrNachoX"
+    ],
+    "rating": 2378.9948
+   },
+   {
+    "university": "UNB",
+    "members": [
+     "cebolinha",
+     "Vilsu",
+     "EYZ"
+    ],
+    "rating": 2314.4515
+   },
+   {
+    "university": "IME",
+    "members": [
+     "Deaga",
+     "srgioreinier",
+     "hsnavarro"
+    ],
+    "rating": 2287.6133
+   },
+   {
+    "university": "Eafit University",
+    "members": [
+     "martinius",
+     "Scano",
+     "MesSimonFallon19"
+    ],
+    "rating": 2261.9705
+   },
+   {
+    "university": "UG-CIMAT",
+    "members": [
+     "DiegoGarcia",
+     "wiritos",
+     "JoseSoto"
+    ],
+    "rating": 2220.6126
+   },
+   {
+    "university": "UFRJ",
+    "members": [
+     "fcw",
+     "LeticiaFCS",
+     "GabrielNexT"
+    ],
+    "rating": 2194.253
+   },
+   {
+    "university": "Universidad Nacional de Rosario",
+    "members": [
+     "Fran2001",
+     "estoy-re-sebado",
+     "Tainel"
+    ],
+    "rating": 2140.2854
+   },
+   {
+    "university": "Universidad Nacional de Colombia",
+    "members": [
+     "AndresRPerez",
+     "Cesardiaz22",
+     "Chaves"
+    ],
+    "rating": 2087.4233
+   },
+   {
+    "university": "Universidad Panamericana",
+    "members": [
+     "kishtarn",
+     "Chaska",
+     "Hurrem_Mancilla"
+    ],
+    "rating": 2047.619
+   },
+   {
+    "university": "FC-UNAM",
+    "members": [
+     "Alexbrii",
+     "Zawos",
+     "laudima"
+    ],
+    "rating": 2013.6888
+   },
+   {
+    "university": "Universidad Mayor de San Simón",
+    "members": [
+     "pacha2880",
+     "el_programador",
+     "HeReWeGoAgAiN123"
+    ],
+    "rating": 1953.8024
+   },
+   {
+    "university": "ESCOM-IPN",
+    "members": [
+     "JorgeIbanez",
+     "DanielMontes",
+     "FeetTester"
+    ],
+    "rating": 1953.7257
+   },
+   {
+    "university": "Universidad de Guadalajara CUCEI",
+    "members": [
+     "Uriel",
+     "Abraham",
+     "Pino"
+    ],
+    "rating": 1772.3002
+   },
+   {
+    "university": "Massachusetts Institute of Technology",
+    "members": [
+     "frodakcin",
+     "thomas0115",
+     "jacobtpl"
+    ],
+    "rating": 2722.6473
+   },
+   {
+    "university": "UC San Diego",
+    "members": [
+     "ZhouShang2003",
+     "stasio6",
+     "bitset"
+    ],
+    "rating": 2710.3446
+   },
+   {
+    "university": "University of Maryland",
+    "members": [
+     "galen_colin",
+     "Navick",
+     "mr.banana"
+    ],
+    "rating": 2687.7573
+   },
+   {
+    "university": "Carnegie Mellon",
+    "members": [
+     "BucketPotato",
+     "4fecta",
+     "kobortor"
+    ],
+    "rating": 2675.8172
+   },
+   {
+    "university": "New York University",
+    "members": [
+     "anpoli99",
+     "Liupeiliang",
+     "spar5h"
+    ],
+    "rating": 2562.4828
+   },
+   {
+    "university": "Georgia Tech",
+    "members": [
+     "dragonslayerintraining",
+     "smax",
+     "RandomKami"
+    ],
+    "rating": 2560.1184
+   },
+   {
+    "university": "University of Virginia",
+    "members": [
+     "nicksms",
+     "Edlue",
+     "Richw818"
+    ],
+    "rating": 2542.3198
+   },
+   {
+    "university": "UC Irvine",
+    "members": [
+     "t0mmyn",
+     "codicon",
+     "nanoblob"
+    ],
+    "rating": 2505.404
+   },
+   {
+    "university": "UT Dallas",
+    "members": [
+     "EMBailey",
+     "surajchip2",
+     "DedsecKnight"
+    ],
+    "rating": 2395.6384
+   },
+   {
+    "university": "Stanford University",
+    "members": [
+     "Vince729",
+     "applepi216",
+     "swagchicken"
+    ],
+    "rating": 2373.9194
+   },
+   {
+    "university": "University of Toronto",
+    "members": [
+     "bonopo",
+     "mattagar6",
+     "TriNitroTofu"
+    ],
+    "rating": 2327.3903
+   },
+   {
+    "university": "UCLA",
+    "members": [
+     "rishisankar",
+     "nikilrselvam",
+     "VisualProgrammer"
+    ],
+    "rating": 2270.8912
+   },
+   {
+    "university": "UC Berkeley",
+    "members": [
+     "linpaws",
+     "ss1237",
+     "fatant"
+    ],
+    "rating": 2025.6201
+   },
+   {
+    "university": "Saint Petersburg State University",
+    "members": [
+     "orz",
+     "74TrAkToR",
+     "sava-cska"
+    ],
+    "rating": 2835.4029
+   },
+   {
+    "university": "Innopolis University",
+    "members": [
+     "Farhod",
+     "sm1lee",
+     "Laggy"
+    ],
+    "rating": 2633.6019
+   },
+   {
+    "university": "Belarusian State University",
+    "members": [
+     "programmer228",
+     "RED_INSIDE",
+     "Septimelon"
+    ],
+    "rating": 2541.452
+   },
+   {
+    "university": "Kazakh-British Technical University",
+    "members": [
+     "Na2a",
+     "amanbol",
+     "DimmyT"
+    ],
+    "rating": 2480.4162
+   },
+   {
+    "university": "ITMO University",
+    "members": [
+     "Allors",
+     "ibraevdmitriy",
+     "RamHakimov"
+    ],
+    "rating": 2376.4538
+   },
+   {
+    "university": "Belarusian SUIR",
+    "members": [
+     "p3rfect",
+     "kartel",
+     "romarkovets"
+    ],
+    "rating": 2354.7632
+   },
+   {
+    "university": "Moscow State University",
+    "members": [
+     "Vladithur",
+     "voyrus",
+     "revelcoS"
+    ],
+    "rating": 2338.2295
+   },
+   {
+    "university": "Nazarbayev University",
+    "members": [
+     "krauch",
+     "CMaster",
+     "dulatcodes"
+    ],
+    "rating": 2281.2667
+   },
+   {
+    "university": "NRU HSE Saint Petersburg",
+    "members": [
+     "NeKpoT",
+     "vmos1999",
+     "Xrite"
+    ],
+    "rating": 2247.5227
+   }
+  ]
+ },
+ "2024": {
+  "source": "https://codeforces.com/blog/entry/129887",
+  "teams": [
+   {
+    "university": "Swarthmore College",
+    "members": [
+     "Geothermal",
+     "silxi",
+     "nitrousoxide"
+    ],
+    "rating": 3569.1801
+   },
+   {
+    "university": "Tsinghua University",
+    "members": [
+     "Rebelz",
+     "qazswedx2",
+     "hehezhou"
+    ],
+    "rating": 3512.6272
+   },
+   {
+    "university": "Massachusetts Institute of Technology (MIT)",
+    "members": [
+     "OddImage",
+     "duality",
+     "TLE"
+    ],
+    "rating": 3417.4571
+   },
+   {
+    "university": "Peking University",
+    "members": [
+     "LJC00118",
+     "xay5421",
+     "wasa855"
+    ],
+    "rating": 3380.7974
+   },
+   {
+    "university": "Saint Petersburg State University",
+    "members": [
+     "turmax",
+     "LeoPro",
+     "fastmath"
+    ],
+    "rating": 3260.6692
+   },
+   {
+    "university": "The University of Tokyo",
+    "members": [
+     "noimi",
+     "SSRS_",
+     "YoshikaMiyafuji"
+    ],
+    "rating": 3200.9995
+   },
+   {
+    "university": "Beijing Jiaotong University",
+    "members": [
+     "StarSilk",
+     "Su_Zipei",
+     "Lirnited"
+    ],
+    "rating": 3136.3336
+   },
+   {
+    "university": "Moscow Institute of Physics and Technology",
+    "members": [
+     "Kapt",
+     "Pechalka",
+     "Tikhon228"
+    ],
+    "rating": 3114.9231
+   },
+   {
+    "university": "Eötvös Loránd University",
+    "members": [
+     "peti1234",
+     "Peti",
+     "mraron"
+    ],
+    "rating": 3057.1607
+   },
+   {
+    "university": "Higher School of Economics",
+    "members": [
+     "allvik66",
+     "alexxela12345",
+     "mutant"
+    ],
+    "rating": 3037.9946
+   },
+   {
+    "university": "Seoul National U",
+    "members": [
+     "Karuna",
+     "YeongTree",
+     "arnold518"
+    ],
+    "rating": 3012.4093
+   },
+   {
+    "university": "Tokyo Institute of Technology",
+    "members": [
+     "potato167",
+     "noshi91",
+     "*Hemimor"
+    ],
+    "rating": 2998.2267
+   },
+   {
+    "university": "National University of Singapore",
+    "members": [
+     "user202729",
+     "rama_pang",
+     "nvmdava"
+    ],
+    "rating": 2943.284
+   },
+   {
+    "university": "Sharif University of Technology",
+    "members": [
+     "Amoo_Safar",
+     "Keshi",
+     "AmShZ"
+    ],
+    "rating": 2888.95
+   },
+   {
+    "university": "Zhejiang University",
+    "members": [
+     "Suika_predator",
+     "lxlxl",
+     "lwn_16"
+    ],
+    "rating": 2865.0481
+   },
+   {
+    "university": "Karlsruhe Institute of Technology",
+    "members": [
+     "LuCpp",
+     "imirdy",
+     "dranjohn"
+    ],
+    "rating": 2744.3931
+   },
+   {
+    "university": "École Polytechnique",
+    "members": [
+     "lucaperju",
+     "Lemur95",
+     "Kripton2005"
+    ],
+    "rating": 2695.4481
+   },
+   {
+    "university": "Universidade do Porto",
+    "members": [
+     "KLPP",
+     "de_sousa",
+     "Haunted_Cpp"
+    ],
+    "rating": 2654.5659
+   },
+   {
+    "university": "ETH Zurich",
+    "members": [
+     "GRT_2018",
+     "theodor.moroianu",
+     "paula"
+    ],
+    "rating": 2602.7203
+   },
+   {
+    "university": "Universitat Politècnica de Catalunya",
+    "members": [
+     "MeGustaElArroz23",
+     "Pablo-No",
+     "xpov1LL"
+    ],
+    "rating": 2545.6825
+   },
+   {
+    "university": "The German University in Cairo",
+    "members": [
+     "ZerooCool",
+     "Hemose",
+     "YahiaSherif"
+    ],
+    "rating": 2358.0895
+   },
+   {
+    "university": "FCAI Cairo University",
+    "members": [
+     "Drakkon",
+     "Gamal74",
+     "Rokba"
+    ],
+    "rating": 2352.5719
+   },
+   {
+    "university": "Tishreen University",
+    "members": [
+     "Guess.Who",
+     "Eliaster",
+     "Helal_Salloum"
+    ],
+    "rating": 2320.5588
+   },
+   {
+    "university": "HIAST",
+    "members": [
+     "Mahmoud_Haddad",
+     "LastDance_NotLastOfMe",
+     "Geo_Ghaffar"
+    ],
+    "rating": 2227.8883
+   },
+   {
+    "university": "Assiut University",
+    "members": [
+     "AhmedEzzatG",
+     "karemo",
+     "MuhammadMostafa"
+    ],
+    "rating": 2185.3437
+   },
+   {
+    "university": "Birzeit University",
+    "members": [
+     "HIJAZ",
+     "Satoru",
+     "UserIsUndefined"
+    ],
+    "rating": 2176.2639
+   },
+   {
+    "university": "FCIS Ain Shams University",
+    "members": [
+     "zezoo050",
+     "go_next",
+     "Youssefmorsi1"
+    ],
+    "rating": 2064.7271
+   },
+   {
+    "university": "Northeastern University",
+    "members": [
+     "Sulfox",
+     "thecold",
+     "CSHwang"
+    ],
+    "rating": 2852.1749
+   },
+   {
+    "university": "Wuhan University of Technology",
+    "members": [
+     "EternalAlexander",
+     "Yaimsea",
+     "DanWin"
+    ],
+    "rating": 2841.8718
+   },
+   {
+    "university": "Nanjing University (NJU)",
+    "members": [
+     "-skyline-",
+     "uuzlovetree",
+     "remoon"
+    ],
+    "rating": 2789.7748
+   },
+   {
+    "university": "University of Electronic Science and Technology of China",
+    "members": [
+     "leukocyte",
+     "axs7384",
+     "Vingying0"
+    ],
+    "rating": 2654.652
+   },
+   {
+    "university": "Harbin Institute of Technology (HIT)",
+    "members": [
+     "w4p3r",
+     "FavorGew",
+     "daniel14311531"
+    ],
+    "rating": 2654.1165
+   },
+   {
+    "university": "Kyoto University",
+    "members": [
+     "physics0523",
+     "cn449",
+     "*sheyasutaka"
+    ],
+    "rating": 2828.9784
+   },
+   {
+    "university": "Universitas Indonesia",
+    "members": [
+     "Pyqe",
+     "steven.novaryo",
+     "ArvinCiu"
+    ],
+    "rating": 2790.0103
+   },
+   {
+    "university": "Soongsil University",
+    "members": [
+     "JooDdae",
+     "edenooo",
+     "Justice_Hui"
+    ],
+    "rating": 2642.9482
+   },
+   {
+    "university": "University of Engineering and Technology – VNU",
+    "members": [
+     "HollwoQ_Pelw",
+     "khuepr123",
+     "trungnotchung"
+    ],
+    "rating": 2582.2363
+   },
+   {
+    "university": "University of Science, VNU-HCM",
+    "members": [
+     "SaoST",
+     "VHTung",
+     "Monarchuwu"
+    ],
+    "rating": 2507.272
+   },
+   {
+    "university": "Pohang University of Science and Technology",
+    "members": [
+     "kwoncycle",
+     "leo020630",
+     "petamingks"
+    ],
+    "rating": 2440.3848
+   },
+   {
+    "university": "Osaka University",
+    "members": [
+     "kotamanegi",
+     "ku-haku",
+     "*vwxyz"
+    ],
+    "rating": 2373.4122
+   },
+   {
+    "university": "Hanoi University of Science and Technology",
+    "members": [
+     "Lyde",
+     "ntdung",
+     "tien_noob"
+    ],
+    "rating": 2364.6384
+   },
+   {
+    "university": "IIT Kharagpur",
+    "members": [
+     "Dominater069",
+     "rishit3234",
+     "rishabh_agarwal"
+    ],
+    "rating": 2838.169
+   },
+   {
+    "university": "IIT Delhi",
+    "members": [
+     "ElDiablo",
+     "MridulAhi",
+     "ghoul932"
+    ],
+    "rating": 2660.8234
+   },
+   {
+    "university": "SUST",
+    "members": [
+     "Alfeh",
+     "YouKn0wWho",
+     "Raiden"
+    ],
+    "rating": 2505.6515
+   },
+   {
+    "university": "IIT Madras",
+    "members": [
+     "Teja-Smart",
+     "blitztage",
+     "Nisanth"
+    ],
+    "rating": 2448.3065
+   },
+   {
+    "university": "Dhaka University",
+    "members": [
+     "DrSwad",
+     "Alpha_Q",
+     "serotonin"
+    ],
+    "rating": 2430.6193
+   },
+   {
+    "university": "IIT Kanpur",
+    "members": [
+     "udhavvarma03",
+     "avi0000",
+     "satyam343"
+    ],
+    "rating": 2369.9295
+   },
+   {
+    "university": "BITS Pilani, Pilani Campus",
+    "members": [
+     "brobat",
+     "utk",
+     "AAK"
+    ],
+    "rating": 2334.0636
+   },
+   {
+    "university": "IIT Bhubaneswar",
+    "members": [
+     "sg0071729",
+     "21cs01033",
+     "gakshat468"
+    ],
+    "rating": 2315.0053
+   },
+   {
+    "university": "IIT Roorkee",
+    "members": [
+     "Gaze_n_Miss",
+     "BlackMamba",
+     "fluffy_the_squirrel"
+    ],
+    "rating": 2233.7046
+   },
+   {
+    "university": "IIT Patna",
+    "members": [
+     "mayankfrost",
+     "TimeWarp101",
+     "quantau"
+    ],
+    "rating": 2179.24
+   },
+   {
+    "university": "GIKI",
+    "members": [
+     "h_squared",
+     "stakudog",
+     "Simba"
+    ],
+    "rating": 2139.5103
+   },
+   {
+    "university": "IIT (BHU) Varanasi",
+    "members": [
+     "_helloLad",
+     "Rohan217",
+     "nakshatraexe"
+    ],
+    "rating": 2112.7124
+   },
+   {
+    "university": "Khulna University of Engineering & Technology",
+    "members": [
+     "Arnob",
+     "MinhazIbnMizan",
+     "BrehamPie"
+    ],
+    "rating": 2018.4965
+   },
+   {
+    "university": "IIT Guwahati",
+    "members": [
+     "dhruvsomani",
+     "vikram108",
+     "ParadigmShift"
+    ],
+    "rating": 1963.3798
+   },
+   {
+    "university": "Universidade Federal de Minas Gerais (UFMG)",
+    "members": [
+     "fmota",
+     "emaneru",
+     "MvKaio"
+    ],
+    "rating": 2679.1545
+   },
+   {
+    "university": "University of São Paulo",
+    "members": [
+     "LipArcanjo",
+     "nathan_luiz",
+     "wnmrmr"
+    ],
+    "rating": 2646.3547
+   },
+   {
+    "university": "Universidad Nacional de Colombia",
+    "members": [
+     "mcqueencin",
+     "aprohACk",
+     "Klaus26"
+    ],
+    "rating": 2475.8523
+   },
+   {
+    "university": "Pontificia Universidad Catolica de Chile",
+    "members": [
+     "MrNachoX",
+     "kovaxis",
+     "visho33"
+    ],
+    "rating": 2398.5245
+   },
+   {
+    "university": "Havana University",
+    "members": [
+     "Giga_Cronos",
+     "AGG",
+     "Leonardo16"
+    ],
+    "rating": 2386.4704
+   },
+   {
+    "university": "Universidad de Guanajuato (CIMAT)",
+    "members": [
+     "DiegoGarcia",
+     "wiritos",
+     "JoseSoto"
+    ],
+    "rating": 2382.3943
+   },
+   {
+    "university": "Universidad Nacional de Ingeniería",
+    "members": [
+     "Cegax",
+     "mika_uwu",
+     "bardend"
+    ],
+    "rating": 2298.9716
+   },
+   {
+    "university": "Universidade do Estado de Santa Catarina (UDESC)",
+    "members": [
+     "joaozao",
+     "nzo",
+     "ericg"
+    ],
+    "rating": 2169.076
+   },
+   {
+    "university": "Universidade Federal de Goiás (UFG)",
+    "members": [
+     "gustavoleal",
+     "Dayllon",
+     "nelsi_sousa"
+    ],
+    "rating": 2166.6545
+   },
+   {
+    "university": "Universidad Nacional de Rosario (UNR)",
+    "members": [
+     "estoy-re-sebado",
+     "Fran2001",
+     "Tainel"
+    ],
+    "rating": 2152.6789
+   },
+   {
+    "university": "Instituto Militar de Engenharia (IME)",
+    "members": [
+     "MatheusAB",
+     "cosenza",
+     "srgioreinier"
+    ],
+    "rating": 2118.5905
+   },
+   {
+    "university": "Universidade de São Paulo — Campus de São Carlos",
+    "members": [
+     "nitor",
+     "kenzo.nobre",
+     "ThiagoSDQ"
+    ],
+    "rating": 1973.8545
+   },
+   {
+    "university": "ITESM Campus Guadalajara",
+    "members": [
+     "karlamun",
+     "Baus",
+     "cdamezcua"
+    ],
+    "rating": 1958.2883
+   },
+   {
+    "university": "Universidad Tecnológica Nacional — FRSF",
+    "members": [
+     "FedeNQ",
+     "marianoferesin",
+     "Aristides"
+    ],
+    "rating": 1956.6493
+   },
+   {
+    "university": "University of Waterloo",
+    "members": [
+     "KevinWan",
+     "mango.",
+     "pwypeanut"
+    ],
+    "rating": 2849.6949
+   },
+   {
+    "university": "University of Maryland",
+    "members": [
+     "Shayan",
+     "galen_colin",
+     "sam571128"
+    ],
+    "rating": 2826.866
+   },
+   {
+    "university": "Columbia University",
+    "members": [
+     "yangster67",
+     "ikaurov",
+     "serichaoo"
+    ],
+    "rating": 2713.7987
+   },
+   {
+    "university": "Stanford University",
+    "members": [
+     "skylinebaby",
+     "nikilrselvam",
+     "Vince729"
+    ],
+    "rating": 2671.1527
+   },
+   {
+    "university": "University of California, Berkeley",
+    "members": [
+     "vkgainz",
+     "Bungmint",
+     "Badint"
+    ],
+    "rating": 2584.4625
+   },
+   {
+    "university": "University of Michigan",
+    "members": [
+     "docriz",
+     "wbyyui",
+     "tuongle"
+    ],
+    "rating": 2548.3597
+   },
+   {
+    "university": "The University of British Columbia",
+    "members": [
+     "ngpin04",
+     "..vince",
+     "joelgun14"
+    ],
+    "rating": 2501.2154
+   },
+   {
+    "university": "Rutgers University",
+    "members": [
+     "bobbilyking",
+     "nickbelov",
+     "PMPuns"
+    ],
+    "rating": 2399.78
+   },
+   {
+    "university": "University of Washington",
+    "members": [
+     "Tohsaka_Sakura",
+     "Evirir",
+     "Rico64"
+    ],
+    "rating": 2381.8423
+   },
+   {
+    "university": "UT Austin",
+    "members": [
+     "mwen",
+     "fishy15",
+     "bleh0.5"
+    ],
+    "rating": 2315.7759
+   },
+   {
+    "university": "Cornell University",
+    "members": [
+     "Fujiwara_no_Mokou",
+     "qlf9",
+     "leo020828"
+    ],
+    "rating": 2206.1175
+   },
+   {
+    "university": "ITMO University",
+    "members": [
+     "iakovlev.zakhar",
+     "DishonoredRighteous",
+     "golikovnik"
+    ],
+    "rating": 2706.9524
+   },
+   {
+    "university": "Yerevan State University",
+    "members": [
+     "Andreasyan",
+     "robert9524",
+     "erankyun"
+    ],
+    "rating": 2640.3536
+   },
+   {
+    "university": "International IT University",
+    "members": [
+     "sstrong",
+     "trainwithoutpain",
+     "HCPS42"
+    ],
+    "rating": 2598.6273
+   },
+   {
+    "university": "Moscow Aviation Institute",
+    "members": [
+     "maxplus",
+     "ZergTricky",
+     "mainyutin"
+    ],
+    "rating": 2511.0766
+   },
+   {
+    "university": "Belarusian State University",
+    "members": [
+     "VEGAnn",
+     "ne4eHbKa",
+     "MathBoy"
+    ],
+    "rating": 2479.1209
+   },
+   {
+    "university": "KBTU",
+    "members": [
+     "ivatopuria",
+     "DimmyT",
+     "amanbol"
+    ],
+    "rating": 2449.4789
+   },
+   {
+    "university": "Belarusian State University of Informatics and Radioelectronics",
+    "members": [
+     "p3rfect",
+     "kartel",
+     "romarkovets"
+    ],
+    "rating": 2382.966
+   },
+   {
+    "university": "Nazarbayev University",
+    "members": [
+     "fractal",
+     "shinbay",
+     "seduneon"
+    ],
+    "rating": 2354.34
+   },
+   {
+    "university": "Astana IT University",
+    "members": [
+     "daukah",
+     "dimachine",
+     "nkamzabek"
+    ],
+    "rating": 2348.8438
+   },
+   {
+    "university": "Skolkovo Institute of Science and Technology",
+    "members": [
+     "kek1234",
+     "madn",
+     "Goldman"
+    ],
+    "rating": 2286.7247
+   },
+   {
+    "university": "Novosibirsk State University",
+    "members": [
+     "Lylova",
+     "amokrousov",
+     "Timonnable"
+    ],
+    "rating": 2236.0049
+   },
+   {
+    "university": "St. Petersburg State University of Industrial Technologies and Design",
+    "members": [
+     "seiko.iwasawa",
+     "*Romashenko",
+     "*Kipriyanov"
+    ],
+    "rating": 2203.0
+   },
+   {
+    "university": "Kutaisi International University",
+    "members": [
+     "Nika_Tamliani",
+     "bebera",
+     "Eke_bichi"
+    ],
+    "rating": 2191.9567
+   },
+   {
+    "university": "I. Javakhishvili Tbilisi State University",
+    "members": [
+     "dkhve",
+     "*Macharashvili",
+     "*Pipia"
+    ],
+    "rating": 2188.0
+   },
+   {
+    "university": "Suleyman Demirel University",
+    "members": [
+     "senitapqan",
+     "ibrm",
+     "spargapees"
+    ],
+    "rating": 2096.2063
+   }
+  ]
+ }
+}

@@ -13,8 +13,9 @@ import re
 import statistics
 import unicodedata
 from collections import Counter, defaultdict
-from dataclasses import dataclass, field
 from pathlib import Path
+
+import forecast
 
 ROOT = Path(__file__).resolve().parent.parent
 SOURCES = ROOT / "data" / "sources"
@@ -23,9 +24,7 @@ OUT = SITE / "data"
 
 SITE_URL = "https://matcom.github.io/icpc"
 NEXT_FINAL = {"year": 2026, "place": "Dubái", "dates": "4–9 abr 2027"}
-ANALOG_CASES = 40
 WINDOW = 4
-BACKTEST_FROM = 2014
 
 
 def fold(text: str) -> str:
@@ -148,141 +147,24 @@ def build_universities(contests: dict[int, list[dict]], raw: dict) -> tuple[list
 # ---------------------------------------------------------------- projection
 
 
-@dataclass
-class Window:
-    """A run of consecutive appearances and what followed it."""
-    owner: str
-    values: tuple[float, ...]
-    end_year: int
-    next_pct: float | None
-    returned: bool
-
-
-@dataclass
-class Forecast:
-    pct: float | None
-    low: float | None
-    high: float | None
-    returns: int
-    cases: int
-    similar: list[str] = field(default_factory=list)
-
-
 def series_of(results: list[dict], before: int) -> list[tuple[int, float]]:
     return [(r["year"], r["pct"]) for r in results if r["pct"] is not None and r["year"] < before]
 
 
-def windows_of(owner: str, series: list[tuple[int, float]], size: int) -> list[Window]:
-    out = []
-    for i in range(len(series) - size + 1):
-        chunk = series[i:i + size]
-        following = series[i + size] if i + size < len(series) else None
-        out.append(Window(
-            owner=owner,
-            values=tuple(v for _, v in chunk),
-            end_year=chunk[-1][0],
-            next_pct=following[1] if following else None,
-            returned=bool(following) and following[0] == chunk[-1][0] + 1,
-        ))
-    return out
-
-
-def quantile(values: list[float], q: float) -> float:
-    ordered = sorted(values)
-    position = (len(ordered) - 1) * q
-    lower = math.floor(position)
-    upper = min(lower + 1, len(ordered) - 1)
-    return ordered[lower] + (ordered[upper] - ordered[lower]) * (position - lower)
-
-
-def forecast(owner: str, series: list[tuple[int, float]], pool: dict[str, list[tuple[int, float]]],
-             target_year: int) -> Forecast | None:
-    """Predict the next percentile from how the closest past trajectories continued."""
+def similar_trajectories(owner: str, series: list[tuple[int, float]], pool: dict[str, list[tuple[int, float]]]) -> list[str]:
+    """The five others with a past run closest to the owner's latest results."""
     if len(series) < 2:
-        return None
+        return []
     size = min(WINDOW, len(series))
     recent = [v for _, v in series[-size:]]
-    scored: list[tuple[float, Window]] = []
-    best_by_owner: dict[str, float] = {}
+    closest: dict[str, float] = {}
     for other, other_series in pool.items():
-        if other == owner or len(other_series) < size:
+        if other == owner:
             continue
-        for window in windows_of(other, other_series, size):
-            distance = sum(abs(a - b) for a, b in zip(window.values, recent)) / size
-            if distance < best_by_owner.get(other, math.inf):
-                best_by_owner[other] = distance
-            if window.end_year < target_year - 1:
-                scored.append((distance, window))
-    scored.sort(key=lambda item: item[0])
-    nearest = [w for _, w in scored[:ANALOG_CASES]]
-    if not nearest:
-        return None
-    following = [w.next_pct for w in nearest if w.next_pct is not None]
-    similar = sorted(best_by_owner, key=best_by_owner.get)[:5]
-    return Forecast(
-        pct=round(quantile(following, 0.5), 1) if following else None,
-        low=round(quantile(following, 0.25), 1) if following else None,
-        high=round(quantile(following, 0.75), 1) if following else None,
-        returns=round(100 * sum(w.returned for w in nearest) / len(nearest)),
-        cases=len(nearest),
-        similar=similar,
-    )
-
-
-def spearman(xs: list[float], ys: list[float]) -> float:
-    def ranks(values: list[float]) -> list[float]:
-        order = sorted(range(len(values)), key=values.__getitem__)
-        out = [0.0] * len(values)
-        i = 0
-        while i < len(order):
-            j = i
-            while j + 1 < len(order) and values[order[j + 1]] == values[order[i]]:
-                j += 1
-            for k in range(i, j + 1):
-                out[order[k]] = (i + j) / 2
-            i = j + 1
-        return out
-    a, b = ranks(xs), ranks(ys)
-    return statistics.correlation(a, b)
-
-
-def backtest(universities: list[dict], years: list[int]) -> dict:
-    """Replay each final using only earlier results, against a last-result baseline."""
-    per_year = []
-    for year in [y for y in years if y >= BACKTEST_FROM]:
-        pool = {u["id"]: series_of(u["results"], year) for u in universities}
-        predicted, baseline, actual, inside = [], [], [], 0
-        for uni in universities:
-            result = next((r for r in uni["results"] if r["year"] == year and r["pct"] is not None), None)
-            series = pool[uni["id"]]
-            if result is None or len(series) < 2:
-                continue
-            guess = forecast(uni["id"], series, pool, year)
-            if guess is None or guess.pct is None:
-                continue
-            predicted.append(guess.pct)
-            baseline.append(series[-1][1])
-            actual.append(result["pct"])
-            inside += guess.low <= result["pct"] <= guess.high
-        if len(actual) < 10:
-            continue
-        per_year.append({
-            "year": year,
-            "teams": len(actual),
-            "spearman": round(spearman(predicted, actual), 3),
-            "spearman_baseline": round(spearman(baseline, actual), 3),
-            "mae": round(statistics.mean(abs(p - a) for p, a in zip(predicted, actual)), 1),
-            "mae_baseline": round(statistics.mean(abs(p - a) for p, a in zip(baseline, actual)), 1),
-            "inside_range": round(100 * inside / len(actual)),
-        })
-    return {
-        "per_year": per_year,
-        "spearman": round(statistics.mean(y["spearman"] for y in per_year), 3),
-        "spearman_baseline": round(statistics.mean(y["spearman_baseline"] for y in per_year), 3),
-        "mae": round(statistics.mean(y["mae"] for y in per_year), 1),
-        "mae_baseline": round(statistics.mean(y["mae_baseline"] for y in per_year), 1),
-        "inside_range": round(statistics.mean(y["inside_range"] for y in per_year)),
-    }
+        for i in range(len(other_series) - size + 1):
+            distance = sum(abs(a - b) for a, (_, b) in zip(recent, other_series[i:i + size])) / size
+            closest[other] = min(distance, closest.get(other, math.inf))
+    return sorted(closest, key=closest.get)[:5]
 
 
 def country_series(universities: list[dict], before: int) -> dict[str, list[tuple[int, float]]]:
@@ -294,43 +176,15 @@ def country_series(universities: list[dict], before: int) -> dict[str, list[tupl
     return {c: sorted(by_year.items()) for c, by_year in best.items()}
 
 
-def build_predictions(universities: list[dict], years: list[int], field_size: int) -> dict:
-    target = max(years) + 1
+def build_predictions(universities: list[dict], countries: dict, regions: dict[str, str]) -> dict:
+    predictions = forecast.project(universities, countries, regions)
+    target = predictions["year"]
     pool = {u["id"]: series_of(u["results"], target) for u in universities}
-    recent = max(years) - 4
-    teams = []
-    similar = {}
-    for uni in universities:
-        guess = forecast(uni["id"], pool[uni["id"]], pool, target)
-        if guess is None:
-            continue
-        similar[uni["id"]] = guess.similar
-        if guess.pct is None or uni["results"][-1]["year"] < recent:
-            continue
-        to_rank = lambda pct: round((1 - pct / 100) * (field_size - 1) + 1)
-        teams.append({
-            "id": uni["id"], "pct": guess.pct, "low": guess.low, "high": guess.high,
-            "rank": to_rank(guess.pct), "rank_best": to_rank(guess.high), "rank_worst": to_rank(guess.low),
-            "returns": guess.returns, "cases": guess.cases,
-        })
-    teams.sort(key=lambda t: -t["pct"])
+    predictions["similar"] = {uid: found for uid, series in pool.items() if (found := similar_trajectories(uid, series, pool))}
     country_pool = country_series(universities, target)
-    countries = {}
     for country, series in country_pool.items():
-        guess = forecast(country, series, country_pool, target)
-        if guess and guess.pct is not None:
-            countries[country] = {
-                "pct": guess.pct, "low": guess.low, "high": guess.high,
-                "returns": guess.returns, "cases": guess.cases, "similar": guess.similar,
-                "rank": round((1 - guess.pct / 100) * (field_size - 1) + 1),
-                "rank_best": round((1 - guess.high / 100) * (field_size - 1) + 1),
-                "rank_worst": round((1 - guess.low / 100) * (field_size - 1) + 1),
-            }
-    return {
-        "year": target, "field_size": field_size, "window": WINDOW, "cases": ANALOG_CASES,
-        "teams": teams, "similar": similar, "countries": countries,
-        "backtest": backtest(universities, years),
-    }
+        predictions["countries"].setdefault(country, {})["similar"] = similar_trajectories(country, series, country_pool)
+    return predictions
 
 
 # ----------------------------------------------------------------------- map
@@ -417,7 +271,7 @@ PAGES = [
     ("problemas", "Problemas", "Problems solved per final: distributions, totals and percentages."),
     ("medallas", "Medallas", "Medal tables by university and country, with the medals actually awarded."),
     ("competidores", "Competidores", "People with the most finals and the most medals."),
-    ("predicciones", "Predicciones", "Projected 2026 results from comparable historical trajectories, with a backtest."),
+    ("predicciones", "Predicciones", "Probability of each place in the next final from a Bayesian model over past finals and Codeforces team ratings, with a backtest."),
     ("comparar", "Comparar", "Head-to-head comparison of universities or countries."),
     ("pais", "País", "Profile of one country: history, similar countries, projection and teams."),
     ("universidad", "Universidad", "Profile of one university: history, similar teams, projection and members."),
@@ -449,6 +303,7 @@ def write_markdown_twins(universities: list[dict], countries: dict, predictions:
         return "\n".join(lines)
 
     uni_name = {u["id"]: u["name"] for u in universities}
+    places = predictions["places"]
     bodies = {
         "index": table(["Year", "Teams", "Champion"], [
             [y, sum(1 for u in universities for r in u["results"] if r["year"] == y),
@@ -465,8 +320,9 @@ def write_markdown_twins(universities: list[dict], countries: dict, predictions:
             for s in [[r["solved"] for u in universities for r in u["results"] if r["year"] == y and r["solved"] is not None]]]),
         "medallas": table(["University", "Gold", "Silver", "Bronze"], [[n, g, s, b] for g, s, b, n in medal_rows[:30]]),
         "competidores": table(["Competitor", "Finals"], [[display[k], n] for k, n in players.most_common(30)]),
-        "predicciones": table(["University", "Projected rank", "Middle half of cases"], [
-            [uni_name[t["id"]], t["rank"], f'{t["rank_best"]}–{t["rank_worst"]}'] for t in predictions["teams"][:30]]),
+        "predicciones": table(["University", "Team", "Champion %", "Gold %", "Any medal %", "Likely place", "Data"], [
+            [t["name"], t["team"] or "", round(100 * t["chances"][0], 1), round(100 * t["chances"][places.index(4)], 1), round(100 * t["chances"][places.index(12)], 1),
+             f'{t["rank"]} ({t["rank_best"]}–{t["rank_worst"]})', t["kind"]] for t in predictions["teams"][:30]]),
         "comparar": "The comparison page reads `data/core.json`; its URL takes `?u=<id>,<id>` or `?c=<name>,<name>`.",
         "pais": "The page takes `?c=<country name in English>`; `data/core.json` holds the same results.",
         "universidad": "The page takes `?u=<university id>`; ids and results are in `data/core.json`.",
@@ -483,7 +339,7 @@ def write_markdown_twins(universities: list[dict], countries: dict, predictions:
         f"## Pages\n\n{links}\n\n"
         "## Data\n\n"
         f"- [core.json]({SITE_URL}/data/core.json): every university with its results per final.\n"
-        f"- [predictions.json]({SITE_URL}/data/predictions.json): next-final projections and their backtest.\n"
+        f"- [predictions.json]({SITE_URL}/data/predictions.json): place probabilities of the next final per team, country and region, and their backtest.\n"
         f"- [results.csv]({SITE_URL}/data/results.csv): one row per team and final.\n"
         f"- [world.json]({SITE_URL}/data/world.json): GeoJSON used by the map.\n"
     )
@@ -494,8 +350,8 @@ def build() -> dict:
     contests, raw, problems = load_contests()
     years = sorted(contests)
     universities, countries = build_universities(contests, raw)
-    field_size = len(contests[years[-1]])
-    predictions = build_predictions(universities, years, field_size)
+    region_names = {k: v["spanish_name"] for k, v in raw["regions"].items()}
+    predictions = build_predictions(universities, countries, region_names)
     for name, meta in countries.items():
         meta["map"] = MAP_NAMES.get(name, name)
         if name in MAP_POINTS:
@@ -504,7 +360,7 @@ def build() -> dict:
         "years": years,
         "field": {str(y): len(contests[y]) for y in years},
         "problems": {str(y): n for y, n in problems.items()},
-        "regions": {k: v["spanish_name"] for k, v in raw["regions"].items()},
+        "regions": region_names,
         "countries": countries,
         "next_final": NEXT_FINAL,
         "logos": json.loads((SOURCES / "logos.json").read_text()),
@@ -523,6 +379,6 @@ if __name__ == "__main__":
     core, predictions = result["core"], result["predictions"]
     print(f"{len(core['years'])} finals, {len(core['universities'])} universities, "
           f"{sum(len(u['results']) for u in core['universities'])} results, "
-          f"{len(predictions['teams'])} projections, "
-          f"backtest spearman {predictions['backtest']['spearman']} "
-          f"vs baseline {predictions['backtest']['spearman_baseline']}")
+          f"{len(predictions['teams'])} projected teams, "
+          f"champion backtest {predictions['backtest']['with_rosters']['champion']} "
+          f"vs finals only {predictions['backtest']['finals_only']['champion']}")

@@ -126,8 +126,17 @@ img.crest { object-fit: contain; }
 .medal-case li { display: grid; grid-template-columns: 2.2em 3.6em minmax(0, 1fr); gap: 6px; align-items: center; }
 .medal-case b { font: 600 22px Cinzel, serif; }
 .medal-case span { color: var(--dim); font-size: 14px; }
+.region-podium { list-style: none; margin: 0 0 14px; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 10px; }
+.region-podium a { display: grid; justify-items: center; gap: 4px; padding: 12px; text-align: center; text-decoration: none; border: 1px solid var(--line); height: 100%; box-sizing: border-box; }
+.region-podium a:hover { background: var(--panel2); }
+.region-podium b { font: 600 20px Cinzel, serif; }
+.region-podium small { color: var(--dim); }
+.region-tables { display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 3fr); gap: 14px; align-items: start; }
+.region-tables > .tablew { --table-h: 560px; }
+.region-finals table { min-width: 560px; }
+@media (max-width: 760px) { .region-tables { grid-template-columns: minmax(0, 1fr); } }
 .winners { --table-h: 620px; }
-.winners table { min-width: 860px; }
+.winners table { min-width: 560px; }
 .winners tbody th { position: sticky; left: 0; background: var(--panel); font: 600 14px Cinzel, serif; color: var(--ink); }
 .winners td { min-width: 128px; font-size: 13px; line-height: 1.2; }
 .winners td a { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 1px 6px; align-items: center; text-decoration: none; }

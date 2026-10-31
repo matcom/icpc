@@ -4,12 +4,15 @@ import json
 import sys
 from pathlib import Path
 
+import numpy as np
 import pytest
 
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "scripts"))
 
 import build_data  # noqa: E402
+import forecast  # noqa: E402
+import refresh_ratings  # noqa: E402
 
 
 @pytest.fixture(scope="session")
@@ -102,25 +105,57 @@ def test_mojibake_names_are_repaired(built):
     assert "Thomas Wьrthinger" not in names
 
 
-def test_forecast_uses_only_the_past():
-    history = {"a": [(2010, 90.0), (2011, 80.0), (2012, 70.0)], "b": [(2010, 90.0), (2011, 80.0), (2012, 10.0)], "c": [(2010, 50.0), (2011, 40.0)]}
-    guess = build_data.forecast("c", history["c"], history, 2013)
-    assert guess.pct == 40.0  # the median of what followed the two (90, 80) runs: 70 and 10
-    assert guess.cases == 2
-    assert build_data.series_of([{"year": 2020, "pct": 50.0}, {"year": 2021, "pct": 60.0}], 2021) == [(2020, 50.0)]
-
-
 def test_projection_ranges_are_ordered_and_in_the_field(built):
     predictions = built["predictions"]
     assert predictions["teams"]
     for team in predictions["teams"]:
         assert 1 <= team["rank_best"] <= team["rank"] <= team["rank_worst"] <= predictions["field_size"]
+        assert team["chances"] == sorted(team["chances"])
 
 
-def test_backtest_beats_its_baseline(built):
+def test_simulated_places_are_coherent(built):
+    predictions = built["predictions"]
+    total = lambda place: sum(t["chances"][predictions["places"].index(place)] for t in predictions["teams"])
+    assert total(1) == pytest.approx(1, abs=0.01)
+    assert total(4) == pytest.approx(4, abs=0.01)
+    assert total(12) == pytest.approx(12, abs=0.01)
+    assert sum(t["attend"] for t in predictions["teams"]) == pytest.approx(predictions["field_size"], abs=1)
+
+
+def test_backtest_beats_finals_only_and_chance(built):
     backtest = built["predictions"]["backtest"]
-    assert backtest["per_year"]
-    assert backtest["spearman"] > backtest["spearman_baseline"]
+    rosters, finals_only, chance = backtest["with_rosters"], backtest["finals_only"], backtest["chance"]
+    assert rosters["champion"] > finals_only["champion"] > chance["champion"]
+    assert rosters["medal_brier"] < finals_only["medal_brier"] < chance["medal_brier"]
+    assert rosters["spearman"] > finals_only["spearman"]
+
+
+def test_community_names_join_only_by_equal_name_or_alias():
+    candidates = {"h": "Harvard University", "la": "Universidad de La Habana", "p": "Peking University"}
+    aliases = {"havana university": "universidad de la habana"}
+    assert forecast.resolve("Havana University", candidates, aliases) == "la"
+    assert forecast.resolve("Zhejiang University", candidates, aliases) is None
+    assert forecast.resolve("The Peking University", candidates, aliases) == "p"
+
+
+def test_team_rating_matches_the_codeforces_formula():
+    assert forecast.team_rating([None, None]) is None
+    single = forecast.team_rating([3000])
+    assert single == pytest.approx(3000, abs=1)
+    assert 3000 < forecast.team_rating([3000, 3000, 3000]) < 3400
+
+
+def test_stronger_prior_and_first_place_raise_the_posterior():
+    mean, variance = forecast.laplace(np.zeros(3), np.ones(3))
+    assert mean[0] > mean[1] > mean[2]
+    assert (variance < 1).all()
+
+
+def test_ratings_match_by_handle_not_position():
+    users = [{"handle": "Bob", "rating": 2000}, {"handle": "alice", "rating": 3000}]
+    found, missing = refresh_ratings.ratings_by_handle(["Alice", "bob", "carol"], users)
+    assert found == {"Alice": 3000, "bob": 2000}
+    assert missing == ["carol"]
 
 
 def test_every_country_with_results_has_a_map_place(built):

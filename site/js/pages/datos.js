@@ -37,7 +37,7 @@ startPage({
         <h2>Percentil</h2><p>Puesto llevado a una escala de 0 a 100 dentro de su final: el campeón tiene 100 y el último 0. Así se comparan finales de distinto tamaño. Un puesto compartido (como 103–122) usa el punto medio; un equipo sin puesto publicado queda fuera de estos cálculos.</p>
         <h2>Medallas</h2><p>Son las entregadas en cada edición, cuyo número varía. Solo al filtrar por región se reparten por posición dentro de ella.</p>
         <h2>Veterano</h2><p>Persona que ya compitió por la misma universidad en una final anterior; se identifica por su perfil en cphof. En Renovación solo cuenta el periodo elegido. El porcentaje de apariciones divide apariciones de veteranos entre apariciones totales, de modo que no pasa de 100.</p>
-        <h2>Proyección</h2><p>Se describe en <a href="predicciones.html">Predicciones</a>, junto con su prueba hacia atrás.</p>
+        <h2>Proyección</h2><p>Se describe en <a href="predicciones.html">Predicciones</a>, junto con su prueba hacia atrás. Usa los ratings públicos de <a href="https://codeforces.com/apiHelp">Codeforces</a> y listas de equipos reunidas por su comunidad: <a href="https://codeforces.com/blog/entry/149719">2026</a>, <a href="https://codeforces.com/blog/entry/102593">2021</a>, <a href="https://codeforces.com/blog/entry/116946">2022</a>, <a href="https://codeforces.com/blog/entry/117183">2023</a> y <a href="https://codeforces.com/blog/entry/129887">2024</a>.</p>
       </div>`,
     });
     card(a, {

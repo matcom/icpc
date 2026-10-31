@@ -7,6 +7,10 @@ The results and medals in data/sources/cphof-1999-2025.json were read from the
 Competitive Programming Hall of Fame, https://www.cphof.org/, (c) Yury Pisarchyk.
 They are not covered by this repository's license.
 
+data/sources/cf-team-ratings-2021-2024.json and wf-2026-field.json were read from team lists posted by
+the Codeforces community (sources in each file). cf-ratings.json comes from the public Codeforces API.
+They are not covered by this repository's license.
+
 site/vendor/echarts.min.js is Apache ECharts (Apache-2.0).
 data/sources/countries-110m.json is world-atlas (ISC), from Natural Earth (public domain).
 site/logos holds university logos, not covered by this repository's license. Sources are in

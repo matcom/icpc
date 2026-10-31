@@ -3,6 +3,7 @@ name = "icpc-observatory"
 version = "0.1.0"
 description = "Data pipeline of the ICPC observatory"
 requires-python = ">=3.11"
+dependencies = ["numpy"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

@@ -59,12 +59,11 @@ function index(core, predictions, world) {
   }
   const people = new Map();
   for (const r of rows) {
-    for (const name of r.players) {
-      const key = fold(name);
-      const p = people.get(key) ?? { key, name, rows: [] };
+    r.player_ids.forEach((id, i) => {
+      const p = people.get(id) ?? { key: id, name: r.players[i], rows: [] };
       p.rows.push(r);
-      people.set(key, p);
-    }
+      people.set(id, p);
+    });
   }
   const forecasts = new Map(predictions.teams.map((t) => [t.id, t]));
   return { ...core, unis, byId, rows, countriesIndex: countries, people, predictions, forecasts, world };

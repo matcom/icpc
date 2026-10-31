@@ -23,8 +23,6 @@ OUT = SITE / "data"
 
 SITE_URL = "https://matcom.github.io/icpc"
 NEXT_FINAL = {"year": 2026, "place": "Dubái", "dates": "15–20 nov 2026"}
-PROBLEMS_2025 = 12
-MEDAL_CUTS = ((4, "gold"), (8, "silver"), (12, "bronze"))
 ANALOG_CASES = 40
 WINDOW = 4
 BACKTEST_FROM = 2014
@@ -55,15 +53,6 @@ def to_int(value: object) -> int | None:
     return int(value) if str(value).strip().isdigit() else None
 
 
-def medal_for(rank: float | None) -> str | None:
-    if rank is None:
-        return None
-    for cut, medal in MEDAL_CUTS:
-        if rank <= cut:
-            return medal
-    return None
-
-
 def percentile(rank: float | None, field_size: int) -> float | None:
     """100 for the champion, 0 for the last place."""
     if rank is None or field_size < 2:
@@ -71,11 +60,25 @@ def percentile(rank: float | None, field_size: int) -> float | None:
     return round(100 * (1 - (rank - 1) / (field_size - 1)), 1)
 
 
-def load_contests() -> tuple[dict[int, list[dict]], dict]:
-    raw = json.loads((SOURCES / "yudivian-2006-2024.json").read_text())
-    contests = {int(y): rows for y, rows in raw["contests"].items()}
-    contests[2025] = json.loads((SOURCES / "cphof-2025.json").read_text())
-    return contests, raw
+def load_contests() -> tuple[dict[int, list[dict]], dict, dict[int, int]]:
+    """Results come from cphof; regions and Spanish names from the yudivian dataset.
+
+    Rows marked `qualified` never received a place, so they are not part of a final.
+    """
+    meta = json.loads((SOURCES / "yudivian-2006-2024.json").read_text())
+    finals = json.loads((SOURCES / "cphof-1999-2025.json").read_text())
+    fixes = json.loads((SOURCES / "name-fixes.json").read_text())
+    contests: dict[int, list[dict]] = {}
+    for year, final in finals.items():
+        rows = []
+        for row in final["rows"]:
+            if row["position"] == "qualified":
+                continue
+            ids = [slug for slug, _ in row["players"]]
+            names = [fixes.get(name, name) for _, name in row["players"]]
+            rows.append({**row, "player_ids": ids, "players": names})
+        contests[int(year)] = rows
+    return contests, meta, {int(y): f["problems"] for y, f in finals.items()}
 
 
 def canonical_names(contests: dict[int, list[dict]], key: str, aliases: dict[str, str]) -> dict[str, str]:
@@ -98,15 +101,19 @@ def load_aliases() -> dict[str, str]:
     return json.loads(path.read_text()) if path.exists() else {}
 
 
+EXTRA_COUNTRIES = {"North Macedonia": {"es": "Macedonia del Norte", "region": "eu"}}
+
+
 def build_universities(contests: dict[int, list[dict]], raw: dict) -> tuple[list[dict], dict]:
     names = canonical_names(contests, "university", load_aliases())
     countries = {
         name: {"es": c["spanish_name"], "region": c["region"]}
         for name, c in raw["countries"].items()
-    }
+    } | EXTRA_COUNTRIES
     teams: dict[str, dict] = {}
     for year in sorted(contests):
         rows = contests[year]
+        ranked = sum(parse_rank(r["position"]) is not None for r in rows)
         for row in rows:
             uni = names[row["university"]]
             rank = parse_rank(row["position"])
@@ -118,19 +125,20 @@ def build_universities(contests: dict[int, list[dict]], raw: dict) -> tuple[list
             entry["results"].append({
                 "year": year,
                 "rank": rank,
-                "pct": percentile(rank, len(rows)),
+                "pct": percentile(rank, ranked),
                 "solved": to_int(row["solved"]),
                 "time": to_int(row["time"]),
                 "team": row["team"],
-                "players": [p for p in row["players"] if p],
-                "medal": medal_for(rank),
+                "players": row["players"],
+                "player_ids": row["player_ids"],
+                "medal": row["medal"].lower() if row["medal"] else None,
             })
     universities = sorted(teams.values(), key=lambda u: u["id"])
     for uni in universities:
         uni["results"].sort(key=lambda r: r["year"])
         seen: set[str] = set()
         for result in uni["results"]:
-            keys = {fold(p) for p in result["players"]}
+            keys = set(result["player_ids"])
             result["veterans"] = len(keys & seen)
             seen |= keys
     return universities, countries
@@ -371,6 +379,7 @@ def build_world() -> dict:
 MAP_NAMES = {
     "United States": "United States of America", "Viet Nam": "Vietnam",
     "Dominican Republic": "Dominican Rep.", "Bosnia and Herzegovina": "Bosnia and Herz.",
+    "North Macedonia": "Macedonia",
 }
 MAP_POINTS = {"Singapore": [103.82, 1.35], "Hong Kong": [114.17, 22.3], "Macau": [113.55, 22.2],
               "Bahrain": [50.55, 26.07], "Malta": [14.4, 35.9]}
@@ -403,7 +412,7 @@ PAGES = [
     ("universidades", "Universidades", "University rankings, constancy heatmap and results."),
     ("renovacion", "Renovación", "How teams renew: returning members, careers and their link with results."),
     ("problemas", "Problemas", "Problems solved per final: distributions, totals and percentages."),
-    ("medallas", "Medallas", "Medal tables by university and country, using positions 1 to 12."),
+    ("medallas", "Medallas", "Medal tables by university and country, with the medals actually awarded."),
     ("competidores", "Competidores", "People with the most finals and the most medals."),
     ("predicciones", "Predicciones", "Projected 2026 results from comparable historical trajectories, with a backtest."),
     ("comparar", "Comparar", "Head-to-head comparison of universities or countries."),
@@ -428,8 +437,8 @@ def write_markdown_twins(universities: list[dict], countries: dict, predictions:
                     / sum(1 for u in universities for r in u["results"] if r["year"] == year))
         for year in years
     }
-    players = Counter(p for u in universities for r in u["results"] for p in {fold(x) for x in r["players"]})
-    display = {fold(p): p for u in universities for r in u["results"] for p in r["players"]}
+    players = Counter(i for u in universities for r in u["results"] for i in r["player_ids"])
+    display = {i: p for u in universities for r in u["results"] for i, p in zip(r["player_ids"], r["players"])}
 
     def table(headers: list[str], rows: list[list[object]]) -> str:
         lines = ["| " + " | ".join(headers) + " |", "|" + " --- |" * len(headers)]
@@ -455,15 +464,15 @@ def write_markdown_twins(universities: list[dict], countries: dict, predictions:
         "comparar": "The comparison page reads `data/core.json`; its URL takes `?u=<id>,<id>` or `?c=<name>,<name>`.",
         "pais": "The page takes `?c=<country name in English>`; `data/core.json` holds the same results.",
         "universidad": "The page takes `?u=<university id>`; ids and results are in `data/core.json`.",
-        "datos": "Sources: `yudivian/icpc` (2006–2024, Apache-2.0) and cphof.org (2025). "
-                 "Medals follow the positional rule 1–4 gold, 5–8 silver, 9–12 bronze.",
+        "datos": "Results and medals come from cphof.org, checked against icpc.global where it publishes them. "
+                 "Regions, Spanish names and the catalogue of analyses come from `yudivian/icpc` (Apache-2.0).",
     }
     for slug, title, summary in PAGES:
         (SITE / f"{slug}.html.md").write_text(f"# {title}\n\n{summary}\n\n{bodies[slug]}\n")
     links = "\n".join(f"- [{t}]({SITE_URL}/{s}.html.md): {d}" for s, t, d in PAGES)
     (SITE / "llms.txt").write_text(
         "# Observatorio ICPC\n\n"
-        "> Public statistics of the ICPC World Finals since 2006, as precomputed static files.\n\n"
+        f"> Public statistics of the ICPC World Finals since {years[0]}, as precomputed static files.\n\n"
         f"## Pages\n\n{links}\n\n"
         "## Data\n\n"
         f"- [core.json]({SITE_URL}/data/core.json): every university with its results per final.\n"
@@ -475,13 +484,11 @@ def write_markdown_twins(universities: list[dict], countries: dict, predictions:
 
 def build() -> dict:
     OUT.mkdir(parents=True, exist_ok=True)
-    contests, raw = load_contests()
+    contests, raw, problems = load_contests()
     years = sorted(contests)
     universities, countries = build_universities(contests, raw)
     field_size = len(contests[years[-1]])
     predictions = build_predictions(universities, years, field_size)
-    problems = {int(y): len(s["problems"]) for y, s in raw["stats"].items()}
-    problems[2025] = PROBLEMS_2025
     for name, meta in countries.items():
         meta["map"] = MAP_NAMES.get(name, name)
         if name in MAP_POINTS:

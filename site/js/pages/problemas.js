@@ -107,7 +107,7 @@ startPage({
       const height = Math.max(320, state.top * 24 + 20);
       rankBars(chartCard(a, { title: "Total de problemas resueltos", sub: "Acumulado del periodo", span: 4, height }),
         [...list].sort((x, y) => y.solved - x.solved).slice(0, state.top).map((e) => ({ label: e.name, value: e.solved, url: uniUrl(e.id) })));
-      rankBars(chartCard(a, { title: "% de problemas resueltos", sub: "Sobre los de sus finales, desde 2010", span: 4, height }),
+      rankBars(chartCard(a, { title: "% de problemas resueltos", sub: "Sobre los problemas de sus finales", span: 4, height }),
         list.filter((e) => e.possible).sort((x, y) => y.inPossible / y.possible - x.inPossible / x.possible).slice(0, state.top).map((e) => ({ label: e.name, value: Math.round((100 * e.inPossible) / e.possible), url: uniUrl(e.id) })),
         { format: (v) => `${v}%`, color: c.blue });
       const regions = [...new Set(rows.map((r) => r.region))].sort();

@@ -8,6 +8,7 @@ import { searchEntries } from "./search.js";
 const NAV = [
   ["index", "Panorama", "◉"],
   ["paises", "Países", "⚑"],
+  ["regiones", "Regiones", "◍"],
   ["universidades", "Universidades", "⌂"],
   ["renovacion", "Renovación", "↻"],
   ["problemas", "Problemas", "✓"],

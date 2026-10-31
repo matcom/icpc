@@ -60,3 +60,23 @@ test("unrelated text does not match", () => {
 test("an exact word ranks above a fuzzy match", () => {
   assert.equal(best("cuba", ["Cuban Institute", "Cuba", "Kuba"]), "Cuba");
 });
+
+test("the global search finds people by name, not by profile id", async () => {
+  const { searchEntries } = await import("../site/js/search.js");
+  const row = { uniName: "Universidad de La Habana" };
+  const data = {
+    countries: {},
+    countriesIndex: new Map(),
+    unis: [],
+    people: new Map([
+      ["icpc:Marcelo Fornet Fornes", { key: "icpc:Marcelo Fornet Fornes", name: "Marcelo Fornet Fornes", rows: [row] }],
+      ["topcoder:xyz", { key: "topcoder:xyz", name: "Ana Pérez", rows: [row] }],
+    ]),
+  };
+  const entries = searchEntries(data);
+  const find = (query) => fuzzyFilter(query, entries, (e) => e.key).map((e) => e.label);
+  assert.deepEqual(find("marcelo"), ["Marcelo Fornet Fornes"]);
+  assert.deepEqual(find("fornet"), ["Marcelo Fornet Fornes"]);
+  assert.deepEqual(find("ana perez"), ["Ana Pérez"]);
+  assert.deepEqual(find("topcoder"), []);
+});

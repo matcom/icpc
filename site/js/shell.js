@@ -1,8 +1,9 @@
 // Page frame: navigation, search, theme, cards, KPIs and shared filters.
-import { crest, countryName, countryUrl, esc, loadData, personUrl, uniUrl } from "./core.js";
+import { crest, esc, loadData } from "./core.js";
 import { disposeAll } from "./charts.js";
 import { watchSelects } from "./combobox.js";
 import { fuzzyFilter } from "./fuzzy.js";
+import { searchEntries } from "./search.js";
 
 const NAV = [
   ["index", "Panorama", "◉"],
@@ -71,11 +72,7 @@ function wireTheme(draw) {
 function wireSearch(data) {
   const input = document.getElementById("q");
   const box = document.getElementById("res");
-  const entries = [
-    ...[...data.countriesIndex.values()].map((c) => ({ kind: "País", order: 0, label: c.es, sub: `${c.rows.length} participaciones`, key: `${c.es} ${c.name}`, url: countryUrl(c.name), mark: c.name })),
-    ...data.unis.map((u) => ({ kind: "Universidad", order: 1, label: u.name, sub: `${countryName(data, u.country)} · ${u.results.length} finales`, key: u.name, url: uniUrl(u.id), mark: u.name })),
-    ...[...data.people.values()].map((p) => ({ kind: "Competidor", order: 2, label: p.name, sub: `${p.rows[p.rows.length - 1].uniName} · ${p.rows.length} finales`, key: p.name, url: personUrl(p.key), mark: p.name })),
-  ];
+  const entries = searchEntries(data);
   input.oninput = () => {
     const needle = input.value.trim();
     if (needle.length < 2) { box.hidden = true; return; }

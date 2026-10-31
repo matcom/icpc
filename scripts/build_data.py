@@ -132,6 +132,7 @@ def build_universities(contests: dict[int, list[dict]], raw: dict) -> tuple[list
                 "players": row["players"],
                 "player_ids": row["player_ids"],
                 "medal": row["medal"].lower() if row["medal"] else None,
+                "titles": row["titles"],
             })
     universities = sorted(teams.values(), key=lambda u: u["id"])
     for uni in universities:
@@ -409,7 +410,9 @@ def write_csv(universities: list[dict], countries: dict) -> None:
 PAGES = [
     ("index", "Panorama", "KPIs, world map, regions, country race and champions of the World Finals."),
     ("paises", "Países", "Country rankings, medals, renewal and historical comparison."),
+    ("regiones", "Regiones", "Regional champion titles awarded at each final, and the best team of each current region."),
     ("universidades", "Universidades", "University rankings, constancy heatmap and results."),
+    ("equipo", "Equipo", "Profile of one team: the same name at the same university counts as one team."),
     ("renovacion", "Renovación", "How teams renew: returning members, careers and their link with results."),
     ("problemas", "Problemas", "Problems solved per final: distributions, totals and percentages."),
     ("medallas", "Medallas", "Medal tables by university and country, with the medals actually awarded."),
@@ -452,6 +455,9 @@ def write_markdown_twins(universities: list[dict], countries: dict, predictions:
              next((u["name"] for u in universities for r in u["results"] if r["year"] == y and r["rank"] == 1), "")]
             for y in years]),
         "paises": table(["Country", "Appearances in finals"], [[c, n] for c, n in teams_by_country.most_common(30)]),
+        "regiones": table(["Year", "Regional title", "University", "Rank"], [
+            [r["year"], t, u["name"], round(r["rank"]) if r["rank"] else ""]
+            for u in sorted(universities, key=lambda x: x["name"]) for r in u["results"] for t in r["titles"] if t != "World"][:200]),
         "universidades": table(["University", "Finals"], [[u["name"], len(u["results"])] for u in finals[:30]]),
         "renovacion": table(["Year", "% of teams with a returning member"], [[y, veteran_share[y]] for y in years]),
         "problemas": table(["Year", "Median solved", "Max solved"], [
@@ -464,6 +470,7 @@ def write_markdown_twins(universities: list[dict], countries: dict, predictions:
         "comparar": "The comparison page reads `data/core.json`; its URL takes `?u=<id>,<id>` or `?c=<name>,<name>`.",
         "pais": "The page takes `?c=<country name in English>`; `data/core.json` holds the same results.",
         "universidad": "The page takes `?u=<university id>`; ids and results are in `data/core.json`.",
+        "equipo": "The page takes `?u=<university id>&t=<team name>`; results are in `data/core.json`.",
         "datos": "Results and medals come from cphof.org, checked against icpc.global where it publishes them. "
                  "Regions, Spanish names and the catalogue of analyses come from `yudivian/icpc` (Apache-2.0).",
     }
@@ -500,6 +507,7 @@ def build() -> dict:
         "regions": {k: v["spanish_name"] for k, v in raw["regions"].items()},
         "countries": countries,
         "next_final": NEXT_FINAL,
+        "logos": json.loads((SOURCES / "logos.json").read_text()),
         "universities": universities,
     }
     write_json("core.json", core)

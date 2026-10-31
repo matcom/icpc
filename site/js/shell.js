@@ -1,10 +1,14 @@
 // Page frame: navigation, search, theme, cards, KPIs and shared filters.
-import { crest, countryName, countryUrl, esc, fold, loadData, personUrl, uniUrl } from "./core.js";
+import { crest, esc, loadData } from "./core.js";
 import { disposeAll } from "./charts.js";
+import { watchSelects } from "./combobox.js";
+import { fuzzyFilter } from "./fuzzy.js";
+import { searchEntries } from "./search.js";
 
 const NAV = [
   ["index", "Panorama", "◉"],
   ["paises", "Países", "⚑"],
+  ["regiones", "Regiones", "◍"],
   ["universidades", "Universidades", "⌂"],
   ["renovacion", "Renovación", "↻"],
   ["problemas", "Problemas", "✓"],
@@ -38,10 +42,11 @@ export async function startPage({ page, title, subtitle, render }) {
           <div class="themes" role="group" aria-label="Tema"><button data-theme-to="pergamino">Pergamino</button><button data-theme-to="vino">Vino</button></div>
         </header>
         <main id="view"></main>
-        <footer><span>Datos: <a href="https://cphof.org">cphof.org</a> y <a href="https://github.com/yudivian/icpc">yudivian/icpc</a>.</span> <a href="datos.html">Método y límites</a> · <a href="${esc(twin)}">Versión Markdown</a> · <a href="https://github.com/matcom/icpc">Código</a></footer>
+        <footer><span>Hecho por <a href="https://uhgia.org">GIA-UH</a> en colaboración con <a href="https://syalia.com">SYALIA SRL</a>.</span> <span>Datos: <a href="https://cphof.org">cphof.org</a> y <a href="https://github.com/yudivian/icpc">yudivian/icpc</a>.</span> <a href="datos.html">Método y límites</a> · <a href="${esc(twin)}">Versión Markdown</a> · <a href="https://github.com/matcom/icpc">Código</a></footer>
       </div>
     </div>`;
   wireSearch(data);
+  watchSelects(document.body);
   const draw = () => {
     disposeAll();
     const view = document.getElementById("view");
@@ -68,15 +73,11 @@ function wireTheme(draw) {
 function wireSearch(data) {
   const input = document.getElementById("q");
   const box = document.getElementById("res");
-  const entries = [
-    ...[...data.countriesIndex.values()].map((c) => ({ kind: "País", order: 0, label: c.es, sub: `${c.rows.length} participaciones`, key: fold(`${c.es} ${c.name}`), url: countryUrl(c.name), mark: c.name })),
-    ...data.unis.map((u) => ({ kind: "Universidad", order: 1, label: u.name, sub: `${countryName(data, u.country)} · ${u.results.length} finales`, key: fold(u.name), url: uniUrl(u.id), mark: u.name })),
-    ...[...data.people.values()].map((p) => ({ kind: "Competidor", order: 2, label: p.name, sub: `${p.rows[p.rows.length - 1].uniName} · ${p.rows.length} finales`, key: fold(p.name), url: personUrl(p.key), mark: p.name })),
-  ];
+  const entries = searchEntries(data);
   input.oninput = () => {
-    const needle = fold(input.value.trim());
+    const needle = input.value.trim();
     if (needle.length < 2) { box.hidden = true; return; }
-    const hits = entries.filter((e) => e.key.includes(needle)).sort((a, b) => a.order - b.order || a.label.localeCompare(b.label)).slice(0, 12);
+    const hits = fuzzyFilter(needle, entries, (e) => e.key).slice(0, 12);
     box.hidden = false;
     box.innerHTML = hits.length
       ? hits.map((h) => `<a href="${esc(h.url)}">${crest(h.mark, 26)}<span>${esc(h.label)}<small>${esc(h.sub)}</small></span><em>${h.kind}</em></a>`).join("")
@@ -170,8 +171,11 @@ export function filters(parent, data, defaults, onChange) {
       state[key] = typeof defaults[key] === "number" ? Number(select.value) : select.value;
       if (state.from > state.to) {
         if (key === "from") state.to = state.from; else state.from = state.to;
-        el.querySelector('[data-f="from"]').value = state.from;
-        el.querySelector('[data-f="to"]').value = state.to;
+        for (const key of ["from", "to"]) {
+          const field = el.querySelector(`[data-f="${key}"]`);
+          field.value = state[key];
+          field.dispatchEvent(new Event("refresh"));
+        }
       }
       emit();
     };

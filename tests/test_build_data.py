@@ -145,3 +145,29 @@ def test_each_page_has_html_script_and_markdown_twin(built):
         assert (build_data.SITE / "js" / "pages" / f"{slug}.js").exists(), slug
         assert (build_data.SITE / f"{slug}.html.md").read_text().strip(), slug
     assert build_data.SITE_URL in (build_data.SITE / "llms.txt").read_text()
+
+
+def winners_of(built, year, title):
+    return [u["name"] for u in built["core"]["universities"] for r in u["results"] if r["year"] == year and title in r["titles"]]
+
+
+def test_regional_titles_are_published(built):
+    assert winners_of(built, 2025, "Northern Eurasia") == ["St. Petersburg State University"]
+    assert winners_of(built, 2025, "Asia East") == ["Beijing Jiaotong University"]
+    assert winners_of(built, 2017, "Europe") == ["St. Petersburg ITMO University"]
+
+
+def test_world_title_goes_to_the_rank_one_team(built):
+    for uni in built["core"]["universities"]:
+        for result in uni["results"]:
+            assert ("World" in result["titles"]) == (result["rank"] == 1), (uni["name"], result["year"])
+
+
+def test_every_logo_has_a_file_and_a_university(built):
+    core = built["core"]
+    ids = {u["id"] for u in core["universities"]}
+    assert len(core["logos"]) >= 5
+    for uni, logo in core["logos"].items():
+        assert uni in ids, uni
+        assert logo["source"] and logo["licence"]
+        assert (build_data.SITE / "logos" / f"{uni}.png").exists(), uni

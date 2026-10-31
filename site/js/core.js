@@ -1,10 +1,10 @@
 // Data loading and the derived indexes every page reads.
+import { fold } from "./fuzzy.js";
+
+export { fold };
 
 export const esc = (text) =>
   String(text).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
-
-export const fold = (text) =>
-  text.normalize("NFD").replace(/\p{M}/gu, "").toLowerCase();
 
 export const avg = (values) => (values.length ? values.reduce((sum, v) => sum + v, 0) / values.length : 0);
 
@@ -31,7 +31,23 @@ export const MEDAL_COLORS = { gold: "#e0ad22", silver: "#9aa5ad", bronze: "#b472
 
 export const MEDAL_NAMES = { gold: "Oro", silver: "Plata", bronze: "Bronce" };
 
+// Regional titles as awarded, in the region names of their time.
+export const TITLE_NAMES = {
+  "North America": "América del Norte",
+  "Latin America": "América Latina",
+  Europe: "Europa",
+  "Northern Eurasia": "Eurasia del Norte",
+  "Africa and the Middle East": "África y Oriente Medio",
+  "Africa and Arab": "África y Arabia",
+  Asia: "Asia",
+  "Asia East": "Asia Este",
+  "Asia West": "Asia Oeste",
+  "Asia Pacific": "Asia Pacífico",
+  "South Pacific": "Pacífico Sur",
+};
+
 let cache = null;
+const logoByName = new Map();
 
 export async function loadData() {
   if (cache) return cache;
@@ -39,6 +55,7 @@ export async function loadData() {
     ["core", "predictions", "world"].map((name) => fetch(`data/${name}.json`).then((r) => r.json())),
   );
   cache = index(core, predictions, world);
+  for (const u of core.universities) if (core.logos[u.id]) logoByName.set(u.name, `logos/${u.id}.png`);
   return cache;
 }
 
@@ -75,6 +92,8 @@ export const uniUrl = (id) => `universidad.html?u=${encodeURIComponent(id)}`;
 export const countryUrl = (name) => `pais.html?c=${encodeURIComponent(name)}`;
 export const personUrl = (key) => `competidores.html?p=${encodeURIComponent(key)}`;
 
+export const teamUrl = (uni, team) => `equipo.html?u=${encodeURIComponent(uni)}&t=${encodeURIComponent(team)}`;
+
 export const compareUrl = (kind, keys) => `comparar.html?${kind}=${keys.map(encodeURIComponent).join(",")}`;
 
 // Per-year best percentile of a country.
@@ -94,6 +113,15 @@ export const medalCounts = (rows) => ({
   bronze: rows.filter((r) => r.medal === "bronze").length,
 });
 
+const MEDAL_RIBBONS = { gold: "#af3227", silver: "#2f6aa3", bronze: "#6d222e" };
+
+// One small medal with its ribbon.
+export const medalIcon = (kind, size = 20) => `<svg class="medal" width="${size}" height="${Math.round(size * 1.3)}" viewBox="0 0 20 26" role="img" aria-label="${MEDAL_NAMES[kind]}"><title>${MEDAL_NAMES[kind]}</title><path d="M5 0h4l3 9H8zM15 0h-4L8 9h4z" fill="${MEDAL_RIBBONS[kind]}"/><circle cx="10" cy="16.5" r="8.5" fill="${MEDAL_COLORS[kind]}" stroke="#0003"/><circle cx="10" cy="16.5" r="5.8" fill="none" stroke="#fff8" stroke-width="1.2"/><path d="m10 12.6 1.2 2.5 2.7.4-2 1.9.5 2.7-2.4-1.3-2.4 1.3.5-2.7-2-1.9 2.7-.4z" fill="#fff" fill-opacity=".85"/></svg>`;
+
+// Every medal of a record, gold first.
+export const medalStrip = (counts, size = 20) => ["gold", "silver", "bronze"]
+  .map((kind) => medalIcon(kind, size).repeat(counts[kind] ?? 0)).join("");
+
 const CREST_COLORS = [
   ["#4984be", "#fbf4e4"], ["#af3227", "#fbf4e4"], ["#fdb830", "#2b0d12"],
   ["#6d222e", "#d6c499"], ["#1d3c5e", "#fdb830"], ["#d6c499", "#4a1520"],
@@ -107,6 +135,8 @@ const initials = (name) => {
 };
 
 export function crest(name, size = 44) {
+  const logo = logoByName.get(name);
+  if (logo) return `<img class="crest" src="${logo}" width="${size}" height="${size}" alt="" loading="lazy">`;
   const hash = [...name].reduce((h, c) => (h * 31 + c.charCodeAt(0)) >>> 0, 7);
   const [fill, ink] = CREST_COLORS[hash % CREST_COLORS.length];
   const letters = initials(name);

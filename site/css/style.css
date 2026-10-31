@@ -74,6 +74,15 @@ a.kpi:hover { border-color: var(--accent); }
 .filters { display: flex; flex-wrap: wrap; gap: 8px 14px; align-items: center; margin-bottom: 14px; padding: 9px 13px; background: var(--panel); border: 1px solid var(--line); border-radius: 13px; font-size: 14.5px; color: var(--dim); }
 .filters label { display: inline-flex; gap: 6px; align-items: center; max-width: 100%; }
 select { color: var(--ink); background: var(--panel2); border: 1px solid var(--line); border-radius: 9px; padding: 6px 8px; min-height: 40px; max-width: min(100%, 290px); }
+.combo { position: relative; display: inline-block; width: calc(var(--combo-ch, 12) * 1ch); max-width: 100%; }
+.combo input { width: 100%; color: var(--ink); background: var(--panel2); border: 1px solid var(--line); border-radius: 9px; padding: 6px 24px 6px 9px; min-height: 40px; outline: 0; text-overflow: ellipsis; background-image: linear-gradient(45deg, transparent 50%, var(--dim) 50%), linear-gradient(-45deg, transparent 50%, var(--dim) 50%); background-size: 5px 5px; background-position: calc(100% - 13px) 55%, calc(100% - 8px) 55%; background-repeat: no-repeat; }
+.combo input:focus { border-color: var(--accent); }
+.combo input:disabled { opacity: .55; }
+.combo-list { position: absolute; z-index: 40; left: 0; top: calc(100% + 4px); min-width: 100%; width: max-content; max-width: min(88vw, 440px); max-height: 300px; overflow: auto; margin: 0; padding: 4px; list-style: none; background: var(--panel); border: 1px solid var(--line); border-radius: 10px; box-shadow: 0 14px 34px #0004; color: var(--ink); font-size: 14.5px; }
+.combo-list li { padding: 7px 9px; border-radius: 7px; cursor: pointer; min-height: 34px; }
+.combo-list li:hover, .combo-list li.on { background: var(--panel2); }
+.combo-list li[aria-selected="true"] { font-weight: 500; color: var(--accent); }
+.combo-list li.none { color: var(--dim); cursor: default; background: none; }
 .seg { display: inline-flex; flex-wrap: wrap; border: 1px solid var(--line); border-radius: 10px; overflow: hidden; }
 .seg button { border: 0; background: none; min-height: 40px; padding: 5px 11px; color: var(--dim); white-space: nowrap; }
 .seg button[aria-pressed="true"] { background: var(--accent); color: var(--on-accent); }
@@ -101,6 +110,30 @@ td a { text-decoration-color: var(--line); text-underline-offset: 3px; }
 .champ:hover { border-color: var(--accent); }
 .champ b { display: block; font: 600 15px Cinzel, serif; color: var(--accent); }
 .champ span { display: block; margin-top: 5px; height: 3.75em; overflow: hidden; }
+img.crest { object-fit: contain; }
+.ficha { list-style: none; margin: 4px 0 0; padding: 0; display: grid; gap: 7px; font-size: 15.5px; }
+.ficha li { padding-left: 2px; }
+.ficha b { font-weight: 500; color: var(--accent); }
+.ficha a { text-decoration-color: var(--line); text-underline-offset: 3px; }
+.ficha .medal { vertical-align: -5px; }
+.medal { flex: none; }
+.medals { display: flex; flex-wrap: wrap; gap: 2px; align-items: center; }
+.medal-rows { list-style: none; margin: 0; padding: 0; }
+.medal-rows a { display: grid; grid-template-columns: minmax(120px, 15em) minmax(0, 1fr); gap: 3px 10px; align-items: center; padding: 5px 4px; text-decoration: none; border-bottom: 1px solid var(--line); min-height: 34px; }
+.medal-rows a:hover { background: var(--panel2); }
+.medal-rows .nm { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 14.5px; }
+.medal-case { list-style: none; margin: 6px 0 0; padding: 0; display: grid; gap: 12px; }
+.medal-case li { display: grid; grid-template-columns: 2.2em 3.6em minmax(0, 1fr); gap: 6px; align-items: center; }
+.medal-case b { font: 600 22px Cinzel, serif; }
+.medal-case span { color: var(--dim); font-size: 14px; }
+.winners { --table-h: 620px; }
+.winners table { min-width: 860px; }
+.winners tbody th { position: sticky; left: 0; background: var(--panel); font: 600 14px Cinzel, serif; color: var(--ink); }
+.winners td { min-width: 128px; font-size: 13px; line-height: 1.2; }
+.winners td a { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 1px 6px; align-items: center; text-decoration: none; }
+.winners td a:hover span { text-decoration: underline; }
+.winners td span { overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+.winners td small { grid-column: 2; display: flex; gap: 4px; align-items: center; }
 .crest { vertical-align: middle; flex: none; }
 .wall { display: grid; grid-template-columns: repeat(auto-fill, minmax(70px, 1fr)); gap: 8px; }
 .wall a { padding: 5px 2px; font-size: 12px; line-height: 1.2; color: var(--dim); text-decoration: none; text-align: center; border: 1px solid transparent; border-radius: 10px; min-height: 84px; }
@@ -144,4 +177,5 @@ footer { color: var(--dim); font-size: 14px; padding: 12px 0 20px; display: flex
   .s3, .s4 { grid-column: span 12; }
   .kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .kpi b { font-size: 21px; }
+  .medal-rows a { grid-template-columns: minmax(0, 1fr); }
 }

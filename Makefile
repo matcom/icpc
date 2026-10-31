@@ -8,3 +8,4 @@ serve: data
 
 test:
 	uv run --with pytest pytest -q
+	node --test tests/fuzzy.test.mjs

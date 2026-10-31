@@ -1,6 +1,6 @@
 import { REGION_COLORS, avg, compareUrl, countryName, countrySeries, countryUrl, crest, esc, medalCounts, params, personUrl, uniUrl } from "../core.js";
 import { categoryAxis, colors, donut, historyChart, plot, valueAxis } from "../charts.js";
-import { chipLinks, forecastCallout, medalDonut } from "../profile.js";
+import { chipLinks, forecastCallout, medalDonut, teamLink } from "../profile.js";
 import { card, chartCard, grid, kpis, startPage, table } from "../shell.js";
 
 startPage({
@@ -91,7 +91,7 @@ startPage({
       title: `Todas sus participaciones (${rows.length})`, span: 7,
       html: table(
         ["Año", { label: "Puesto", num: 1 }, { label: "Res.", num: 1 }, { label: "Vet.", num: 1, title: "Miembros que ya compitieron por esta universidad" }, "Universidad y equipo"],
-        rows.map((r) => [r.year, r.rank == null ? "—" : Math.round(r.rank), r.solved ?? "—", r.veterans || "", `<a href="${uniUrl(r.uni)}">${esc(r.uniName)}</a><br><small>${esc(r.team)}: ${r.players.map((p, i) => `<a href="${personUrl(r.player_ids[i])}">${esc(p)}</a>`).join(", ")}</small>`]),
+        rows.map((r) => [r.year, r.rank == null ? "—" : Math.round(r.rank), r.solved ?? "—", r.veterans || "", `<a href="${uniUrl(r.uni)}">${esc(r.uniName)}</a><br><small>${teamLink(r.uni, r.team)}: ${r.players.map((p, i) => `<a href="${personUrl(r.player_ids[i])}">${esc(p)}</a>`).join(", ")}</small>`]),
       ),
     });
   },

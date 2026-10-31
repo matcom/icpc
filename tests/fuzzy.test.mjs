@@ -80,3 +80,14 @@ test("the global search finds people by name, not by profile id", async () => {
   assert.deepEqual(find("ana perez"), ["Ana Pérez"]);
   assert.deepEqual(find("topcoder"), []);
 });
+
+test("the profile text states the titles and the finals of a competitor", async () => {
+  const { personFacts } = await import("../site/js/profile.js");
+  const row = (year, rank, titles) => ({ year, rank, solved: 5, team: "UH++", titles, medal: null, uni: "uh", uniName: "UH", player_ids: ["a", "b"], players: ["Ana", "Luis"] });
+  const data = { byId: new Map([["uh", { name: "Universidad de La Habana" }]]), field: { 2015: 128, 2017: 133 } };
+  const text = personFacts(data, { key: "a", rows: [row(2015, 108, []), row(2017, 44, ["Latin America"])] }).join(" ");
+  assert.match(text, /Título de América Latina<\/b> en 2017/);
+  assert.match(text, /en 2015 y 2017/);
+  assert.match(text, /puesto 44 de 133 en 2017/);
+  assert.match(text, /Luis.* \(2 finales\)/);
+});

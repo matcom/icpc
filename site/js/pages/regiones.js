@@ -1,26 +1,11 @@
-import { REGION_COLORS, countryName, countryUrl, crest, esc, medalCounts, medalStrip, quantile, uniUrl } from "../core.js";
+import { REGION_COLORS, TITLE_NAMES, countryName, countryUrl, crest, esc, medalCounts, medalStrip, quantile, uniUrl } from "../core.js";
 import { categoryAxis, colors, donut, plot, rankBars, valueAxis } from "../charts.js";
 import { card, chartCard, filterRows, filters, grid, kpis, startPage } from "../shell.js";
-
-// Regional titles as awarded, in the region names of their time.
-const TITLES = {
-  "North America": "América del Norte",
-  "Latin America": "América Latina",
-  Europe: "Europa",
-  "Northern Eurasia": "Eurasia del Norte",
-  "Africa and the Middle East": "África y Oriente Medio",
-  "Africa and Arab": "África y Arabia",
-  Asia: "Asia",
-  "Asia East": "Asia Este",
-  "Asia West": "Asia Oeste",
-  "Asia Pacific": "Asia Pacífico",
-  "South Pacific": "Pacífico Sur",
-};
 
 const place = (rank) => (rank == null ? "sin puesto" : `puesto ${Math.round(rank)}`);
 
 const winnerCell = (r) => (r
-  ? `<a href="${uniUrl(r.uni)}" title="${esc(r.uniName)}, ${r.year}: ${place(r.rank)}, ${esc(r.team)}">${crest(r.uniName, 18)} <span>${esc(r.uniName)}</span><small>${place(r.rank)}${r.medal ? ` ${medalStrip({ [r.medal]: 1 }, 12)}` : ""}</small></a>`
+  ? `<a href="${uniUrl(r.uni)}" title="${esc(r.uniName)}, ${r.year}: ${place(r.rank)}, ${esc(r.team)}">${crest(r.uniName, 18)} <span>${esc(r.uniName)}</span><small>${esc(r.team)} · ${place(r.rank)}${r.medal ? ` ${medalStrip({ [r.medal]: 1 }, 12)}` : ""}</small></a>`
   : "");
 
 const winnersTable = (years, columns, winnerOf) => `<div class="tablew winners"><table><thead><tr><th>Final</th>${columns.map(([, label]) => `<th>${esc(label)}</th>`).join("")}</tr></thead><tbody>${[...years].reverse().map((year) => `<tr><th>${year}</th>${columns.map(([key]) => `<td>${winnerCell(winnerOf(year, key))}</td>`).join("")}</tr>`).join("")}</tbody></table></div>`;
@@ -41,7 +26,7 @@ startPage({
       const c = colors();
       const years = [...new Set(rows.map((r) => r.year))].sort((a, b) => a - b);
       const awards = rows.flatMap((r) => r.titles.filter((t) => t !== "World").map((title) => ({ ...r, title })));
-      const awarded = Object.entries(TITLES).filter(([key]) => awards.some((a) => a.title === key));
+      const awarded = Object.entries(TITLE_NAMES).filter(([key]) => awards.some((a) => a.title === key));
       const titleOf = (year, key) => awards.find((a) => a.year === year && a.title === key);
       const tally = (items, keyOf) => {
         const counts = new Map();

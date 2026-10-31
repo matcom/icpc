@@ -1,6 +1,6 @@
 import { avg, compareUrl, countryName, countryUrl, crest, esc, medalCounts, params, personUrl, uniSeries, uniUrl } from "../core.js";
 import { categoryAxis, colors, historyChart, plot, valueAxis } from "../charts.js";
-import { chipLinks, forecastCallout, medalDonut } from "../profile.js";
+import { chipLinks, ficha, forecastCallout, medalDonut, teamLink, universityFacts } from "../profile.js";
 import { card, chartCard, grid, kpis, sequenceSvg, startPage, table } from "../shell.js";
 
 startPage({
@@ -31,6 +31,7 @@ startPage({
     ]);
     const c = colors();
     const a = grid(view);
+    card(a, { title: "Ficha", span: 12, html: ficha(universityFacts(data, uni)) });
     const similarIds = data.predictions.similar[uni.id] ?? [];
     const similar = similarIds.map((id) => ({ name: data.byId.get(id).name, series: uniSeries(data.byId.get(id)), id }));
     const body = card(a, {
@@ -74,7 +75,7 @@ startPage({
       title: `Sus finales (${results.length})`, span: 12,
       html: table(
         ["Año", { label: "Puesto", num: 1 }, { label: "Res.", num: 1 }, { label: "Tiempo", num: 1 }, { label: "Vet.", num: 1, title: "Miembros que ya compitieron por esta universidad" }, "Equipo", "Miembros"],
-        [...results].reverse().map((r) => [r.year, r.rank == null ? "—" : Math.round(r.rank), r.solved ?? "—", r.time ?? "—", r.veterans || "", esc(r.team), r.players.map((p, i) => `<a href="${personUrl(r.player_ids[i])}">${esc(p)}</a>`).join(", ")]),
+        [...results].reverse().map((r) => [r.year, r.rank == null ? "—" : Math.round(r.rank), r.solved ?? "—", r.time ?? "—", r.veterans || "", teamLink(uni.id, r.team), r.players.map((p, i) => `<a href="${personUrl(r.player_ids[i])}">${esc(p)}</a>`).join(", ")]),
       ),
     });
   },

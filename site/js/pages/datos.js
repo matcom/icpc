@@ -16,6 +16,7 @@ startPage({
       html: `<div class="prose"><ul>
         <li>Resultados y medallas: <a href="https://www.cphof.org/">Competitive Programming Hall of Fame</a> (© Yury Pisarchyk), excluidos de la licencia de este repositorio y contrastados con <a href="https://icpc.global/worldfinals/results">icpc.global</a>.</li>
         <li>Análisis, regiones y nombres en español: <a href="https://github.com/yudivian/icpc">yudivian/icpc</a> (Apache-2.0), origen de este proyecto.</li>
+        <li>Escudos de universidades cubanas: La Habana, UCI y Pinar del Río desde Wikimedia Commons (CC BY-SA 4.0); Las Villas y Oriente desde sus sitios oficiales, para identificarlas. Las marcas pertenecen a cada universidad.</li>
         <li>Mapa: <a href="https://github.com/topojson/world-atlas">world-atlas</a>, basado en Natural Earth.</li>
         <li>Gráficos: <a href="https://echarts.apache.org/">Apache ECharts</a>.</li>
       </ul></div>`,
@@ -46,7 +47,7 @@ startPage({
         <li>Las universidades se unifican con una lista revisada a mano; los campus y facultades que compitieron por separado siguen separados. Alguna persona puede contarse dos veces.</li>
         <li>Los equipos marcados solo como clasificados, sin puesto, no se cuentan. La fila de la Universidad Tecnológica de Pereira en 2014 consta en la fuente oficial y no en cphof.</li>
         <li>Fuera del top 12, la fuente oficial solo publica bandas y menciones; ahí el puesto exacto y los problemas dependen de cphof.</li>
-        <li>Los escudos son monogramas generados, no los oficiales.</li>
+        <li>Salvo las universidades cubanas, los escudos son monogramas generados, no los oficiales.</li>
         <li>Los 33 equipos de 2009 marcados solo como finalistas no tienen puesto y no cuentan para percentiles.</li>
       </ul></div>`,
     });

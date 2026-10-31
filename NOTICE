@@ -9,4 +9,7 @@ They are not covered by this repository's license.
 
 site/vendor/echarts.min.js is Apache ECharts (Apache-2.0).
 data/sources/countries-110m.json is world-atlas (ISC), from Natural Earth (public domain).
+site/logos holds university logos, not covered by this repository's license. Sources are in
+data/sources/logos.json: three from Wikimedia Commons (CC BY-SA 4.0) and two from the universities'
+official sites, shown only to identify them. The marks belong to each university.
 site/fonts holds Cinzel and Jost, under the SIL Open Font License; licences alongside.

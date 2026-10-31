@@ -161,3 +161,13 @@ def test_world_title_goes_to_the_rank_one_team(built):
     for uni in built["core"]["universities"]:
         for result in uni["results"]:
             assert ("World" in result["titles"]) == (result["rank"] == 1), (uni["name"], result["year"])
+
+
+def test_every_logo_has_a_file_and_a_university(built):
+    core = built["core"]
+    ids = {u["id"] for u in core["universities"]}
+    assert len(core["logos"]) >= 5
+    for uni, logo in core["logos"].items():
+        assert uni in ids, uni
+        assert logo["source"] and logo["licence"]
+        assert (build_data.SITE / "logos" / f"{uni}.png").exists(), uni

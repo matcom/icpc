@@ -1,5 +1,6 @@
 import { countryName, countryUrl, crest, esc, medalCounts, medalStrip, params, personUrl, uniUrl } from "../core.js";
 import { categoryAxis, colors, donut, plot, rankBars, valueAxis } from "../charts.js";
+import { ficha, personFacts, teamLink } from "../profile.js";
 import { card, chartCard, grid, kpis, startPage, table } from "../shell.js";
 
 function profile(view, data, person) {
@@ -20,6 +21,7 @@ function profile(view, data, person) {
   ]);
   const a = grid(view);
   const c = colors();
+  card(a, { title: "Ficha", span: 12, html: ficha(personFacts(data, person)) });
   plot(chartCard(a, { title: "Su trayectoria", sub: "Percentil en cada final", span: 6, height: 300 }), {
     legend: false, tooltip: { trigger: "axis" },
     xAxis: categoryAxis(rows.map((r) => String(r.year))), yAxis: valueAxis({ min: 0, max: 100 }),
@@ -29,7 +31,7 @@ function profile(view, data, person) {
     title: "Sus equipos", span: 6,
     html: table(
       ["Año", "Universidad", "Equipo", { label: "Puesto", num: 1 }, { label: "Res.", num: 1 }, "Compañeros"],
-      [...rows].reverse().map((r) => [r.year, `<a href="${uniUrl(r.uni)}">${esc(r.uniName)}</a>`, esc(r.team), r.rank == null ? "—" : Math.round(r.rank), r.solved ?? "—", r.players.filter((_, i) => r.player_ids[i] !== person.key).map(esc).join(", ")]),
+      [...rows].reverse().map((r) => [r.year, `<a href="${uniUrl(r.uni)}">${esc(r.uniName)}</a>`, teamLink(r.uni, r.team), r.rank == null ? "—" : Math.round(r.rank), r.solved ?? "—", r.players.map((p, i) => [p, r.player_ids[i]]).filter(([, id]) => id !== person.key).map(([p, id]) => `<a href="${personUrl(id)}">${esc(p)}</a>`).join(", ")]),
     ),
   });
 }

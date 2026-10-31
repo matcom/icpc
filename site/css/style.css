@@ -110,6 +110,12 @@ td a { text-decoration-color: var(--line); text-underline-offset: 3px; }
 .champ:hover { border-color: var(--accent); }
 .champ b { display: block; font: 600 15px Cinzel, serif; color: var(--accent); }
 .champ span { display: block; margin-top: 5px; height: 3.75em; overflow: hidden; }
+img.crest { object-fit: contain; }
+.ficha { list-style: none; margin: 4px 0 0; padding: 0; display: grid; gap: 7px; font-size: 15.5px; }
+.ficha li { padding-left: 2px; }
+.ficha b { font-weight: 500; color: var(--accent); }
+.ficha a { text-decoration-color: var(--line); text-underline-offset: 3px; }
+.ficha .medal { vertical-align: -5px; }
 .medal { flex: none; }
 .medals { display: flex; flex-wrap: wrap; gap: 2px; align-items: center; }
 .medal-rows { list-style: none; margin: 0; padding: 0; }

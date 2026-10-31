@@ -31,7 +31,23 @@ export const MEDAL_COLORS = { gold: "#e0ad22", silver: "#9aa5ad", bronze: "#b472
 
 export const MEDAL_NAMES = { gold: "Oro", silver: "Plata", bronze: "Bronce" };
 
+// Regional titles as awarded, in the region names of their time.
+export const TITLE_NAMES = {
+  "North America": "América del Norte",
+  "Latin America": "América Latina",
+  Europe: "Europa",
+  "Northern Eurasia": "Eurasia del Norte",
+  "Africa and the Middle East": "África y Oriente Medio",
+  "Africa and Arab": "África y Arabia",
+  Asia: "Asia",
+  "Asia East": "Asia Este",
+  "Asia West": "Asia Oeste",
+  "Asia Pacific": "Asia Pacífico",
+  "South Pacific": "Pacífico Sur",
+};
+
 let cache = null;
+const logoByName = new Map();
 
 export async function loadData() {
   if (cache) return cache;
@@ -39,6 +55,7 @@ export async function loadData() {
     ["core", "predictions", "world"].map((name) => fetch(`data/${name}.json`).then((r) => r.json())),
   );
   cache = index(core, predictions, world);
+  for (const u of core.universities) if (core.logos[u.id]) logoByName.set(u.name, `logos/${u.id}.png`);
   return cache;
 }
 
@@ -74,6 +91,8 @@ export const countryName = (data, name) => data.countries[name]?.es ?? name;
 export const uniUrl = (id) => `universidad.html?u=${encodeURIComponent(id)}`;
 export const countryUrl = (name) => `pais.html?c=${encodeURIComponent(name)}`;
 export const personUrl = (key) => `competidores.html?p=${encodeURIComponent(key)}`;
+
+export const teamUrl = (uni, team) => `equipo.html?u=${encodeURIComponent(uni)}&t=${encodeURIComponent(team)}`;
 
 export const compareUrl = (kind, keys) => `comparar.html?${kind}=${keys.map(encodeURIComponent).join(",")}`;
 
@@ -116,6 +135,8 @@ const initials = (name) => {
 };
 
 export function crest(name, size = 44) {
+  const logo = logoByName.get(name);
+  if (logo) return `<img class="crest" src="${logo}" width="${size}" height="${size}" alt="" loading="lazy">`;
   const hash = [...name].reduce((h, c) => (h * 31 + c.charCodeAt(0)) >>> 0, 7);
   const [fill, ink] = CREST_COLORS[hash % CREST_COLORS.length];
   const letters = initials(name);

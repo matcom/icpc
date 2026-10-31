@@ -22,7 +22,7 @@ SITE = ROOT / "site"
 OUT = SITE / "data"
 
 SITE_URL = "https://matcom.github.io/icpc"
-NEXT_FINAL = {"year": 2026, "place": "Dubái", "dates": "15–20 nov 2026"}
+NEXT_FINAL = {"year": 2026, "place": "Dubái", "dates": "4–9 abr 2027"}
 ANALOG_CASES = 40
 WINDOW = 4
 BACKTEST_FROM = 2014
@@ -410,7 +410,7 @@ def write_csv(universities: list[dict], countries: dict) -> None:
 PAGES = [
     ("index", "Panorama", "KPIs, world map, regions, country race and champions of the World Finals."),
     ("paises", "Países", "Country rankings, medals, renewal and historical comparison."),
-    ("regiones", "Regiones", "Regional champion titles awarded at each final, and the best team of each current region."),
+    ("regiones", "Regiones", "Historic podium of each current region, and the regional champion titles awarded at each final."),
     ("universidades", "Universidades", "University rankings, constancy heatmap and results."),
     ("equipo", "Equipo", "Profile of one team: the same name at the same university counts as one team."),
     ("renovacion", "Renovación", "How teams renew: returning members, careers and their link with results."),

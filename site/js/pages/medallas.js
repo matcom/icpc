@@ -25,9 +25,9 @@ startPage({
           const e = entries.get(key) ?? { key, places: Array(12).fill(0), years: new Set(), gold: 0, silver: 0, bronze: 0 };
           entries.set(key, e);
           e.years.add(year);
-          if (r.rank == null || i >= 12) return;
-          e.places[i] += 1;
-          const medal = medalOf(i + 1);
+          if (r.rank != null && i < 12) e.places[i] += 1;
+          const medal = state.region === "all" ? r.medal : (r.rank != null && i < 12 ? medalOf(i + 1) : null);
+          if (!medal) return;
           e[medal] += 1;
           awards.push({ ...r, medal });
         });
@@ -56,7 +56,7 @@ startPage({
 
       const years = [...new Set(rows.map((r) => r.year))].sort((x, y) => x - y);
       const regions = [...new Set(awards.map((r) => r.region))];
-      plot(chartCard(a, { title: "El reparto de las 12 medallas", sub: "Por región, en cada edición", span: 7, height: 340 }), {
+      plot(chartCard(a, { title: "El reparto de las medallas", sub: "Por región, en cada edición", span: 7, height: 340 }), {
         tooltip: { trigger: "axis", axisPointer: { type: "shadow" } },
         xAxis: categoryAxis(years.map(String)),
         yAxis: valueAxis({ minInterval: 1 }),
@@ -89,7 +89,7 @@ startPage({
         html: table(
           [{ label: "#", num: 1 }, state.scope === "uni" ? "Universidad" : "País", { label: "Oro", num: 1 }, { label: "Plata", num: 1 }, { label: "Bronce", num: 1 }, { label: "Total", num: 1 }, { label: "Finales", num: 1 }, ...Array.from({ length: 12 }, (_, i) => ({ label: `${i + 1}º`, num: 1 }))],
           shown.map((e, i) => [i + 1, `<a href="${link(e.key)}">${esc(label(e.key))}</a>`, `<b>${e.gold}</b>`, e.silver, e.bronze, e.gold + e.silver + e.bronze, e.years.size, ...e.places.map((v) => v || "")]),
-        ) + '<p class="note">Regla usada: puestos 1–4 oro, 5–8 plata, 9–12 bronce. El número real de medallas de una edición puede variar. Con una región elegida, los puestos se recalculan dentro de esa región.</p>',
+        ) + '<p class="note">Son las medallas realmente entregadas, según cphof, cuyo número varía de una edición a otra. Con una región elegida se reparten por posición dentro de esa región: puestos 1–4 oro, 5–8 plata y 9–12 bronce.</p>',
       });
     };
     draw();

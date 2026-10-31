@@ -29,7 +29,7 @@ function profile(view, data, person) {
     title: "Sus equipos", span: 6,
     html: table(
       ["Año", "Universidad", "Equipo", { label: "Puesto", num: 1 }, { label: "Res.", num: 1 }, "Compañeros"],
-      [...rows].reverse().map((r) => [r.year, `<a href="${uniUrl(r.uni)}">${esc(r.uniName)}</a>`, esc(r.team), r.rank == null ? "—" : Math.round(r.rank), r.solved ?? "—", r.players.filter((p) => p !== person.name).map(esc).join(", ")]),
+      [...rows].reverse().map((r) => [r.year, `<a href="${uniUrl(r.uni)}">${esc(r.uniName)}</a>`, esc(r.team), r.rank == null ? "—" : Math.round(r.rank), r.solved ?? "—", r.players.filter((_, i) => r.player_ids[i] !== person.key).map(esc).join(", ")]),
     ),
   });
 }
@@ -51,7 +51,7 @@ startPage({
     const score = (p) => { const m = medalCounts(p.rows); return m.gold * 1e4 + m.silver * 100 + m.bronze; };
     const uniqueYears = (p) => new Set(p.rows.map((r) => r.year)).size;
     kpis(view, [
-      [people.length.toLocaleString("es"), "nombres distintos"],
+      [people.length.toLocaleString("es"), "personas"],
       [`${Math.round((100 * people.filter((p) => uniqueYears(p) === 1).length) / people.length)}%`, "van a una sola final"],
       [Math.max(...people.map(uniqueYears)), "finales como máximo"],
       [people.filter((p) => medalCounts(p.rows).gold > 0).length, "con oro"],
@@ -60,7 +60,7 @@ startPage({
     const byFinals = [...people].sort((x, y) => uniqueYears(y) - uniqueYears(x) || score(y) - score(x)).slice(0, 20);
     rankBars(chartCard(a, { title: "Más finales", span: 4, height: 520 }), byFinals.map((p) => ({ label: p.name, value: uniqueYears(p), url: personUrl(p.key) })));
     const medalists = [...people].filter((p) => score(p) > 0).sort((x, y) => score(y) - score(x)).slice(0, 20);
-    plot(chartCard(a, { title: "Más medallas", sub: "Puestos 1 a 12", span: 5, height: 520 }), {
+    plot(chartCard(a, { title: "Más medallas", span: 5, height: 520 }), {
       tooltip: { trigger: "axis", axisPointer: { type: "shadow" } },
       grid: { left: 8, right: 16, top: 8, bottom: 34, containLabel: true },
       xAxis: valueAxis({ minInterval: 1 }),

@@ -222,7 +222,7 @@ startPage({
       itemStyle: { color: REGION_COLORS[region] },
       children: [...data.countriesIndex.values()].filter((x) => x.region === region).map((x) => ({ name: x.es, value: x.rows.length, id: x.name })),
     })).filter((node) => node.children.length);
-    plot(chartCard(mid, { title: "El peso de cada país", sub: "Participaciones desde 2006, por región", span: 5, height: 350 }), {
+    plot(chartCard(mid, { title: "El peso de cada país", sub: `Participaciones desde ${data.years[0]}, por región`, span: 5, height: 350 }), {
       legend: false,
       tooltip: { formatter: (p) => `${esc(p.name)}: <b>${p.value}</b>` },
       series: [{

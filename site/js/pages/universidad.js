@@ -1,4 +1,4 @@
-import { avg, compareUrl, countryName, countryUrl, crest, esc, fold, medalCounts, params, personUrl, uniSeries, uniUrl } from "../core.js";
+import { avg, compareUrl, countryName, countryUrl, crest, esc, medalCounts, params, personUrl, uniSeries, uniUrl } from "../core.js";
 import { categoryAxis, colors, historyChart, plot, valueAxis } from "../charts.js";
 import { chipLinks, forecastCallout, medalDonut } from "../profile.js";
 import { card, chartCard, grid, kpis, sequenceSvg, startPage, table } from "../shell.js";
@@ -64,7 +64,7 @@ startPage({
         { name: "Puesto", type: "line", yAxisIndex: 1, connectNulls: true, data: years.map((y) => (by.get(y)?.rank == null ? null : Math.round(by.get(y).rank))), lineStyle: { width: 3, color: c.accent }, itemStyle: { color: c.accent }, symbolSize: 8 },
       ],
     });
-    medalDonut(chartCard(a, { title: "Medallero", sub: "Puestos 1–4, 5–8 y 9–12", span: 5, height: 310 }), medals);
+    medalDonut(chartCard(a, { title: "Medallero", span: 5, height: 310 }), medals);
 
     card(a, {
       title: "Secuencia de participaciones", sub: "Cada arco une dos finales que comparten miembros; el número dice cuántos.", span: 12,
@@ -74,7 +74,7 @@ startPage({
       title: `Sus finales (${results.length})`, span: 12,
       html: table(
         ["Año", { label: "Puesto", num: 1 }, { label: "Res.", num: 1 }, { label: "Tiempo", num: 1 }, { label: "Vet.", num: 1, title: "Miembros que ya compitieron por esta universidad" }, "Equipo", "Miembros"],
-        [...results].reverse().map((r) => [r.year, r.rank == null ? "—" : Math.round(r.rank), r.solved ?? "—", r.time ?? "—", r.veterans || "", esc(r.team), r.players.map((p) => `<a href="${personUrl(fold(p))}">${esc(p)}</a>`).join(", ")]),
+        [...results].reverse().map((r) => [r.year, r.rank == null ? "—" : Math.round(r.rank), r.solved ?? "—", r.time ?? "—", r.veterans || "", esc(r.team), r.players.map((p, i) => `<a href="${personUrl(r.player_ids[i])}">${esc(p)}</a>`).join(", ")]),
       ),
     });
   },

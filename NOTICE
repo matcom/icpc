@@ -1,10 +1,11 @@
 Observatorio ICPC
 
-The 2006-2024 dataset in data/sources/yudivian-2006-2024.json and the catalogue
-of analyses come from https://github.com/yudivian/icpc, licensed Apache-2.0.
+The regions and Spanish names in data/sources/yudivian-2006-2024.json and the
+catalogue of analyses come from https://github.com/yudivian/icpc, licensed Apache-2.0.
 
-The 2025 results in data/sources/cphof-2025.json were read from
-https://www.cphof.org/standings/icpc/2025.
+The results and medals in data/sources/cphof-1999-2025.json were read from the
+Competitive Programming Hall of Fame, https://www.cphof.org/, (c) Yury Pisarchyk.
+They are not covered by this repository's license.
 
 site/vendor/echarts.min.js is Apache ECharts (Apache-2.0).
 data/sources/countries-110m.json is world-atlas (ISC), from Natural Earth (public domain).

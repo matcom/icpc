@@ -38,7 +38,7 @@ export async function startPage({ page, title, subtitle, render }) {
           <div class="themes" role="group" aria-label="Tema"><button data-theme-to="pergamino">Pergamino</button><button data-theme-to="vino">Vino</button></div>
         </header>
         <main id="view"></main>
-        <footer><span>Datos: <a href="https://github.com/yudivian/icpc">yudivian/icpc</a> y <a href="https://cphof.org">cphof.org</a>.</span> <a href="datos.html">Método y límites</a> · <a href="${esc(twin)}">Versión Markdown</a> · <a href="https://github.com/matcom/icpc">Código</a></footer>
+        <footer><span>Datos: <a href="https://cphof.org">cphof.org</a> y <a href="https://github.com/yudivian/icpc">yudivian/icpc</a>.</span> <a href="datos.html">Método y límites</a> · <a href="${esc(twin)}">Versión Markdown</a> · <a href="https://github.com/matcom/icpc">Código</a></footer>
       </div>
     </div>`;
   wireSearch(data);
@@ -205,7 +205,7 @@ export function sequenceSvg(data, uni) {
   let highest = base - 26;
   uni.results.forEach((a, i) => {
     for (const b of uni.results.slice(i + 1)) {
-      const shared = a.players.filter((p) => b.players.includes(p)).length;
+      const shared = a.player_ids.filter((p) => b.player_ids.includes(p)).length;
       if (!shared) continue;
       const x1 = x(a.year);
       const x2 = x(b.year);

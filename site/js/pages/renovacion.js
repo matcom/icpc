@@ -1,4 +1,4 @@
-import { REGION_COLORS, avg, countryName, countryUrl, esc, fold, personUrl, quantile, uniUrl } from "../core.js";
+import { REGION_COLORS, avg, countryName, countryUrl, esc, personUrl, quantile, uniUrl } from "../core.js";
 import { categoryAxis, colors, donut, plot, rankBars, valueAxis } from "../charts.js";
 import { card, chartCard, filterRows, filters, grid, sequenceSvg, startPage, universityPicker } from "../shell.js";
 
@@ -31,7 +31,7 @@ startPage({
         const key = state.scope === "uni" ? r.uni : r.country;
         const e = entities.get(key) ?? { key, teams: 0, repeatedTeams: 0, repeatedPlayers: 0, appearances: 0, seen: new Set(), years: new Set(), pct: [] };
         entities.set(key, e);
-        const names = r.players.map(fold);
+        const names = r.player_ids;
         const veterans = names.filter((n) => e.seen.has(n)).length;
         e.teams += 1; e.appearances += names.length; e.repeatedPlayers += veterans;
         if (veterans) e.repeatedTeams += 1;
@@ -86,9 +86,8 @@ startPage({
       });
 
       const people = new Map();
-      for (const r of rows) for (const n of r.players) {
-        const k = fold(n);
-        const p = people.get(k) ?? { name: n, years: new Set(), last: r };
+      for (const r of rows) for (const [i, k] of r.player_ids.entries()) {
+        const p = people.get(k) ?? { name: r.players[i], years: new Set(), last: r };
         p.years.add(r.year); p.last = r;
         people.set(k, p);
       }
@@ -120,8 +119,8 @@ startPage({
 
       const veterans = [...people.entries()].sort((x, y) => y[1].years.size - x[1].years.size).slice(0, 15);
       card(a, {
-        title: "Los más repetidores", sub: "Más finales con la misma ortografía de su nombre", span: 12,
-        html: `<div class="chips">${veterans.map(([k, p]) => `<a class="chip" href="${personUrl(k)}">${esc(p.name)} · ${p.years.size}</a>`).join("")}</div><p class="note">Los nombres se comparan sin distinguir mayúsculas ni acentos, así que una variante de escritura cuenta como persona nueva. Al inicio de un periodo nadie tiene pasado, por eso el primer año se omite en la evolución.</p>`,
+        title: "Los más repetidores", sub: "Más finales dentro del periodo", span: 12,
+        html: `<div class="chips">${veterans.map(([k, p]) => `<a class="chip" href="${personUrl(k)}">${esc(p.name)} · ${p.years.size}</a>`).join("")}</div><p class="note">Las personas se identifican con los perfiles de cphof, que separan homónimos y reúnen variantes de escritura, aunque no todas. Al inicio de un periodo nadie tiene pasado, por eso el primer año se omite en la evolución.</p>`,
       });
     };
     draw();

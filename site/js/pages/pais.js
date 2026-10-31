@@ -1,4 +1,4 @@
-import { REGION_COLORS, avg, compareUrl, countryName, countrySeries, countryUrl, crest, esc, fold, medalCounts, params, personUrl, uniUrl } from "../core.js";
+import { REGION_COLORS, avg, compareUrl, countryName, countrySeries, countryUrl, crest, esc, medalCounts, params, personUrl, uniUrl } from "../core.js";
 import { categoryAxis, colors, donut, historyChart, plot, valueAxis } from "../charts.js";
 import { chipLinks, forecastCallout, medalDonut } from "../profile.js";
 import { card, chartCard, grid, kpis, startPage, table } from "../shell.js";
@@ -41,7 +41,7 @@ startPage({
       html: `<div class="plot" id="hist" style="height:330px"></div>${chipLinks(similar.map((s) => ({ label: s.name, url: countryUrl(s.key) })))}${forecastCallout(predict, data.predictions.field_size, data.predictions.year)}`,
     });
     historyChart(historyBody.querySelector("#hist"), { name: country.es, series: countrySeries(country), similar, forecast: predict, nextYear: data.predictions.year, firstYear: years[0] });
-    medalDonut(chartCard(a, { title: "Medallero", sub: "Puestos 1–4, 5–8 y 9–12", span: 4, height: 300 }), medals);
+    medalDonut(chartCard(a, { title: "Medallero", span: 4, height: 300 }), medals);
 
     plot(chartCard(a, { title: "Equipos por año", span: 4, height: 290 }), {
       legend: false, tooltip: { trigger: "axis" },
@@ -91,7 +91,7 @@ startPage({
       title: `Todas sus participaciones (${rows.length})`, span: 7,
       html: table(
         ["Año", { label: "Puesto", num: 1 }, { label: "Res.", num: 1 }, { label: "Vet.", num: 1, title: "Miembros que ya compitieron por esta universidad" }, "Universidad y equipo"],
-        rows.map((r) => [r.year, r.rank == null ? "—" : Math.round(r.rank), r.solved ?? "—", r.veterans || "", `<a href="${uniUrl(r.uni)}">${esc(r.uniName)}</a><br><small>${esc(r.team)}: ${r.players.map((p) => `<a href="${personUrl(fold(p))}">${esc(p)}</a>`).join(", ")}</small>`]),
+        rows.map((r) => [r.year, r.rank == null ? "—" : Math.round(r.rank), r.solved ?? "—", r.veterans || "", `<a href="${uniUrl(r.uni)}">${esc(r.uniName)}</a><br><small>${esc(r.team)}: ${r.players.map((p, i) => `<a href="${personUrl(r.player_ids[i])}">${esc(p)}</a>`).join(", ")}</small>`]),
       ),
     });
   },

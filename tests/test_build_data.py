@@ -22,9 +22,24 @@ def test_parse_rank(position, expected):
     assert build_data.parse_rank(position) == expected
 
 
-@pytest.mark.parametrize("rank, medal", [(1, "gold"), (4, "gold"), (5, "silver"), (8, "silver"), (9, "bronze"), (12, "bronze"), (13, None), (None, None)])
-def test_medal_rule(rank, medal):
-    assert build_data.medal_for(rank) == medal
+def medals_of(built, year):
+    rows = [r for u in built["core"]["universities"] for r in u["results"] if r["year"] == year]
+    return [sum(r["medal"] == m for r in rows) for m in ("gold", "silver", "bronze")]
+
+
+def test_medals_are_the_ones_awarded(built):
+    assert medals_of(built, 2025) == [4, 4, 4]
+    assert medals_of(built, 2009) == [4, 4, 5]
+    assert medals_of(built, 1999) == [1, 1, 8]
+
+
+def test_qualified_only_teams_are_not_published(built):
+    assert build_data.parse_rank("qualified") is None
+    finals = json.loads((build_data.SOURCES / "cphof-1999-2025.json").read_text())
+    qualified = sum(r["position"] == "qualified" for f in finals.values() for r in f["rows"])
+    total = sum(len(f["rows"]) for f in finals.values())
+    assert qualified > 0
+    assert sum(len(u["results"]) for u in built["core"]["universities"]) == total - qualified
 
 
 def test_percentile_ends():
@@ -40,7 +55,7 @@ def test_fold_joins_spelling_variants():
 
 def test_every_team_of_every_final_is_published(built):
     core = built["core"]
-    assert core["years"] == list(range(2006, 2026))
+    assert core["years"] == list(range(1999, 2026))
     for year in core["years"]:
         published = sum(1 for u in core["universities"] for r in u["results"] if r["year"] == year)
         assert published == core["field"][str(year)]
@@ -48,6 +63,7 @@ def test_every_team_of_every_final_is_published(built):
 
 def test_known_champions(built):
     uni_of = {r["year"]: u["name"] for u in built["core"]["universities"] for r in u["results"] if r["rank"] == 1}
+    assert uni_of[1999] == "University of Waterloo"
     assert uni_of[2006] == "Saratov State University"
     assert uni_of[2025] == "St. Petersburg State University"
 
@@ -55,6 +71,11 @@ def test_known_champions(built):
 def test_spelling_variants_merge_into_one_university(built):
     names = [u["name"] for u in built["core"]["universities"]]
     assert sum(1 for n in names if build_data.fold(n) == "moscow institute of physics and technology") == 1
+
+
+@pytest.mark.parametrize("old", ["St. Petersburg National Research University of IT, Mechanics and Optics", "University of California at Berkeley"])
+def test_reviewed_aliases_are_applied(built, old):
+    assert old not in {u["name"] for u in built["core"]["universities"]}
 
 
 def test_university_ids_are_unique(built):
@@ -67,15 +88,18 @@ def test_first_appearance_has_no_veterans(built):
         assert uni["results"][0]["veterans"] == 0
 
 
-def test_veterans_counts_returning_members():
-    runs = [{"players": ["Ana", "Luis", "Eva"]}, {"players": ["ana", "Rosa", "Juan"]}]
-    seen = set()
-    counts = []
-    for run in runs:
-        keys = {build_data.fold(p) for p in run["players"]}
-        counts.append(len(keys & seen))
-        seen |= keys
-    assert counts == [0, 1]
+def test_veterans_count_returning_people_by_profile(built):
+    for uni in built["core"]["universities"]:
+        seen = set()
+        for result in uni["results"]:
+            assert result["veterans"] == len(set(result["player_ids"]) & seen)
+            seen |= set(result["player_ids"])
+
+
+def test_mojibake_names_are_repaired(built):
+    names = {p for u in built["core"]["universities"] for r in u["results"] for p in r["players"]}
+    assert "Thomas Würthinger" in names
+    assert "Thomas Wьrthinger" not in names
 
 
 def test_forecast_uses_only_the_past():

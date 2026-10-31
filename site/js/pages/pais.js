@@ -24,7 +24,9 @@ startPage({
     head.innerHTML = `${crest(name, 58)}<div><h1>${esc(country.es)}</h1><p>${esc(data.regions[country.region] ?? "")} · <a href="${compareUrl("c", [name])}">Comparar con otro país</a></p></div>`;
     view.append(head);
     kpis(view, [
-      [rows.length, "equipos en la final"],
+      [rows.length, `participaciones ${Math.min(...rows.map((r) => r.year))}–${Math.max(...rows.map((r) => r.year))}`],
+      [Math.max(...years.map((y) => rows.filter((r) => r.year === y).length)), "máx. equipos en una final"],
+      [new Set(rows.map((r) => `${r.uni}|${r.team}`)).size, "nombres de equipo distintos"],
       [country.unis.size, "universidades"],
       [new Set(rows.map((r) => r.year)).size, "ediciones"],
       [best === 1e9 ? "—" : Math.round(best), "mejor puesto"],
@@ -86,7 +88,7 @@ startPage({
       }],
     });
     card(a, {
-      title: `Todos sus equipos (${rows.length})`, span: 7,
+      title: `Todas sus participaciones (${rows.length})`, span: 7,
       html: table(
         ["Año", { label: "Puesto", num: 1 }, { label: "Res.", num: 1 }, { label: "Vet.", num: 1, title: "Miembros que ya compitieron por esta universidad" }, "Universidad y equipo"],
         rows.map((r) => [r.year, r.rank == null ? "—" : Math.round(r.rank), r.solved ?? "—", r.veterans || "", `<a href="${uniUrl(r.uni)}">${esc(r.uniName)}</a><br><small>${esc(r.team)}: ${r.players.map((p) => `<a href="${personUrl(fold(p))}">${esc(p)}</a>`).join(", ")}</small>`]),

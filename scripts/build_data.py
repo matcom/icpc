@@ -442,7 +442,7 @@ def write_markdown_twins(universities: list[dict], countries: dict, predictions:
             [y, sum(1 for u in universities for r in u["results"] if r["year"] == y),
              next((u["name"] for u in universities for r in u["results"] if r["year"] == y and r["rank"] == 1), "")]
             for y in years]),
-        "paises": table(["Country", "Teams in finals"], [[c, n] for c, n in teams_by_country.most_common(30)]),
+        "paises": table(["Country", "Appearances in finals"], [[c, n] for c, n in teams_by_country.most_common(30)]),
         "universidades": table(["University", "Finals"], [[u["name"], len(u["results"])] for u in finals[:30]]),
         "renovacion": table(["Year", "% of teams with a returning member"], [[y, veteran_share[y]] for y in years]),
         "problemas": table(["Year", "Median solved", "Max solved"], [

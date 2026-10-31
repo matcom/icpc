@@ -105,7 +105,7 @@ startPage({
     card(a, {
       title: "Frente a frente", span: 12,
       html: table(
-        [kind === "u" ? "Universidad" : "País", { label: "Finales", num: 1 }, { label: "Equipos", num: 1 }, { label: "Mejor", num: 1 }, { label: "Perc. medio", num: 1 }, { label: "Resueltos/final", num: 1 }, { label: "% veteranos", num: 1 }, { label: "Oro", num: 1 }, { label: "Plata", num: 1 }, { label: "Bronce", num: 1 }],
+        [kind === "u" ? "Universidad" : "País", { label: "Finales", num: 1 }, { label: "Particip.", num: 1, title: "Participaciones: cada equipo en cada final suma una" }, { label: "Mejor", num: 1 }, { label: "Perc. medio", num: 1 }, { label: "Resueltos/final", num: 1 }, { label: "% veteranos", num: 1 }, { label: "Oro", num: 1 }, { label: "Plata", num: 1 }, { label: "Bronce", num: 1 }],
         stats.map((s) => [`<a href="${s.item.url}">${esc(s.item.name)}</a>`, s.finals, s.teams, s.best === 1e9 ? "—" : Math.round(s.best), Math.round(s.avg), s.solved.toFixed(1), Math.round(s.vets), s.medalDetail.gold, s.medalDetail.silver, s.medalDetail.bronze]),
       ),
     });

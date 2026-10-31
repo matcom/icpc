@@ -145,7 +145,7 @@ startPage({
     view.append(head);
     kpis(view, [
       [data.years.length, "finales", "datos.html"],
-      [number(data.rows.length), "equipos en la final", "universidades.html"],
+      [number(data.rows.length), "participaciones en finales", "universidades.html"],
       [data.unis.length, "universidades", "universidades.html"],
       [data.countriesIndex.size, "países y territorios", "paises.html"],
       [number(data.people.size), "competidores", "competidores.html"],
@@ -156,7 +156,7 @@ startPage({
     const state = { metric: "teams", period: "cum" };
     const mapBody = card(top, {
       title: "El mapa de la final", span: 8,
-      html: `<div class="filters" style="border:0;padding:0;margin:4px 0 6px;background:none"><span class="seg" role="group" aria-label="Métrica"><button data-m="teams">Equipos</button><button data-m="top">Medallas</button></span><span class="seg" role="group" aria-label="Periodo"><button data-p="cum">Acumulado</button><button data-p="one">Ese año</button></span></div><div class="plot" id="map" style="height:${innerWidth < 640 ? 330 : 470}px"></div>`,
+      html: `<div class="filters" style="border:0;padding:0;margin:4px 0 6px;background:none"><span class="seg" role="group" aria-label="Métrica"><button data-m="teams">Participaciones</button><button data-m="top">Medallas</button></span><span class="seg" role="group" aria-label="Periodo"><button data-p="cum">Acumulado</button><button data-p="one">Ese año</button></span></div><div class="plot" id="map" style="height:${innerWidth < 640 ? 330 : 470}px"></div>`,
     });
     const rankBody = card(top, { title: "Quién domina", span: 4, html: '<p class="sub" id="rank-sub"></p><div id="rank"></div>' });
 
@@ -167,7 +167,7 @@ startPage({
       const byCountry = new Map();
       for (const r of rows) byCountry.set(r.country, (byCountry.get(r.country) ?? 0) + 1);
       const items = [...byCountry].sort((a, b) => b[1] - a[1]).slice(0, 8).map(([name, value]) => ({ label: countryName(data, name), value, url: countryUrl(name) }));
-      rankBody.querySelector("#rank-sub").textContent = `${state.metric === "teams" ? "Equipos" : "Medallas"}, ${state.period === "cum" ? `${data.years[0]}–${year}` : year}`;
+      rankBody.querySelector("#rank-sub").textContent = `${state.metric === "teams" ? "Participaciones" : "Medallas"}, ${state.period === "cum" ? `${data.years[0]}–${year}` : year}`;
       rankBody.querySelector("#rank").innerHTML = barList(items);
       const byRegion = new Map();
       for (const r of rows) byRegion.set(r.region, (byRegion.get(r.region) ?? 0) + 1);
@@ -188,7 +188,7 @@ startPage({
     redrawMap();
 
     const raceBody = card(top, {
-      title: "La carrera de los países", sub: "Equipos acumulados en la final, edición a edición", span: 8,
+      title: "La carrera de los países", sub: "Participaciones acumuladas, edición a edición: cada equipo en cada final suma una", span: 8,
       html: `<button class="chip" id="race-go" style="cursor:pointer">▶ Reproducir</button><div class="plot" id="race" style="height:${innerWidth < 640 ? 320 : 320}px"></div>`,
     });
     const race = drawRace(raceBody.querySelector("#race"), data);
@@ -222,7 +222,7 @@ startPage({
       itemStyle: { color: REGION_COLORS[region] },
       children: [...data.countriesIndex.values()].filter((x) => x.region === region).map((x) => ({ name: x.es, value: x.rows.length, id: x.name })),
     })).filter((node) => node.children.length);
-    plot(chartCard(mid, { title: "El peso de cada país", sub: "Equipos en la final desde 2006, por región", span: 5, height: 350 }), {
+    plot(chartCard(mid, { title: "El peso de cada país", sub: "Participaciones desde 2006, por región", span: 5, height: 350 }), {
       legend: false,
       tooltip: { formatter: (p) => `${esc(p.name)}: <b>${p.value}</b>` },
       series: [{

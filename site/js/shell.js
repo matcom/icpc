@@ -69,7 +69,7 @@ function wireSearch(data) {
   const input = document.getElementById("q");
   const box = document.getElementById("res");
   const entries = [
-    ...[...data.countriesIndex.values()].map((c) => ({ kind: "País", order: 0, label: c.es, sub: `${c.rows.length} equipos`, key: fold(`${c.es} ${c.name}`), url: countryUrl(c.name), mark: c.name })),
+    ...[...data.countriesIndex.values()].map((c) => ({ kind: "País", order: 0, label: c.es, sub: `${c.rows.length} participaciones`, key: fold(`${c.es} ${c.name}`), url: countryUrl(c.name), mark: c.name })),
     ...data.unis.map((u) => ({ kind: "Universidad", order: 1, label: u.name, sub: `${countryName(data, u.country)} · ${u.results.length} finales`, key: fold(u.name), url: uniUrl(u.id), mark: u.name })),
     ...[...data.people.values()].map((p) => ({ kind: "Competidor", order: 2, label: p.name, sub: `${p.rows[p.rows.length - 1].uniName} · ${p.rows.length} finales`, key: p.key, url: personUrl(p.key), mark: p.name })),
   ];

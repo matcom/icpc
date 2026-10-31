@@ -30,7 +30,7 @@ startPage({
       const height = (n) => Math.max(320, Math.min(n, state.top) * 24 + 20);
 
       const a = grid(holder);
-      rankBars(chartCard(a, { title: "Equipos en la final", span: 4, height: height(list.length) }), toItems((e) => e.rows.length));
+      rankBars(chartCard(a, { title: "Participaciones acumuladas", sub: "Cada equipo en cada final suma una", span: 4, height: height(list.length) }), toItems((e) => e.rows.length));
       rankBars(chartCard(a, { title: "Universidades finalistas", sub: "Cuántas universidades distintas", span: 4, height: height(list.length) }), toItems((e) => e.unis.size), { color: c.blue });
       rankBars(chartCard(a, { title: "Ediciones con presencia", span: 4, height: height(list.length) }), toItems((e) => e.years.size), { color: c.gold });
 
@@ -39,10 +39,10 @@ startPage({
         value: [e.rows.length, Math.round(e.avg), e.unis.size],
         itemStyle: { color: REGION_COLORS[e.region], opacity: 0.8 },
       }));
-      plot(chartCard(a, { title: "Cantidad frente a calidad", sub: "Equipos, percentil medio y número de universidades (tamaño)", span: 8, height: 420 }), {
+      plot(chartCard(a, { title: "Cantidad frente a calidad", sub: "Participaciones, percentil medio y número de universidades (tamaño)", span: 8, height: 420 }), {
         legend: false,
-        tooltip: { formatter: (p) => `<b>${esc(p.name)}</b><br>${p.value[0]} equipos · percentil medio ${p.value[1]} · ${p.value[2]} universidades` },
-        xAxis: valueAxis({ type: "log", logBase: 2, min: 1, name: "Equipos", nameLocation: "middle", nameGap: 26, nameTextStyle: { color: c.dim } }),
+        tooltip: { formatter: (p) => `<b>${esc(p.name)}</b><br>${p.value[0]} participaciones · percentil medio ${p.value[1]} · ${p.value[2]} universidades` },
+        xAxis: valueAxis({ type: "log", logBase: 2, min: 1, name: "Participaciones", nameLocation: "middle", nameGap: 26, nameTextStyle: { color: c.dim } }),
         yAxis: valueAxis({ min: 0, max: 100, name: "Percentil medio", nameTextStyle: { color: c.dim } }),
         grid: { left: 8, right: 16, top: 30, bottom: 30, containLabel: true },
         series: [{
@@ -97,7 +97,7 @@ startPage({
       card(a, {
         title: "Todos los países", span: 12,
         html: table(
-          ["País", "Región", { label: "Equipos", num: 1 }, { label: "Univ.", num: 1 }, { label: "Ediciones", num: 1 }, { label: "Mejor", num: 1 }, { label: "Perc. medio", num: 1 }, { label: "Oro", num: 1 }, { label: "Plata", num: 1 }, { label: "Bronce", num: 1 }],
+          ["País", "Región", { label: "Particip.", num: 1, title: "Participaciones: cada equipo en cada final suma una" }, { label: "Univ.", num: 1 }, { label: "Ediciones", num: 1 }, { label: "Mejor", num: 1 }, { label: "Perc. medio", num: 1 }, { label: "Oro", num: 1 }, { label: "Plata", num: 1 }, { label: "Bronce", num: 1 }],
           ordered.map((e) => [`<a href="${countryUrl(e.name)}">${esc(countryName(data, e.name))}</a>`, esc(data.regions[e.region] ?? ""), e.rows.length, e.unis.size, e.years.size, e.best === 1e9 ? "—" : Math.round(e.best), Math.round(e.avg), e.medals.gold, e.medals.silver, e.medals.bronze]),
         ),
       });

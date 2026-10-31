@@ -101,9 +101,9 @@ startPage({
         const region = state.scope === "uni" ? data.countries[data.byId.get(e.key).country]?.region : data.countries[e.key]?.region;
         return { name: label(e.key), key: e.key, value: [Math.round((100 * e.repeatedTeams) / e.teams), Math.round(avg(e.pct)), e.teams], itemStyle: { color: REGION_COLORS[region] ?? c.gold, opacity: 0.75 } };
       });
-      plot(chartCard(a, { title: "Renovación frente a resultado", sub: "Con al menos 3 equipos. El tamaño es la cantidad de equipos.", span: 8, height: 320 }), {
+      plot(chartCard(a, { title: "Renovación frente a resultado", sub: "Con al menos 3 participaciones. El tamaño es su cantidad.", span: 8, height: 320 }), {
         legend: false,
-        tooltip: { formatter: (p) => `<b>${esc(p.name)}</b><br>${p.value[0]}% con veteranos · percentil medio ${p.value[1]} · ${p.value[2]} equipos` },
+        tooltip: { formatter: (p) => `<b>${esc(p.name)}</b><br>${p.value[0]}% con veteranos · percentil medio ${p.value[1]} · ${p.value[2]} participaciones` },
         grid: { left: 8, right: 16, top: 26, bottom: 30, containLabel: true },
         xAxis: valueAxis({ min: 0, max: 100, name: "% de equipos con veteranos", nameLocation: "middle", nameGap: 26, nameTextStyle: { color: c.dim } }),
         yAxis: valueAxis({ min: 0, max: 100, name: "Percentil medio", nameTextStyle: { color: c.dim } }),

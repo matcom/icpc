@@ -32,6 +32,7 @@ startPage({
     card(a, {
       title: "Definiciones", span: 12,
       html: `<div class="prose">
+        <h2>Participación</h2><p>Un equipo en una final. Un país o universidad que vuelve suma otra, así que el total acumulado no es el número de equipos de una final ni de equipos distintos.</p>
         <h2>Percentil</h2><p>Puesto llevado a una escala de 0 a 100 dentro de su final: el campeón tiene 100 y el último 0. Así se comparan finales de distinto tamaño. Un puesto compartido (como 103–122) usa el punto medio; un equipo sin puesto publicado queda fuera de estos cálculos.</p>
         <h2>Medallas</h2><p>Se usa la regla de posición: 1–4 oro, 5–8 plata, 9–12 bronce. Algunas ediciones reales repartieron otro número.</p>
         <h2>Veterano</h2><p>Miembro que ya compitió por la misma universidad en una final anterior. En Renovación solo cuenta el periodo elegido. El porcentaje de apariciones divide apariciones de veteranos entre apariciones totales, de modo que no pasa de 100.</p>

@@ -206,3 +206,155 @@ def test_every_logo_has_a_file_and_a_university(built):
         assert uni in ids, uni
         assert logo["source"] and logo["licence"]
         assert (build_data.SITE / "logos" / f"{uni}.png").exists(), uni
+
+
+def test_cuba_slice_has_the_expected_totals(built):
+    cuba = built["cuba"]
+    assert cuba["years"] == list(range(2010, 2026))
+    assert cuba["totals"] == {
+        "editions": 16,
+        "teams": 26,
+        "slots": 78,
+        "people": 57,
+        "universities": 5,
+        "podiums": 5,
+        "medals": 0,
+        "regionalTitles": 1,
+        "maxTeamsYear": 3,
+        "bestRank": 44,
+        "worstRank": 132,
+        "bestPct": 65.9,
+        "worstPct": 1.8,
+        "solvedMax": 5,
+        "teams6Plus": 0,
+        "repeatPeople": 21,
+        "people3Plus": 0,
+        "finalsPerPerson": 1.37,
+    }
+    assert len(cuba["teams"]) == 26
+    assert {row["year"] for row in cuba["teams"]} == set(cuba["years"])
+    assert all(row["field"] and row["group"]["size"] > 0 for row in cuba["teams"])
+
+
+def test_cuba_podiums_name_the_university_of_each_place(built):
+    cuba = built["cuba"]
+    podiums = cuba["podiums"]
+    assert podiums["totals"] | {} == {
+        **podiums["totals"],
+        "latamTeams": 286,
+        "cubaTeams": 26,
+        "cubaShare": 9.1,
+        "podiums": 48,
+        "cubaPodiums": 5,
+        "cubaPodiumShare": 10.4,
+        "cubaPerEdition": 0.31,
+        "cubaRank": 4,
+        "gold": 1,
+        "silver": 0,
+        "bronze": 4,
+    }
+    assert [(row["year"], row["place"]) for row in podiums["cuba"]] == [
+        (2017, 1), (2019, 3), (2020, 3), (2021, 3), (2023, 3)
+    ]
+    assert {row["uni"] for row in podiums["cuba"]} == {"universidad-de-la-habana"}
+    assert {row["uniName"] for row in podiums["cuba"]} == {"Universidad de La Habana"}
+    assert podiums["cuba"][0]["rank"] == 44
+    assert podiums["cuba"][0]["field"] == 127
+    assert len(podiums["years"]) == 16
+    assert all(row["cuba"]["uniName"] for row in podiums["years"])
+    assert podiums["totals"]["countriesWithTeams"] == 11
+    assert podiums["totals"]["countriesWithPodiums"] == 7
+    assert podiums["totals"]["cubaPodiumRank"] == 4
+    assert all(row["latamCountries"] >= len(row["top"]) for row in podiums["years"])
+    assert next(row for row in podiums["years"] if row["year"] == 2010)["latamCountries"] == 6
+
+
+def test_cuba_gender_is_aggregate_only(built):
+    cuba = built["cuba"]
+    gender = cuba["gender"]
+    assert gender["women"] == 4
+    assert gender["men"] == 53
+    assert gender["womenSlots"] == 5
+    assert gender["menSlots"] == 73
+    assert gender["teamsWithWomen"] == 5
+    assert gender["teamsTwoPlus"] == 0
+    assert gender["universities"] == 3
+    assert gender["coverage"] == {"known": 57, "total": 57, "missing": []}
+    assert gender["firstYear"] == 2016
+    assert gender["lastYear"] == 2022
+    assert gender["lastGap"] == [2023, 2024, 2025]
+    assert sum(1 for row in gender["timeline"] if row["women"] > 0) == 4
+    assert all(set(player) == {"id", "name"} for team in cuba["teams"] for player in team["players"])
+    assert not (build_data.OUT / "cuba-gender.csv").exists()
+    curated = ROOT / "data" / "curated" / "cuba-gender.csv"
+    with curated.open() as handle:
+        rows = list(csv.DictReader(handle))
+    assert len(rows) == 57
+    assert sum(row["gender"] == "f" for row in rows) == 4
+    site_text = "".join(path.read_text() for path in build_data.OUT.glob("*.json"))
+    assert '"gender":"f"' not in site_text
+    assert '"gender": "f"' not in site_text
+
+
+def test_cuba_csv_has_one_row_per_team(built):
+    with (build_data.OUT / "cuba.csv").open() as handle:
+        rows = list(csv.DictReader(handle))
+    assert len(rows) == 26
+    assert set(rows[0]) == {
+        "year", "university", "team", "rank", "field", "percentile", "solved", "time",
+        "group_position", "group_size", "veterans", "members",
+    }
+    assert {row["university"] for row in rows} == {
+        university["name"] for university in built["cuba"]["universities"]
+    }
+
+
+def test_cuba_2018_visa_story_is_preserved(built):
+    cuba = built["cuba"]
+    note = cuba["note2018"]
+    assert note["qualified"] == [{
+        "year": 2017,
+        "uniName": "Universidad de Pinar del Río",
+        "team": "sUrPRise",
+        "players": ["Elio Alejandro Govea Aguilar", "José Guerra Carmenate", "Manuel Alejandro Díaz Pérez"],
+    }]
+    assert [row["uni"] for row in note["teams2018"]] == [
+        "universidad-central-marta-abreu-de-las-villas",
+        "universidad-de-oriente-sede-antonio-maceo",
+        "universidad-de-pinar-del-rio",
+    ]
+    assert [row["rank"] for row in note["teams2018"]] == [100, 118, 131]
+    assert all(row["year"] == 2017 for row in note["qualified"])
+    assert not any(row["year"] == 2017 and row["uni"] == "universidad-de-pinar-del-rio" for row in cuba["teams"])
+    assert sum(row["year"] == 2017 for row in cuba["teams"]) == 1
+
+
+def test_cuba_field_and_simulator_are_coherent(built):
+    cuba = built["cuba"]
+    assert len(cuba["field"]) == 16
+    assert len(cuba["simulator"]) > 100
+    field_2017 = next(row for row in cuba["field"] if row["year"] == 2017)
+    assert field_2017["cubaBestSolved"] == 5
+    assert field_2017["cubaBestRank"] == 44
+    assert field_2017["gapMedian"] == 1
+    assert field_2017["gapTop50"] == 0
+    assert field_2017["gapMedal"] == -3
+    assert cuba["records"]["mostSolved"][0]["year"] == 2017
+    assert cuba["records"]["fastest"]["year"] == 2018
+    assert cuba["records"]["slowest"]["year"] == 2015
+    assert cuba["scenarios"]["years"] == [2021, 2022, 2023, 2024, 2025]
+    assert cuba["projection"]["teams"][0]["team"] == "UH Pop"
+
+
+def test_cuba_map_has_the_sixteen_provinces(built):
+    cuba_map = json.loads((build_data.OUT / "cuba-map.json").read_text())
+    assert cuba_map["type"] == "FeatureCollection"
+    assert len(cuba_map["features"]) == 16
+    names = {feature["properties"]["name"] for feature in cuba_map["features"]}
+    assert {"La Habana", "Villa Clara", "Pinar del Río", "Santiago de Cuba"} <= names
+    assert "Guantánamo" in names
+    assert "Guantanmo" not in names
+    assert all(feature["properties"]["name"] for feature in cuba_map["features"])
+    assert {row["province"] for row in built["cuba"]["universities"]} == {
+        "La Habana", "Villa Clara", "Pinar del Río", "Santiago de Cuba"
+    }

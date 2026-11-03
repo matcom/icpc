@@ -17,7 +17,8 @@ startPage({
         <li>Resultados y medallas: <a href="https://www.cphof.org/">Competitive Programming Hall of Fame</a> (© Yury Pisarchyk), excluidos de la licencia de este repositorio y contrastados con <a href="https://icpc.global/worldfinals/results">icpc.global</a>.</li>
         <li>Análisis, regiones y nombres en español: <a href="https://github.com/yudivian/icpc">yudivian/icpc</a> (Apache-2.0), origen de este proyecto.</li>
         <li>Escudos de universidades cubanas: La Habana, UCI y Pinar del Río desde Wikimedia Commons (CC BY-SA 4.0); Las Villas y Oriente desde sus sitios oficiales, para identificarlas. Las marcas pertenecen a cada universidad.</li>
-        <li>Mapa: <a href="https://github.com/topojson/world-atlas">world-atlas</a>, basado en Natural Earth.</li>
+        <li>Mapa del mundo: <a href="https://github.com/topojson/world-atlas">world-atlas</a>, basado en Natural Earth.</li>
+        <li>Geometrías provinciales de Cuba: <a href="https://github.com/yudivian/cuba-geojsons">cuba-geojsons</a> (MIT), de Yudivián Almeida Cruz.</li>
         <li>Gráficos: <a href="https://echarts.apache.org/">Apache ECharts</a>.</li>
       </ul></div>`,
     });
@@ -27,6 +28,7 @@ startPage({
         <li><a href="data/results.csv">results.csv</a>: una fila por equipo y final.</li>
         <li><a href="data/core.json">core.json</a>: universidades, resultados y regiones.</li>
         <li><a href="data/predictions.json">predictions.json</a>: proyecciones y su prueba hacia atrás.</li>
+        <li><a href="data/cuba.json">cuba.json</a> y <a href="data/cuba.csv">cuba.csv</a>: el corte de Cuba y su descarga.</li>
         <li><a href="llms.txt">llms.txt</a>: índice para agentes; cada página tiene su versión Markdown.</li>
       </ul></div>`,
     });

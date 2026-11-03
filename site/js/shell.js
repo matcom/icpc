@@ -4,6 +4,7 @@ import { disposeAll } from "./charts.js";
 import { watchSelects } from "./combobox.js";
 import { fuzzyFilter } from "./fuzzy.js";
 import { searchEntries } from "./search.js";
+import { refreshTables, watchTables } from "./tables.js";
 
 const NAV = [
   ["index", "Panorama", "◉"],
@@ -16,6 +17,7 @@ const NAV = [
   ["competidores", "Competidores", "☺"],
   ["predicciones", "Predicciones", "◔"],
   ["comparar", "Comparar", "⇄"],
+  ["cuba", "Cuba", "✦"],
   ["datos", "Datos y método", "ⓘ"],
 ];
 
@@ -47,11 +49,13 @@ export async function startPage({ page, title, subtitle, render }) {
     </div>`;
   wireSearch(data);
   watchSelects(document.body);
+  const view = document.getElementById("view");
+  watchTables(view);
   const draw = () => {
     disposeAll();
-    const view = document.getElementById("view");
     view.innerHTML = title ? `<div class="head"><h1>${esc(title)}</h1>${subtitle ? `<p>${esc(subtitle)}</p>` : ""}</div>` : "";
     render(view, data, draw);
+    refreshTables(view);
   };
   wireTheme(draw);
   draw();

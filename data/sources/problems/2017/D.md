@@ -1,0 +1,69 @@
+---
+year: 2017
+letter: "D"
+title: "Money for Nothing"
+source: "https://icpc.global/worldfinals/problems/2017-ICPC-World-Finals/icpc2017.pdf"
+source_pages: 7-8
+local_pdf: "problems_pdfs/2017/D.pdf"
+---
+
+# Money for Nothing
+Rapid City
+
+                                                                                    event
+                                                                                    sponsor
+                                                                                                   ICPC 2017
+
+                                            Problem D
+                                       Money for Nothing
+                                       Time limit: 5 seconds
+In this problem you will be solving one of the most profound challenges of humans across the world since
+the beginning of time – how to make lots of money.
+You are a middleman in the widget market. Your job is to buy widgets from widget producer companies
+and sell them to widget consumer companies. Each widget consumer company has an open request for one
+widget per day, until some end date, and a price at which it is willing to buy the widgets. On the other hand,
+each widget producer company has a start date at which it can start delivering widgets and a price at which
+it will deliver each widget.
+Due to fair competition laws, you can sign a contract with only one producer company and only one con-
+sumer company. You will buy widgets from the producer company, one per day, starting on the day it can
+start delivering, and ending on the date specified by the consumer company. On each of those days you earn
+the difference between the producer’s selling price and the consumer’s buying price.
+Your goal is to choose the consumer company and the producer company that will maximize your profits.
+
+Input
+
+The first line of input contains two integers m and n (1 ≤ m, n ≤ 500 000) denoting the number of producer
+and consumer companies in the market, respectively. It is followed by m lines, the ith of which contains
+two integers pi and di (1 ≤ pi , di ≤ 109 ), the price (in dollars) at which the ith producer sells one widget
+and the day on which the first widget will be available from this company. Then follow n lines, the j th of
+which contains two integers qj and ej (1 ≤ qj , ej ≤ 109 ), the price (in dollars) at which the j th consumer is
+willing to buy widgets and the day immediately after the day on which the last widget has to be delivered to
+this company.
+
+Output
+
+Display the maximum total number of dollars you can earn. If there is no way to sign contracts that gives
+you any profit, display 0.
+
+ Sample Input 1                                          Sample Output 1
+ 2 2                                                     5
+ 1 3
+ 2 1
+ 3 5
+ 7 2
+
+ACM-ICPC World Finals 2017 Problem D: Money for Nothing                                                             7
+
+                                                                              Rapid City
+
+                                                                 event
+                                                                 sponsor
+                                                                           ICPC 2017
+
+Sample Input 2                                 Sample Output 2
+1 2                                            0
+10 10
+9 11
+11 9
+
+ACM-ICPC World Finals 2017 Problem D: Money for Nothing                                    8

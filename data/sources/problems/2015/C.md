@@ -1,0 +1,62 @@
+---
+year: 2015
+letter: "C"
+title: "Catering"
+source: "https://icpc.global/worldfinals/problems/2015-ICPC-World-Finals/icpc2015.pdf"
+source_pages: 5-6
+local_pdf: "problems_pdfs/2015/C.pdf"
+---
+
+# Catering
+Problem C
+                                                  Catering
+                                        Time limit: 4 seconds
+Paul owns a catering company and business is booming. The com-
+pany has k catering teams, each in charge of one set of catering equip-
+ment. Every week, the company accepts n catering requests for var-
+ious events. For every request, they send a catering team with their
+equipment to the event location. The team delivers the food, sets up
+the equipment, and instructs the host on how to use the equipment and
+serve the food. After the event, the host is responsible for returning the
+equipment back to Paul’s company.
+Unfortunately, in some weeks the number of catering teams is less than
+the number of requests, so some teams may have to be used for more
+than one event. In these cases, the company cannot wait for the host
+                                                                                       Picture from Wikimedia Commons
+to return the equipment and must keep the team on-site to move the
+equipment to another location. The company has an accurate estimate of the cost to move a set of
+equipment from any location to any other location. Given these costs, Paul wants to prepare an Advance
+Catering Map to service the requests while minimizing the total moving cost of equipment (including
+the cost of the first move), even if that means not using all the available teams. Paul needs your help to
+write a program to accomplish this task. The requests are sorted in ascending order of their event times
+and they are chosen in such a way that for any i < j, there is enough time to transport the equipment
+used in the ith request to the location of the j th request.
+
+Input
+
+The first line of input contains two integers n (1 ≤ n ≤ 100) and k (1 ≤ k ≤ 100) which are the number
+of requests and the number of catering teams, respectively. Following that are n lines, where the ith line
+contains n − i + 1 integers between 0 and 1 000 000 inclusive. The j th number in the ith line is the cost
+of moving a set of equipment from location i to location i + j. The company is at location 1 and the n
+requests are at locations 2 to n + 1.
+
+Output
+
+Display the minimum moving cost to service all requests. (This amount does not include the cost of
+moving the equipment back to the catering company.)
+
+ Sample Input 1                                            Sample Output 1
+ 3 2                                                       80
+ 40 30 40
+ 50 10
+ 50
+
+ACM-ICPC World Finals 2015 Problem C: Catering                                                                     5
+
+Sample Input 2                               Sample Output 2
+3 2                                          40
+10 10 10
+20 21
+21
+
+ACM-ICPC World Finals 2015 Problem C: Catering                 6

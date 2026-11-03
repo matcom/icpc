@@ -16,6 +16,7 @@ const NAV = [
   ["medallas", "Medallas", "★"],
   ["competidores", "Competidores", "☺"],
   ["predicciones", "Predicciones", "◔"],
+  ["sedes", "Sedes", "⌖"],
   ["comparar", "Comparar", "⇄"],
   ["cuba", "Cuba", "✦"],
   ["datos", "Datos y método", "ⓘ"],

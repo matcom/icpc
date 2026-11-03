@@ -354,3 +354,33 @@ footer { color: var(--dim); font-size: 14px; padding: 12px 0 20px; display: flex
   .cuba-team-top { grid-template-columns: auto minmax(0, 1fr); }
   .cuba-team-rank { grid-column: 2; }
 }
+
+/* Sedes: a transversal view of the World Finals venues. */
+.sedes-map { height: 430px; min-height: 320px; width: 100%; }
+@media (min-width: 900px) { .sedes-kpis { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+.sedes-changes { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+.sedes-change { background: var(--panel2); border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px; }
+.sedes-change-year { color: var(--accent); font: 600 12px/1.4 Jost, system-ui, sans-serif; letter-spacing: .1em; }
+.sedes-change h3 { font-size: 15.5px; margin: 3px 0 4px; }
+.sedes-change p { margin: 0; color: var(--dim); font-size: 14.5px; }
+@media (max-width: 760px) {
+  .sedes-map { height: 330px; }
+  .sedes-changes { grid-template-columns: minmax(0, 1fr); }
+}
+
+/* The one perfect final, highlighted on the problems page. */
+.perfect-card { border-color: var(--gold); background: linear-gradient(135deg, var(--panel), var(--panel2)); }
+.perfect-record { display: grid; grid-template-columns: 170px minmax(0, 1fr); gap: 18px; align-items: center; }
+.perfect-score b { display: block; color: var(--accent); font: 600 56px/1 Cinzel, Georgia, serif; }
+.perfect-score span { display: block; color: var(--dim); font-size: 14px; }
+.perfect-record h3 { font-size: 18px; margin: 0 0 4px; }
+.perfect-record p { margin: 4px 0; font-size: 15.5px; }
+@media (max-width: 600px) {
+  .perfect-record { grid-template-columns: minmax(0, 1fr); gap: 8px; }
+  .perfect-score b { font-size: 44px; }
+}
+
+/* Competitors: keep the medal list readable while adding university and country. */
+.people-medals a { align-items: start; }
+.people-medals .nm { white-space: normal; }
+.people-medals .nm small { display: block; margin-top: 2px; color: var(--dim); font-size: 13px; line-height: 1.25; }

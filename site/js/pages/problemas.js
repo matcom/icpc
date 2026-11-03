@@ -1,4 +1,4 @@
-import { REGION_COLORS, avg, quantile, uniUrl } from "../core.js";
+import { REGION_COLORS, avg, esc, quantile, teamUrl, uniUrl } from "../core.js";
 import { categoryAxis, colors, plot, rankBars, valueAxis } from "../charts.js";
 import { card, chartCard, filterRows, filters, grid, startPage, universityPicker } from "../shell.js";
 
@@ -13,6 +13,25 @@ startPage({
   title: "Problemas y puestos",
   subtitle: "Qué tan difícil fue cada final y cuánto resuelve cada universidad.",
   render(view, data) {
+    const perfect = data.rows.filter((r) => r.solved != null && data.problems[r.year] && r.solved === data.problems[r.year]);
+    if (perfect.length === 1) {
+      const row = perfect[0];
+      const highlight = document.createElement("div");
+      highlight.className = "dash";
+      view.append(highlight);
+      const perfectBody = card(highlight, {
+        title: "La única final perfecta", span: 12,
+        sub: "Un equipo ha resuelto todos los problemas de una final. Solo uno en 27 ediciones.",
+        html: `<div class="perfect-record">
+          <div class="perfect-score"><b>${row.solved}</b><span>de ${data.problems[row.year]} problemas</span></div>
+          <div><h3>${esc(row.team)} · ${row.year}</h3>
+            <p><a href="${uniUrl(row.uni)}">${esc(row.uniName)}</a> terminó <b>1.º</b> con ${row.solved} problemas y ${row.time} minutos de tiempo total. Es el único equipo que ha completado todos los problemas de una final entre ${data.years[0]} y ${data.years[data.years.length - 1]}.</p>
+            <p class="note">Los problemas de 2015 eran 13. Ningún otro equipo ha llegado a 13/13 en la serie. <a href="${teamUrl(row.uni, row.team)}">Ver el equipo</a>.</p>
+          </div>
+        </div>`,
+      });
+      perfectBody.closest(".card")?.classList.add("perfect-card");
+    }
     const holder = document.createElement("div");
     const defaults = { from: 2010, to: data.years[data.years.length - 1], region: "all", min: 1, top: 20, a: "universidad-de-la-habana", b: "universidad-de-oriente-sede-antonio-maceo" };
     const state = filters(view, data, defaults, () => draw());
@@ -31,6 +50,7 @@ startPage({
       const pickers = picker.querySelectorAll("[data-pick]");
       pickers[0].onchange = (e) => { state.a = e.target.value; draw(); };
       pickers[1].onchange = (e) => { state.b = e.target.value; draw(); };
+
 
       const uniLine = (id, color, field) => {
         const by = new Map(data.byId.get(id).results.map((r) => [r.year, r]));

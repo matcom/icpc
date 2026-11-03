@@ -101,12 +101,13 @@ def load_aliases() -> dict[str, str]:
 
 
 EXTRA_COUNTRIES = {"North Macedonia": {"es": "Macedonia del Norte", "region": "eu"}}
+COUNTRY_ES_FIXES = {"Spain": "España", "Belarus": "Bielorrusia", "Kazakhstan": "Kazajistán"}
 
 
 def build_universities(contests: dict[int, list[dict]], raw: dict) -> tuple[list[dict], dict]:
     names = canonical_names(contests, "university", load_aliases())
     countries = {
-        name: {"es": c["spanish_name"], "region": c["region"]}
+        name: {"es": COUNTRY_ES_FIXES.get(name, c["spanish_name"]), "region": c["region"]}
         for name, c in raw["countries"].items()
     } | EXTRA_COUNTRIES
     teams: dict[str, dict] = {}
@@ -304,6 +305,155 @@ def gender_map() -> dict[str, str]:
     with path.open() as handle:
         rows = list(csv.DictReader(handle))
     return {row["person_id"]: row["gender"] for row in rows}
+
+
+
+HOST_ALIASES = {
+    "ITMO University": "St. Petersburg ITMO University",
+    "KTH Royal Institute of Technology": "KTH - Royal Institute of Technology",
+    "University of Porto": "Universidade do Porto",
+}
+
+
+def build_sedes(universities: list[dict], countries: dict, problems: dict[int, int]) -> dict:
+    """Every World Finals venue joined to its final and its host country."""
+    venues = list(csv.DictReader((SOURCES / "world-finals-venues.csv").open()))
+    all_rows = []
+    for uni in universities:
+        for result in uni["results"]:
+            all_rows.append({
+                **result,
+                "uni": uni["id"],
+                "uniName": uni["name"],
+                "country": uni["country"],
+                "region": countries.get(uni["country"], {}).get("region", "other"),
+            })
+    by_year: dict[int, list[dict]] = defaultdict(list)
+    for row in all_rows:
+        by_year[row["year"]].append(row)
+    uni_by_fold = {fold(u["name"]): u for u in universities}
+
+    def stats(rows: list[dict]) -> dict:
+        ranked = [r for r in rows if r["rank"] is not None]
+        pcts = [r["pct"] for r in ranked if r["pct"] is not None]
+        return {
+            "teams": len(rows),
+            "meanPct": round(statistics.mean(pcts), 1) if pcts else None,
+            "medals": sum(1 for r in rows if r["medal"]),
+            "bestRank": round(min((r["rank"] for r in ranked), default=0), 1) if ranked else None,
+            "top10": sum(1 for r in ranked if r["rank"] <= 10),
+        }
+
+    def brief(row: dict | None) -> dict | None:
+        if row is None:
+            return None
+        return {
+            "country": row["country"],
+            "es": countries.get(row["country"], {}).get("es", row["country"]),
+            "uni": row["uni"],
+            "uniName": row["uniName"],
+            "team": row["team"],
+            "rank": round(row["rank"], 1) if row["rank"] is not None else None,
+            "pct": row["pct"],
+            "medal": row["medal"],
+        }
+
+    finals = []
+    for venue in venues:
+        year = int(venue["year"])
+        rows = by_year[year]
+        host_country = venue["country"]
+        meta = countries.get(host_country, {})
+        host_rows = [r for r in rows if r["country"] == host_country]
+        host_uni = None
+        for part in re.split(r"\s*/\s*", venue["host"] or ""):
+            key = fold(HOST_ALIASES.get(part, part))
+            uni = uni_by_fold.get(key)
+            if not uni:
+                continue
+            result = next((r for r in uni["results"] if r["year"] == year), None)
+            host_uni = {
+                "id": uni["id"],
+                "name": uni["name"],
+                "competed": result is not None,
+                "rank": round(result["rank"], 1) if result and result["rank"] is not None else None,
+                "pct": result["pct"] if result else None,
+                "team": result["team"] if result else None,
+                "medal": result["medal"] if result else None,
+            }
+            break
+        finals.append({
+            "year": year,
+            "city": venue["city"],
+            "country": host_country,
+            "es": meta.get("es", host_country),
+            "region": meta.get("region", "other"),
+            "host": venue["host"],
+            "hostUniversity": host_uni,
+            "date": venue["date"],
+            "lat": float(venue["lat"]),
+            "lon": float(venue["lon"]),
+            "note": venue["note"],
+            "teams": len(rows),
+            "countries": len({r["country"] for r in rows}),
+            "problems": problems.get(year),
+            "champion": brief(next((r for r in rows if r["rank"] == 1), None)),
+            "hostCountry": stats(host_rows),
+        })
+
+    host_countries = []
+    for country in sorted({f["country"] for f in finals}):
+        hosted = [f for f in finals if f["country"] == country]
+        hosted_years = {f["year"] for f in hosted}
+        home = [r for r in all_rows if r["country"] == country and r["year"] in hosted_years]
+        away = [r for r in all_rows if r["country"] == country and r["year"] not in hosted_years]
+        home_stats, away_stats = stats(home), stats(away)
+        delta = (
+            round(home_stats["meanPct"] - away_stats["meanPct"], 1)
+            if home_stats["meanPct"] is not None and away_stats["meanPct"] is not None else None
+        )
+        host_countries.append({
+            "country": country,
+            "es": countries.get(country, {}).get("es", country),
+            "region": countries.get(country, {}).get("region", "other"),
+            "hosted": len(hosted),
+            "years": sorted(hosted_years),
+            "cities": sorted({f["city"] for f in hosted}),
+            "home": home_stats,
+            "away": away_stats,
+            "deltaPct": delta,
+        })
+    host_countries.sort(key=lambda c: (-c["hosted"], c["es"]))
+
+    city_counts = Counter(f["city"] for f in finals)
+    max_city = max(city_counts.values())
+    country_counts = Counter(f["country"] for f in finals)
+    max_country = max(country_counts.values())
+    host_uni_finals = [f for f in finals if f["hostUniversity"] and f["hostUniversity"]["competed"]]
+    totals = {
+        "finals": len(finals),
+        "cities": len(city_counts),
+        "countries": len({f["country"] for f in finals}),
+        "regions": len({f["region"] for f in finals}),
+        "hostCountries": len(host_countries),
+        "repeatCities": [city for city, count in city_counts.items() if count > 1],
+        "repeatCountries": [country for country, count in country_counts.items() if count > 1],
+        "mostHostedCountry": {
+            "country": max(country_counts, key=country_counts.get),
+            "es": countries.get(max(country_counts, key=country_counts.get), {}).get("es", ""),
+            "finals": max_country,
+        },
+        "mostHostedCities": [city for city, count in city_counts.items() if count == max_city],
+        "mostHostedCityFinals": max_city,
+        "hostCountryChampions": sum(1 for f in finals if f["champion"] and f["champion"]["country"] == f["country"]),
+        "hostUniversityFinals": len(host_uni_finals),
+        "hostUniversityPodiums": sum(1 for f in host_uni_finals if f["hostUniversity"]["rank"] is not None and f["hostUniversity"]["rank"] <= 3),
+        "homeBetter": sum(1 for c in host_countries if c["deltaPct"] is not None and c["deltaPct"] > 0),
+        "latamHosts": sum(1 for f in finals if f["region"] == "la"),
+        "first": finals[0]["year"],
+        "last": finals[-1]["year"],
+    }
+    return {"finals": finals, "countries": host_countries, "totals": totals}
 
 
 def build_cuba(universities: list[dict], countries: dict, predictions: dict, problems: dict[int, int]) -> dict:
@@ -917,6 +1067,22 @@ def write_cuba_csv(cuba: dict) -> None:
 # ------------------------------------------------------------------- outputs
 
 
+def write_sedes_csv(sedes: dict) -> None:
+    with (OUT / "sedes.csv").open("w", newline="") as handle:
+        writer = csv.writer(handle)
+        writer.writerow(["year", "city", "country", "host", "date", "teams", "countries", "problems",
+                         "champion", "host_country_teams", "host_country_mean_pct", "host_country_medals",
+                         "host_university", "host_university_rank"])
+        for row in sedes["finals"]:
+            host = row["hostUniversity"] or {}
+            writer.writerow([
+                row["year"], row["city"], row["country"], row["host"], row["date"], row["teams"],
+                row["countries"], row["problems"], row["champion"]["uniName"] if row["champion"] else "",
+                row["hostCountry"]["teams"], row["hostCountry"]["meanPct"], row["hostCountry"]["medals"],
+                host.get("name", ""), host.get("rank", ""),
+            ])
+
+
 def write_json(name: str, payload: object) -> None:
     (OUT / name).write_text(json.dumps(payload, ensure_ascii=False, separators=(",", ":")))
 
@@ -946,6 +1112,7 @@ PAGES = [
     ("medallas", "Medallas", "Medal tables by university and country, with the medals actually awarded."),
     ("competidores", "Competidores", "People with the most finals and the most medals."),
     ("predicciones", "Predicciones", "Probability of each place in the next final from a Bayesian model over past finals and Codeforces team ratings, with a backtest."),
+    ("sedes", "Sedes", "Every World Finals host city, its host country, its champion and the local performance."),
     ("comparar", "Comparar", "Head-to-head comparison of universities or countries."),
     ("pais", "País", "Profile of one country: history, similar countries, projection and teams."),
     ("universidad", "Universidad", "Profile of one university: history, similar teams, projection and members."),
@@ -954,7 +1121,7 @@ PAGES = [
 ]
 
 
-def write_markdown_twins(universities: list[dict], countries: dict, predictions: dict, years: list[int], cuba: dict) -> None:
+def write_markdown_twins(universities: list[dict], countries: dict, predictions: dict, years: list[int], cuba: dict, sedes: dict) -> None:
     """One Markdown twin per page plus llms.txt, regenerated on every build."""
     teams_by_country = Counter(u["country"] for u in universities for _ in u["results"])
     finals = sorted(universities, key=lambda u: -len(u["results"]))
@@ -1002,6 +1169,21 @@ def write_markdown_twins(universities: list[dict], countries: dict, predictions:
         "pais": "The page takes `?c=<country name in English>`; `data/core.json` holds the same results.",
         "universidad": "The page takes `?u=<university id>`; ids and results are in `data/core.json`.",
         "equipo": "The page takes `?u=<university id>&t=<team name>`; results are in `data/core.json`.",
+        "sedes": "\n\n".join([
+            "World Finals venues, 1999–2025. A country can host more than once; the host country and host university are shown.",
+            table(["Year", "City", "Country", "Host", "Teams", "Countries", "Champion"], [
+                [r["year"], r["city"], r["es"], r["host"], r["teams"], r["countries"],
+                 r["champion"]["uniName"] if r["champion"] else ""]
+                for r in sedes["finals"]]),
+            "Host country at home and away:",
+            table(["Country", "Hosted", "Home teams", "Home percentile", "Away percentile", "Difference"], [
+                [r["es"], r["hosted"], r["home"]["teams"], r["home"]["meanPct"], r["away"]["meanPct"], r["deltaPct"]]
+                for r in sedes["countries"]]),
+            "Host universities that competed in their own final:",
+            table(["Year", "City", "University", "Rank", "Team"], [
+                [r["year"], r["city"], r["hostUniversity"]["name"], r["hostUniversity"]["rank"], r["hostUniversity"]["team"]]
+                for r in sedes["finals"] if r["hostUniversity"] and r["hostUniversity"]["competed"]]),
+        ]),
         "cuba": "\n\n".join([
             "Every Cuban team in the World Finals, 2010–2025.",
             table(["Year", "University", "Team", "Rank", "Teams in final", "Percentile", "Solved", "Time", "Group"], [
@@ -1037,6 +1219,8 @@ def write_markdown_twins(universities: list[dict], countries: dict, predictions:
         f"- [core.json]({SITE_URL}/data/core.json): every university with its results per final.\n"
         f"- [predictions.json]({SITE_URL}/data/predictions.json): place probabilities of the next final per team, country and region, and their backtest.\n"
         f"- [results.csv]({SITE_URL}/data/results.csv): one row per team and final.\n"
+        f"- [sedes.json]({SITE_URL}/data/sedes.json): every World Finals venue, host country and local performance.\n"
+        f"- [sedes.csv]({SITE_URL}/data/sedes.csv): one row per World Finals venue.\n"
         f"- [cuba.json]({SITE_URL}/data/cuba.json): the Cuban slice: teams, field gaps, Latin-American podiums, people, gender aggregates, records and projection.\n"
         f"- [cuba.csv]({SITE_URL}/data/cuba.csv): one row per Cuban team and final.\n"
         f"- [cuba-map.json]({SITE_URL}/data/cuba-map.json): province boundaries used by the Cuba map (cuba-geojsons, MIT).\n"
@@ -1066,15 +1250,18 @@ def build() -> dict:
         "universities": universities,
     }
     cuba = build_cuba(universities, countries, predictions, problems)
+    sedes = build_sedes(universities, countries, problems)
     write_json("core.json", core)
     write_json("predictions.json", predictions)
     write_json("world.json", build_world())
     write_json("cuba.json", cuba)
     write_json("cuba-map.json", build_cuba_map())
+    write_json("sedes.json", sedes)
     write_csv(universities, countries)
     write_cuba_csv(cuba)
-    write_markdown_twins(universities, countries, predictions, years, cuba)
-    return {"core": core, "predictions": predictions, "cuba": cuba}
+    write_sedes_csv(sedes)
+    write_markdown_twins(universities, countries, predictions, years, cuba, sedes)
+    return {"core": core, "predictions": predictions, "cuba": cuba, "sedes": sedes}
 
 
 if __name__ == "__main__":

@@ -1,0 +1,28 @@
+year,city,country,host,date,lat,lon,note
+1999,Eindhoven,Netherlands,Eindhoven University of Technology,"April 11, 1999",51.4416,5.4697,
+2000,Orlando,United States,ACM / IBM,"March 18, 2000",28.5383,-81.3792,
+2001,Vancouver,Canada,ACM / IBM,"March 10, 2001",49.2827,-123.1207,
+2002,Honolulu,United States,ACM / IBM,"March 23, 2002",21.3069,-157.8583,
+2003,Beverly Hills,United States,ACM / IBM,"March 25, 2003",34.0736,-118.4004,
+2004,Prague,Czechia,Czech Technical University in Prague,"March 31, 2004",50.0755,14.4378,Obecní dům
+2005,Shanghai,China,Shanghai Jiao Tong University,"April 6, 2005",31.2304,121.4737,Pudong Shangri-La Hotel
+2006,San Antonio,United States,Baylor University,"April 12, 2006",29.4241,-98.4936,
+2007,Urayasu,Japan,ACM Japan Chapter / IBM Tokyo Research Lab,"March 15, 2007",35.6539,139.9019,Tokyo Bay Hilton; Tokyo area
+2008,Banff,Canada,University of Alberta,"April 9, 2008",51.1784,-115.5708,Fairmont Banff Springs Hotel
+2009,Stockholm,Sweden,KTH Royal Institute of Technology,"April 21, 2009",59.3293,18.0686,KTH campus and hotels
+2010,Harbin,China,Harbin Engineering University,"Feb. 5, 2010",45.8038,126.5349,
+2011,Orlando,United States,IBM,"May 30, 2011",28.5383,-81.3792,Moved from Sharm el-Sheikh, Egypt
+2012,Warsaw,Poland,University of Warsaw,"May 17, 2012",52.2297,21.0122,
+2013,Saint Petersburg,Russia,ITMO University,"July 3, 2013",59.9311,30.3609,
+2014,Yekaterinburg,Russia,Ural Federal University,"June 25, 2014",56.8389,60.6057,
+2015,Marrakesh,Morocco,Mohammed V University / Al Akhawayn University / Mundiapolis University,"May 20, 2015",31.6295,-7.9811,
+2016,Phuket,Thailand,Prince of Songkla University,"May 19, 2016",7.8804,98.3923,
+2017,Rapid City,United States,Excellence in Computer Programming,"May 24, 2017",44.0805,-103.2310,Visa issues affected several teams
+2018,Beijing,China,Peking University,"April 19, 2018",39.9042,116.4074,
+2019,Porto,Portugal,University of Porto,"April 4, 2019",41.1579,-8.6291,
+2020,Moscow,Russia,Moscow Institute of Physics and Technology,"Oct. 5, 2021",55.7558,37.6173,Held as World Finals Moscow
+2021,Dhaka,Bangladesh,University of Asia Pacific,"Nov. 10, 2022",23.8103,90.4125,Held as World Finals Dhaka
+2022,Luxor,Egypt,,"April 18, 2024",25.6872,32.6396,Originally Sharm el-Sheikh; shared with 2023
+2023,Luxor,Egypt,,"April 18, 2024",25.6872,32.6396,Shared with 2022
+2024,Astana,Kazakhstan,Kazakhstan Competitive Programming Federation,"Sept. 19, 2024",51.1694,71.4491,
+2025,Baku,Azerbaijan,ADA University,"Sept. 4, 2025",40.4093,49.8671,

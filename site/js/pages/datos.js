@@ -28,6 +28,7 @@ startPage({
         <li><a href="data/results.csv">results.csv</a>: una fila por equipo y final.</li>
         <li><a href="data/core.json">core.json</a>: universidades, resultados y regiones.</li>
         <li><a href="data/predictions.json">predictions.json</a>: proyecciones y su prueba hacia atrás.</li>
+        <li><a href="data/sedes.json">sedes.json</a> y <a href="data/sedes.csv">sedes.csv</a>: las finales y sus sedes.</li>
         <li><a href="data/cuba.json">cuba.json</a> y <a href="data/cuba.csv">cuba.csv</a>: el corte de Cuba y su descarga.</li>
         <li><a href="llms.txt">llms.txt</a>: índice para agentes; cada página tiene su versión Markdown.</li>
       </ul></div>`,

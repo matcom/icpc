@@ -108,7 +108,7 @@ export function rankBars(el, items, { format, color, onClick } = {}) {
   }, { onClick: onClick ?? ((p) => { const url = ordered[p.dataIndex].url; if (url) location.href = url; }) });
 }
 
-export function donut(el, slices, { onClick, center } = {}) {
+export function donut(el, slices, { onClick, center, labelFormatter } = {}) {
   const c = colors();
   const rows = legendRows(slices.map((s) => s.name), el.clientWidth || 300);
   const centerPct = Math.max(34, 48 - rows * 4);
@@ -121,7 +121,7 @@ export function donut(el, slices, { onClick, center } = {}) {
       radius: rows > 2 ? ["34%", "58%"] : ["42%", "68%"],
       center: ["50%", centerY],
       itemStyle: { borderColor: c.panel, borderWidth: 2, borderRadius: 4 },
-      label: { color: c.ink, formatter: (p) => `${Math.round(p.percent)}%`, fontSize: 12, overflow: "none", minMargin: 4 },
+      label: { color: c.ink, formatter: labelFormatter ?? ((p) => `${Math.round(p.percent)}%`), fontSize: 12, overflow: "none", minMargin: 4 },
       labelLine: { length: 8, length2: 6, lineStyle: { color: c.dim } },
       labelLayout: { hideOverlap: true },
       data: slices,

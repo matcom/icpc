@@ -362,3 +362,61 @@ def test_cuba_map_has_the_sixteen_provinces(built):
     assert {row["province"] for row in built["cuba"]["universities"]} == {
         "La Habana", "Villa Clara", "Pinar del Río", "Santiago de Cuba"
     }
+
+
+def test_sedes_cover_every_final(built):
+    sedes = built["sedes"]
+    assert sedes["totals"] | {} == {
+        **sedes["totals"],
+        "finals": 27,
+        "cities": 25,
+        "countries": 16,
+        "regions": 7,
+        "hostCountries": 16,
+        "mostHostedCountry": {"country": "United States", "es": "Estados Unidos", "finals": 6},
+        "mostHostedCities": ["Orlando", "Luxor"],
+        "mostHostedCityFinals": 2,
+        "hostCountryChampions": 5,
+        "hostUniversityFinals": 14,
+        "hostUniversityPodiums": 4,
+        "homeBetter": 2,
+        "latamHosts": 0,
+        "first": 1999,
+        "last": 2025,
+    }
+    assert len(sedes["finals"]) == 27
+    assert sedes["finals"][0]["city"] == "Eindhoven"
+    assert sedes["finals"][-1]["city"] == "Baku"
+    assert sedes["finals"][0]["champion"]["uniName"] == "University of Waterloo"
+    assert sedes["finals"][-1]["champion"]["uniName"] == "St. Petersburg State University"
+    assert sedes["finals"][12]["year"] == 2011
+    assert "Sharm" in sedes["finals"][12]["note"]
+    assert [row["city"] for row in sedes["finals"] if row["year"] in (2022, 2023)] == ["Luxor", "Luxor"]
+    assert all(row["latamHosts"] == 0 for row in [sedes["totals"]])
+
+
+def test_sedes_host_universities_and_csv(built):
+    sedes = built["sedes"]
+    host = {row["year"]: row["hostUniversity"] for row in sedes["finals"] if row["hostUniversity"] and row["hostUniversity"]["competed"]}
+    assert host[2005]["name"] == "Shanghai Jiao Tong University"
+    assert host[2005]["rank"] == 1
+    assert host[2012]["rank"] == 2
+    assert host[2018]["rank"] == 3
+    assert host[2020]["rank"] == 4
+    assert host[2013]["rank"] == 1
+    with (build_data.OUT / "sedes.csv").open() as handle:
+        rows = list(csv.DictReader(handle))
+    assert len(rows) == 27
+    assert rows[0]["city"] == "Eindhoven"
+    assert rows[-1]["city"] == "Baku"
+    assert rows[0]["champion"] == "University of Waterloo"
+
+
+def test_only_one_team_has_solved_every_problem(built):
+    core = built["core"]
+    perfect = [
+        (r["year"], u["name"], r["team"], r["solved"], r["rank"])
+        for u in core["universities"] for r in u["results"]
+        if r["solved"] is not None and r["solved"] == core["problems"][str(r["year"])]
+    ]
+    assert perfect == [(2015, "St. Petersburg ITMO University", "SPb ITMO University 1", 13, 1)]

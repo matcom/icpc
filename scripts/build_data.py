@@ -415,24 +415,26 @@ def build_cuba(universities: list[dict], countries: dict, predictions: dict, pro
                 "top50": sum(1 for r in group if r["rank"] <= 50),
             })
 
-    # Podium by country: the best team of each Latin-American country, by percentile.
+    # Podium by team: the three best Latin-American teams of each final. A country
+    # can take more than one place, because several of its teams can reach the top 3.
     podium_years = []
     latam_countries = {r["country"] for r in all_rows if r["year"] in years and r["region"] == "la"}
     podium_by_country: dict[str, dict] = {
-        country: {"country": country, "es": es(country), "teams": 0, "podiums": 0, "gold": 0, "medals": 0}
+        country: {
+            "country": country, "es": es(country), "teams": 0, "podiums": 0,
+            "gold": 0, "silver": 0, "bronze": 0, "medals": 0,
+        }
         for country in latam_countries
     }
     latam_teams = 0
     for year in years:
-        latam = [r for r in all_rows if r["year"] == year and r["region"] == "la" and r["rank"] is not None]
+        latam = sorted(
+            (r for r in all_rows if r["year"] == year and r["region"] == "la" and r["rank"] is not None),
+            key=lambda r: (r["rank"], r["time"] if r["time"] is not None else math.inf),
+        )
         latam_teams += len(latam)
-        best: dict[str, dict] = {}
-        for row in latam:
-            if row["country"] not in best or row["pct"] > best[row["country"]]["pct"]:
-                best[row["country"]] = row
-        ordered = sorted(best.values(), key=lambda r: (-r["pct"], r["rank"]))
         top = []
-        for index, row in enumerate(ordered[:3]):
+        for index, row in enumerate(latam[:3]):
             top.append({
                 "place": index + 1,
                 "country": row["country"],
@@ -444,18 +446,23 @@ def build_cuba(universities: list[dict], countries: dict, predictions: dict, pro
                 "uniName": row["uniName"],
                 "team": row["team"],
                 "medal": row["medal"],
+                "field": row["field"],
             })
             stats = podium_by_country[row["country"]]
             stats["podiums"] += 1
             if index == 0:
                 stats["gold"] += 1
-        cuba_best = best.get("Cuba")
-        cuba_place = ordered.index(cuba_best) + 1 if cuba_best else None
+            elif index == 1:
+                stats["silver"] += 1
+            else:
+                stats["bronze"] += 1
+        cuba_best = next((row for row in latam if row["country"] == "Cuba"), None)
+        cuba_place = latam.index(cuba_best) + 1 if cuba_best else None
         cuba_share = round(100 * sum(1 for r in cuba_rows if r["year"] == year) / len(latam), 1) if latam else None
         podium_years.append({
             "year": year,
             "latamTeams": len(latam),
-            "latamCountries": len(best),
+            "latamCountries": len({r["country"] for r in latam}),
             "cubaTeams": sum(1 for r in cuba_rows if r["year"] == year),
             "cubaShare": cuba_share,
             "cubaPlace": cuba_place,
@@ -479,7 +486,10 @@ def build_cuba(universities: list[dict], countries: dict, predictions: dict, pro
             podium_by_country[row["country"]]["teams"] += 1
             if row["medal"]:
                 podium_by_country[row["country"]]["medals"] += 1
-    podium_countries = sorted(podium_by_country.values(), key=lambda c: (-c["podiums"], -c["gold"], -c["teams"], c["es"]))
+    podium_countries = sorted(
+        podium_by_country.values(),
+        key=lambda c: (-c["podiums"], -c["gold"], -c["silver"], -c["bronze"], -c["teams"], c["es"]),
+    )
     countries_with_podiums = [c for c in podium_countries if c["podiums"] > 0]
     for index, row in enumerate(countries_with_podiums):
         row["podiumRank"] = index + 1
@@ -487,25 +497,25 @@ def build_cuba(universities: list[dict], countries: dict, predictions: dict, pro
     total_podiums = 3 * len(years)
     for index, row in enumerate(podium_countries):
         row["teamShare"] = round(100 * row["teams"] / latam_teams, 1) if latam_teams else None
-        row["podiumShare"] = round(100 * row["podiums"] / total_podiums, 1) if total_podiums else None
+        row["podiumShare"] = round(100 * row["podiums"] / total_podiums + 1e-9, 1) if total_podiums else None
         row["perEdition"] = round(row["podiums"] / len(years), 2) if years else None
         row["rank"] = index + 1
     cuba_podiums = [{
         "year": entry["year"],
-        "place": entry["cuba"]["place"],
+        "place": row["place"],
         "country": "Cuba",
-        "rank": entry["cuba"]["rank"],
-        "pct": entry["cuba"]["pct"],
-        "solved": entry["cuba"]["solved"],
-        "uni": entry["cuba"]["uni"],
-        "uniName": entry["cuba"]["uniName"],
-        "team": entry["cuba"]["team"],
-        "field": entry["cuba"]["field"],
-    } for entry in podium_years if entry["cubaPlace"] and entry["cubaPlace"] <= 3]
+        "rank": row["rank"],
+        "pct": row["pct"],
+        "solved": row["solved"],
+        "uni": row["uni"],
+        "uniName": row["uniName"],
+        "team": row["team"],
+        "field": row["field"],
+    } for entry in podium_years for row in entry["top"] if row["country"] == "Cuba"]
     podium_place = {(p["year"], p["uni"], p["team"]): p["place"] for p in cuba_podiums}
     cuba_country_stats = next((c for c in podium_countries if c["country"] == "Cuba"), {})
     podiums = {
-        "definition": "Podio por país: el mejor equipo de cada país latinoamericano, ordenado por percentil. No es un premio oficial del ICPC; reagrupa el podio por universidad que ya publica Regiones.",
+        "definition": "Podio por equipo: los tres mejores equipos latinoamericanos de cada final, ordenados por puesto. No es un premio oficial del ICPC; un país puede ocupar más de un lugar si varios de sus equipos entran en el top 3.",
         "years": podium_years,
         "cuba": cuba_podiums,
         "countries": podium_countries,
@@ -515,7 +525,7 @@ def build_cuba(universities: list[dict], countries: dict, predictions: dict, pro
             "cubaShare": round(100 * len(cuba_rows) / latam_teams, 1) if latam_teams else None,
             "podiums": total_podiums,
             "cubaPodiums": len(cuba_podiums),
-            "cubaPodiumShare": round(100 * len(cuba_podiums) / total_podiums, 1) if total_podiums else None,
+            "cubaPodiumShare": round(100 * len(cuba_podiums) / total_podiums + 1e-9, 1) if total_podiums else None,
             "cubaPerEdition": round(len(cuba_podiums) / len(years), 2) if years else None,
             "cubaRank": cuba_country_stats.get("rank"),
             "cubaPodiumRank": cuba_podium_rank,
@@ -998,12 +1008,12 @@ def write_markdown_twins(universities: list[dict], countries: dict, predictions:
                 [r["year"], r["uniName"], r["team"], r["rank"], r["field"], r["pct"], r["solved"], r["time"],
                  f'{r["group"]["position"]}/{r["group"]["size"]}' if r.get("group") else ""]
                 for r in cuba["teams"]]),
-            "Podium by country: the best team of each Latin-American country in each final, by percentile. "
-            "It is a reaggregation, not an official ICPC award; the Cuban university of each Cuban podium place is shown.",
-            table(["Year", "LatAm teams", "Cuba teams", "Cuba place", "Cuban university"], [
+            "Podium by team: the three best Latin-American teams in each final. "
+            "A country can take more than one place; Cuba's best team place is shown.",
+            table(["Year", "LatAm teams", "Cuba teams", "1.º", "2.º", "3.º", "Cuba best place"], [
                 [r["year"], r["latamTeams"], r["cubaTeams"],
-                 r["cubaPlace"] if r["cubaPlace"] else "—",
-                 r["cuba"]["uniName"] if r["cubaPlace"] and r["cubaPlace"] <= 3 else (r["cuba"]["uniName"] or "—")]
+                 *[f'{t["es"]} · {t["uniName"]} ({t["rank"]})' for t in r["top"]],
+                 r["cubaPlace"] if r["cubaPlace"] else "—"]
                 for r in cuba["podiums"]["years"]]),
             f'Gender, aggregate only: {cuba["gender"]["women"]} women and {cuba["gender"]["men"]} men; '
             f'{cuba["gender"]["womenSlots"]} of {cuba["totals"]["slots"]} slots; '

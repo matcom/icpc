@@ -28,7 +28,6 @@ const shortUni = (name) => {
 };
 const uniLink = (row) => `<a href="${uniUrl(row.uni)}">${esc(row.uniName)}</a>`;
 const teamLink = (row) => `<a href="${teamUrl(row.uni, row.team)}">${esc(row.team)}</a>`;
-const placeLabel = (value) => (value === 1 ? "oro" : value === 2 ? "plata" : value === 3 ? "bronce" : "");
 const recordDate = (row) => `${row.year} · ${esc(row.team)} · ${esc(shortUni(row.uniName))}`;
 
 const SECTIONS = [
@@ -159,7 +158,7 @@ function draw(view, data, cuba, cubaMap) {
 
   const hero = document.createElement("div");
   hero.className = "cuba-hero";
-  hero.innerHTML = `<p class="cuba-lead">Cuba estuvo en las <b>16 finales</b> de la serie 2010–2025. Lo hizo con <b>26 equipos</b>, <b>57 personas</b> y <b>cinco universidades</b>. La Universidad de La Habana concentra 13 de esos equipos y los cinco podios latinoamericanos. El podio mundial sigue sin llegar: el mejor puesto es <b>44.º</b> (2017) y ninguna formación ha resuelto más de <b>cinco problemas</b>.</p>
+  hero.innerHTML = `<p class="cuba-lead">Cuba estuvo en las <b>16 finales</b> de la serie 2010–2025. Lo hizo con <b>26 equipos</b>, <b>57 personas</b> y <b>cinco universidades</b>. La Universidad de La Habana concentra 13 de esos equipos y los tres podios latinoamericanos. El podio mundial sigue sin llegar: el mejor puesto es <b>44.º</b> (2017) y ninguna formación ha resuelto más de <b>cinco problemas</b>.</p>
     <div class="cuba-hero-note"><span>Una lectura de país, no un perfil más.</span> Reagrupa el podio latinoamericano, mira el campo desde dentro y publica el género solo en agregado.</div>`;
   view.append(hero);
 
@@ -167,10 +166,10 @@ function draw(view, data, cuba, cubaMap) {
     ["16", "finales, 2010–2025"],
     ["26", "equipos cubanos"],
     ["57", "personas distintas"],
-    ["5", "podios latinoamericanos"],
+    ["3", "podios latinoamericanos"],
     ["0", "medallas mundiales"],
     ["5", "problemas: el techo"],
-    ["4.º de 11", "podios de Latinoamérica"],
+    ["4.º de 7", "países con podios"],
     ["22.º de 79", "participaciones en el mundo"],
   ]);
   heroKpis.classList.add("cuba-kpis");
@@ -237,7 +236,7 @@ function draw(view, data, cuba, cubaMap) {
   const readCard = card(w, {
     title: "Cómo se lee el tablero", span: 6,
     html: `<div class="prose"><p>El ranking cuenta <b>equipos</b>, no países distintos ni personas. Un país con más plazas puede sumar más aunque rinda menos.</p>
-      <p>Cuba tiene <b>26 equipos</b>: el <b>9,1%</b> de los equipos latinoamericanos de la serie. Con ese volumen es <b>22.ª del mundo</b>, pero <b>4.ª de Latinoamérica por podios</b> y aporta el <b>10,4%</b> de los podios de la región.</p>
+      <p>Cuba tiene <b>26 equipos</b>: el <b>9,1%</b> de los equipos latinoamericanos de la serie. Con ese volumen es <b>22.ª del mundo</b>, pero <b>4.ª de Latinoamérica por podios</b> y aporta el <b>${pct(cuba.podiums.totals.cubaPodiumShare)}</b> de los podios de la región.</p>
       <p class="note">Estados Unidos, con 286 equipos, multiplica por once la delegación cubana. La comparación útil no es el volumen, sino el rendimiento por equipo. <a href="#podios">Ver el podio latinoamericano</a>.</p></div>`,
   });
   readCard.closest(".card")?.classList.add("cuba-aside");
@@ -301,8 +300,8 @@ function draw(view, data, cuba, cubaMap) {
       <article class="cuba-story"><span class="cuba-kicker">2018 · La visa</span><h3>La plaza que no se pudo usar</h3>
         <p>Pinar del Río clasificó en 2017, pero el equipo no pudo viajar a Estados Unidos por el visado. La fuente conserva la clasificación sin puesto. En 2018 Cuba llevó tres equipos: <b>UCLV KFP</b> (100.º), <b>Oriente Netscape</b> (118.º) y <b>Pinar sUrPRise</b> (131.º). La Habana no estuvo.</p>
         <p class="note">El relato del visado es del equipo del proyecto; la base de resultados solo registra la clasificación de 2017.</p></article>
-      <article class="cuba-story"><span class="cuba-kicker">2019–2023 · La edad de bronce</span><h3>Cuatro podios latinoamericanos</h3>
-        <p>La Habana encadenó bronces en <b>2019, 2020, 2021 y 2023</b>. El último, UH Top en 2023, terminó <b>46.º de 130</b> con 5 problemas y <b>65,1</b> de percentil: el segundo mejor registro cubano.</p></article>
+      <article class="cuba-story"><span class="cuba-kicker">2021–2023 · Dos bronces</span><h3>Dos podios latinoamericanos</h3>
+        <p>La Habana fue bronce en <b>2021</b> (UH Top, 55.º de 132) y <b>2023</b> (UH Top, 46.º de 130, 65,1 de percentil). En 2019 y 2020 Cuba fue 5.ª y 7.ª entre los equipos de la región, sin podio: el podio se cuenta por equipo, no por país.</p></article>
       <article class="cuba-story"><span class="cuba-kicker">2024–2025 · El suelo</span><h3>132.º en un campo más grande</h3>
         <p>2025 dejó el peor puesto de la serie: <b>132.º de 139</b> con 4 problemas. La caída coincide con un campo que creció de 103 equipos en 2010 a 139 en 2025, pero el percentil (5,1) también es el segundo más bajo.</p></article>
     </div>`,
@@ -329,7 +328,7 @@ function draw(view, data, cuba, cubaMap) {
 
   // ---------------------------------------------------------------- 04 podios
   const podiums = section(view, "podios", "04 · Podios", "El podio que Cuba sí alcanza",
-    "No es un premio oficial del ICPC: es el podio por país, el mejor equipo de cada país latinoamericano en cada final. Cuba ha colocado un equipo en cinco de las 16 ediciones: es cuarta entre los siete países que han subido al podio (11 han tenido equipos).");
+    `No es un premio oficial del ICPC: es el podio por equipo, los tres mejores equipos latinoamericanos de cada final. Un país puede ocupar más de un lugar. Cuba ha colocado al menos un equipo en tres de las 16 ediciones: es cuarta entre los ${cuba.podiums.totals.countriesWithPodiums} países que han subido al podio (${cuba.podiums.totals.countriesWithTeams} han tenido equipos).`);
   kpis(podiums, [
     [cuba.podiums.totals.cubaPodiums, "podios latinoamericanos"],
     [cuba.podiums.totals.gold, "oro"],
@@ -340,8 +339,8 @@ function draw(view, data, cuba, cubaMap) {
   ]);
   const p = grid(podiums);
   card(p, {
-    title: "Los cinco podios cubanos", span: 12,
-    sub: "Cada tarjeta es un puesto cubano en el podio por país. La universidad que lo ocupó está siempre a la vista.",
+    title: "Los tres podios cubanos", span: 12,
+    sub: "Cada tarjeta es un puesto cubano en el podio por equipo. La universidad que lo ocupó está siempre a la vista.",
     html: `<div class="cuba-podiums">${cuba.podiums.cuba.map(podiumCard).join("")}</div>`,
   });
   card(p, {
@@ -356,35 +355,42 @@ function draw(view, data, cuba, cubaMap) {
   });
 
   const podiumYears = cuba.podiums.years;
+  const maxTeams = Math.max(10, ...podiumYears.map((row) => row.latamTeams));
+  const minTeams = Math.min(...podiumYears.map((row) => row.latamTeams));
   plot(chartCard(p, {
-    title: "Cuba en el podio latinoamericano", span: 6, height: 300,
-    sub: "Puesto de Cuba entre los países de la región en cada final. La línea marca el corte del podio.",
+    title: "Cuba entre los equipos latinoamericanos", span: 6, height: 300,
+    sub: `Puesto del mejor equipo cubano entre todos los equipos latinoamericanos. La línea marca el corte del podio y el color destaca los podios. Cuba fue 1.ª en 2017 y 3.ª en 2021 y 2023; el número de equipos de la región varió entre ${minTeams} y ${maxTeams}.`,
   }), {
     legend: false,
-    grid: { left: 8, right: 18, top: 24, bottom: 26, containLabel: true },
+    grid: { left: 8, right: 38, top: 24, bottom: 24, containLabel: true },
     tooltip: {
       formatter: (p) => {
         const row = podiumYears[p.dataIndex];
         const uni = row.cuba?.uniName ? `<br>${esc(row.cuba.uniName)} · ${place(row.cuba.rank)}` : "";
-        return `<b>${row.year}</b>: ${row.cubaPlace}.º de ${row.latamCountries} países${uni}`;
+        return `<b>${row.year}</b>: ${row.cubaPlace}.º de ${row.latamTeams} equipos${uni}`;
       },
     },
-    xAxis: categoryAxis(podiumYears.map((row) => String(row.year))),
-    yAxis: valueAxis({ inverse: true, min: 0, max: 11 }),
+    xAxis: valueAxis({ min: 0, max: maxTeams }),
+    yAxis: categoryAxis(podiumYears.map((row) => String(row.year)), { inverse: true, axisLabel: { color: c.ink, interval: 0 } }),
     series: [{
-      type: "bar", barMaxWidth: 24, barMinHeight: 2,
+      type: "bar", barMaxWidth: 14, barMinHeight: 3,
       data: podiumYears.map((row) => ({
         value: row.cubaPlace,
-        itemStyle: { color: row.cubaPlace <= 3 ? c.accent : c.blue, opacity: row.cubaPlace <= 3 ? 1 : 0.55, borderRadius: [3, 3, 0, 0] },
+        itemStyle: {
+          color: row.cubaPlace <= 3 ? c.accent : c.blue,
+          opacity: row.cubaPlace <= 3 ? 1 : 0.6,
+          borderRadius: [0, 3, 3, 0],
+        },
       })),
-      markLine: { silent: true, symbol: "none", lineStyle: { color: c.gold, type: "dashed" }, label: { show: false }, data: [{ yAxis: 3 }] },
+      label: { show: true, position: "right", color: c.ink, fontSize: 11, formatter: (p) => `${p.value}.º` },
+      markLine: { silent: true, symbol: "none", lineStyle: { color: c.gold, type: "dashed" }, label: { show: false }, data: [{ xAxis: 3 }] },
     }],
   });
 
   const podiumCountries = cuba.podiums.countries;
   plot(chartCard(p, {
     title: "Peso relativo en la región", span: 6, height: 300,
-    sub: "Porcentaje de equipos frente a porcentaje de podios en los 11 países con equipos. Por encima de la diagonal se rinde por encima del peso demográfico.",
+    sub: `Porcentaje de equipos frente a porcentaje de podios en los ${cuba.podiums.totals.countriesWithTeams} países con equipos. Por encima de la diagonal se rinde por encima del peso demográfico. Cuba es ${cuba.podiums.totals.cubaPodiumRank}.ª de ${cuba.podiums.totals.countriesWithPodiums} por podios, pero su ${pct(cuba.podiums.totals.cubaPodiumShare)} de podios es menor que su ${pct(cuba.podiums.totals.cubaShare)} de equipos.`,
   }), {
     legend: false,
     grid: { left: 8, right: 30, top: 22, bottom: 34, containLabel: true },
@@ -392,7 +398,7 @@ function draw(view, data, cuba, cubaMap) {
       formatter: (p) => `<b>${esc(p.data.es)}</b><br>${p.data.teams} equipos (${pct(p.data.teamShare)})<br>${p.data.podiums} podios (${pct(p.data.podiumShare)})`,
     },
     xAxis: valueAxis({ min: 0, max: 40, name: "% de equipos", nameLocation: "middle", nameGap: 26 }),
-    yAxis: valueAxis({ min: 0, max: 35 }),
+    yAxis: valueAxis({ min: 0, max: 45 }),
     series: [{
       type: "scatter",
       symbolSize: (value) => 9 + Math.sqrt(value[2]) * 1.4,
@@ -407,21 +413,21 @@ function draw(view, data, cuba, cubaMap) {
           color: row.country === "Cuba" ? c.ink : c.dim, fontSize: 11,
         },
       })),
-      markLine: { silent: true, symbol: "none", lineStyle: { color: c.dim, type: "dashed" }, label: { show: false }, data: [[{ coord: [0, 0] }, { coord: [35, 35] }]] },
+      markLine: { silent: true, symbol: "none", lineStyle: { color: c.dim, type: "dashed" }, label: { show: false }, data: [[{ coord: [0, 0] }, { coord: [40, 40] }]] },
     }],
   });
 
   const podiumCell = (row) => (row
     ? `<a href="${uniUrl(row.uni)}">${esc(row.es)}</a> <small>${esc(shortUni(row.uniName))} · ${place(row.rank)}</small>`
     : "—");
-  const latamTable = table(["Año", "1.º", "2.º", "3.º", "Cuba"], podiumYears.map((row) => [
+  const latamTable = table(["Año", "1.º", "2.º", "3.º", "Mejor equipo cubano"], podiumYears.map((row) => [
     row.year, ...[0, 1, 2].map((i) => podiumCell(row.top[i])),
-    row.cubaPlace <= 3 ? `<b>${row.cubaPlace}.º</b> ${esc(shortUni(row.cuba.uniName))} · ${place(row.cuba.rank)}` : `${row.cubaPlace}.º`,
+    row.cubaPlace <= 3 ? `<b>${row.cubaPlace}.º</b> ${esc(shortUni(row.cuba.uniName))} · ${place(row.cuba.rank)}` : `${row.cubaPlace}.º ${esc(shortUni(row.cuba.uniName))}`,
   ]));
   card(p, {
-    title: "Los 16 podios latinoamericanos", span: 12,
+    title: "El podio latinoamericano, año por año", span: 12,
     sub: `Cuba aporta ${cuba.podiums.totals.cubaTeams} de los ${cuba.podiums.totals.latamTeams} equipos de la región (${pct(cuba.podiums.totals.cubaShare)}) y ${cuba.podiums.totals.cubaPodiums} de los ${cuba.podiums.totals.podiums} puestos de podio (${pct(cuba.podiums.totals.cubaPodiumShare)}).`,
-    html: `<details class="cuba-details"><summary>Ver año por año</summary>${latamTable.replace('<div class="tablew">', '<div class="tablew" style="--table-h:560px">')}</details><p class="note">El podio por país es una reagregación del podio por universidad que ya publica <a href="regiones.html?podio=la">Regiones</a>. No es un premio oficial del ICPC. ${esc(cuba.podiums.definition)}</p>`,
+    html: `<details class="cuba-details"><summary>Ver año por año</summary>${latamTable.replace('<div class="tablew">', '<div class="tablew" style="--table-h:560px">')}</details><p class="note">El podio por equipo coincide con el podio por universidad que ya publica <a href="regiones.html?podio=la">Regiones</a>: los tres mejores equipos de la región, aunque sean del mismo país. ${esc(cuba.podiums.definition)}</p>`,
   });
 
   // ----------------------------------------------------------------- 05 campo
@@ -920,9 +926,9 @@ function draw(view, data, cuba, cubaMap) {
       <p>En 2018 Cuba tuvo tres equipos porque Pinar del Río clasificó en 2017 pero no pudo viajar por el visado; el equipo compitió en 2018. La Habana no estuvo en 2010, 2014 ni 2018. El relato del visado es del equipo del proyecto; la fuente solo conserva la clasificación sin puesto.</p></div>`,
   });
   card(m, {
-    title: "El podio por país", span: 6,
-    html: `<div class="prose"><p>El podio latinoamericano no es un premio oficial del ICPC. Es una <b>reagregación</b>: en cada final se toma el mejor equipo de cada país de la región, se ordenan por percentil y se queda un podio de tres. Cuba suma 5 puestos en 16 ediciones: es 4.ª de los 7 países que han subido al podio (11 han tenido equipos).</p>
-      <p>La tabla por universidad que ya publica <a href="regiones.html?podio=la">Regiones</a> es la otra cara del mismo dato. Allí se ve qué universidad ocupó cada puesto; aquí, qué país.</p></div>`,
+    title: "El podio por equipo", span: 6,
+    html: `<div class="prose"><p>El podio latinoamericano no es un premio oficial del ICPC. En cada final se toman los <b>tres mejores equipos</b> de la región por puesto, sin limitar a uno por país: un país puede ocupar más de un lugar. Cuba suma 3 puestos en 16 ediciones: es 4.ª de los ${cuba.podiums.totals.countriesWithPodiums} países que han subido al podio (${cuba.podiums.totals.countriesWithTeams} han tenido equipos).</p>
+      <p>La tabla por universidad que ya publica <a href="regiones.html?podio=la">Regiones</a> es el mismo podio. Allí se ve qué universidad ocupó cada puesto; aquí, qué equipos y países lo hicieron.</p></div>`,
   });
   card(m, {
     title: "Tiempo y desempate", span: 6,

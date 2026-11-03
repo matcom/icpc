@@ -217,7 +217,7 @@ def test_cuba_slice_has_the_expected_totals(built):
         "slots": 78,
         "people": 57,
         "universities": 5,
-        "podiums": 5,
+        "podiums": 3,
         "medals": 0,
         "regionalTitles": 1,
         "maxTeamsYear": 3,
@@ -245,16 +245,16 @@ def test_cuba_podiums_name_the_university_of_each_place(built):
         "cubaTeams": 26,
         "cubaShare": 9.1,
         "podiums": 48,
-        "cubaPodiums": 5,
-        "cubaPodiumShare": 10.4,
-        "cubaPerEdition": 0.31,
+        "cubaPodiums": 3,
+        "cubaPodiumShare": 6.3,
+        "cubaPerEdition": 0.19,
         "cubaRank": 4,
         "gold": 1,
         "silver": 0,
-        "bronze": 4,
+        "bronze": 2,
     }
     assert [(row["year"], row["place"]) for row in podiums["cuba"]] == [
-        (2017, 1), (2019, 3), (2020, 3), (2021, 3), (2023, 3)
+        (2017, 1), (2021, 3), (2023, 3)
     ]
     assert {row["uni"] for row in podiums["cuba"]} == {"universidad-de-la-habana"}
     assert {row["uniName"] for row in podiums["cuba"]} == {"Universidad de La Habana"}
@@ -266,7 +266,11 @@ def test_cuba_podiums_name_the_university_of_each_place(built):
     assert podiums["totals"]["countriesWithPodiums"] == 7
     assert podiums["totals"]["cubaPodiumRank"] == 4
     assert all(row["latamCountries"] >= len(row["top"]) for row in podiums["years"])
-    assert next(row for row in podiums["years"] if row["year"] == 2010)["latamCountries"] == 6
+    assert [row["latamCountries"] for row in podiums["years"]] == [6, 7, 7, 7, 8, 8, 8, 9, 10, 7, 8, 8, 6, 8, 8, 9]
+    assert [row["cubaPlace"] for row in podiums["years"]] == [13, 13, 16, 8, 10, 10, 13, 1, 10, 5, 7, 3, 8, 3, 10, 16]
+    assert [row["country"] for row in podiums["years"][0]["top"]] == ["Brazil", "Brazil", "Argentina"]
+    assert [row["country"] for row in podiums["years"][7]["top"]] == ["Cuba", "Argentina", "Argentina"]
+    assert [row["country"] for row in podiums["years"][15]["top"]] == ["Brazil", "Argentina", "Argentina"]
 
 
 def test_cuba_gender_is_aggregate_only(built):

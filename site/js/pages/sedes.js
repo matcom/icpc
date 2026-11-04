@@ -182,7 +182,7 @@ function draw(view, data, sedes) {
     ["2017", "Rapid City y los visados", "Varios equipos no pudieron viajar a Estados Unidos. La final se jugó igualmente y las universidades afectadas recibieron plazas directas para 2018."],
     ["2020", "World Finals Moscow", "La edición de 2020 se pospuso por la pandemia y se disputó en Moscú del 1 al 5 de octubre de 2021."],
     ["2021", "World Finals Dhaka", "La edición de 2021 se jugó en Daca del 6 al 11 de noviembre de 2022."],
-    ["2022–2023", "World Finals Luxor", "Las ediciones 46 y 47 compartieron Luxor en abril de 2024; antes estaban previstas en Sharm el-Sheikh."],
+    ["2022–2023", "World Finals Luxor", "Las ediciones 46 y 47 compartieron Luxor en abril de 2024, organizadas por la AASTMT; antes estaban previstas en Sharm el-Sheikh."],
   ];
   card(view, {
     title: "Sedes que cambiaron", span: 12,
@@ -210,7 +210,7 @@ function draw(view, data, sedes) {
   card(method, {
     title: "La serie", span: 6,
     html: `<div class="prose"><p>Se cuentan las <b>${totals.finals} finales de ${totals.first} a ${totals.last}</b>. La sede es la ciudad donde se disputó la competición; el anfitrión es la universidad u organización que figura en la fuente. La sede de 2007 fue Urayasu, no Tokio: el Tokyo Bay Hilton está en esa ciudad del área metropolitana.</p>
-      <p>Las ediciones de 2020 y 2021 se llaman por su ciudad —Moscow y Dhaka— para no confundirlas con el año en que se jugaron. Las de 2022 y 2023 comparten Luxor.</p></div>`,
+      <p>Las ediciones de 2020 y 2021 se llaman por su ciudad —Moscow y Dhaka— para no confundirlas con el año en que se jugaron. Las de 2022 y 2023 comparten Luxor y fueron organizadas por la Arab Academy for Science, Technology and Maritime Transport (AASTMT).</p></div>`,
   });
   card(method, {
     title: "Ventaja local", span: 6,

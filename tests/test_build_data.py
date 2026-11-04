@@ -394,6 +394,7 @@ def test_sedes_cover_every_final(built):
     assert sedes["finals"][12]["year"] == 2011
     assert "Sharm" in sedes["finals"][12]["note"]
     assert [row["city"] for row in sedes["finals"] if row["year"] in (2022, 2023)] == ["Luxor", "Luxor"]
+    assert all("AASTMT" in row["host"] for row in sedes["finals"] if row["year"] in (2022, 2023))
     assert all(row["latamHosts"] == 0 for row in [sedes["totals"]])
 
 

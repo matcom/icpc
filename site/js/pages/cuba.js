@@ -36,6 +36,7 @@ const SECTIONS = [
   ["equipos", "Equipos"],
   ["podios", "Podios"],
   ["campo", "Campo"],
+  ["dificultad", "Dificultad"],
   ["universidades", "Universidades"],
   ["personas", "Personas"],
   ["genero", "Género"],
@@ -151,7 +152,187 @@ function rangeRow(row, min, span, selected, cubaTeams) {
   </div>`;
 }
 
-function draw(view, data, cuba, cubaMap) {
+const LEVEL_LIGHT = ["#4f9a8c", "#7fb3e4", "#fdb830", "#d97f45", "#af3227", "#6d222e"];
+const LEVEL_DARK = ["#4f9a8c", "#7fb3e4", "#fdb830", "#d97f45", "#f0735f", "#b05a72"];
+const levelColor = (index) => (isDark() ? LEVEL_DARK : LEVEL_LIGHT)[index];
+const namedAxis = (name, extra = {}) => valueAxis({ name, nameLocation: "middle", nameGap: 38, nameRotate: 90, nameTextStyle: { color: colors().dim }, ...extra });
+
+function drawCubaAttempts(el, payload) {
+  const c = colors();
+  const levels = payload.levels.map((row) => `N${row.level}`);
+  plot(el, {
+    tooltip: {
+      trigger: "axis",
+      formatter: (params) => {
+        const row = payload.levels[params[0].dataIndex];
+        return `<b>N${row.level} · ${esc(row.label)}</b><br>Cuba intenta: <b>${pct(100 * row.attemptRate)}</b><br>Campo intenta: <b>${pct(100 * row.fieldAttemptRate)}</b>`;
+      },
+    },
+    legend: { data: ["Cuba", "Campo"] },
+    grid: { top: 38 },
+    xAxis: categoryAxis(levels),
+    yAxis: valueAxis({ min: 0, max: 100, name: "% intentados", nameLocation: "end", nameGap: 8, nameTextStyle: { align: "left", color: c.dim }, axisLabel: { formatter: "{value}%" } }),
+    series: [
+      { name: "Cuba", type: "bar", barMaxWidth: 24, itemStyle: { color: c.red }, data: payload.levels.map((row) => +(100 * row.attemptRate).toFixed(1)) },
+      { name: "Campo", type: "bar", barMaxWidth: 24, itemStyle: { color: c.blue }, data: payload.levels.map((row) => +(100 * row.fieldAttemptRate).toFixed(1)) },
+    ],
+  });
+}
+
+function drawCubaConditional(el, payload) {
+  const c = colors();
+  const levels = payload.levels.map((row) => `N${row.level}`);
+  plot(el, {
+    tooltip: {
+      trigger: "axis",
+      formatter: (params) => {
+        const row = payload.levels[params[0].dataIndex];
+        return `<b>N${row.level} · ${esc(row.label)}</b><br>Cuba convierte: <b>${pct(100 * row.conditionalSolveRate)}</b><br>Campo convierte: <b>${pct(100 * row.fieldConditionalSolveRate)}</b>`;
+      },
+    },
+    legend: { data: ["Cuba", "Campo"] },
+    grid: { top: 38 },
+    xAxis: categoryAxis(levels),
+    yAxis: valueAxis({ min: 0, max: 100, name: "% resueltos", nameLocation: "end", nameGap: 8, nameTextStyle: { align: "left", color: c.dim }, axisLabel: { formatter: "{value}%" } }),
+    series: [
+      { name: "Cuba", type: "bar", barMaxWidth: 24, itemStyle: { color: c.red }, data: payload.levels.map((row) => +(100 * (row.conditionalSolveRate ?? 0)).toFixed(1)) },
+      { name: "Campo", type: "bar", barMaxWidth: 24, itemStyle: { color: c.blue }, data: payload.levels.map((row) => +(100 * (row.fieldConditionalSolveRate ?? 0)).toFixed(1)) },
+    ],
+  });
+}
+
+function mixHtml(payload) {
+  const rows = payload.comparison.map((row) => {
+    const total = row.total || 1;
+    const segments = row.levels.map((value, index) => value
+      ? `<i style="width:${(100 * value) / total}%;background:${levelColor(index)}" title="N${index + 1}: ${value} (${pct(100 * value / total)})"></i>`
+      : "").join("");
+    return `<div class="cuba-mix-row"><span class="cuba-mix-label">${esc(row.label)}</span><span class="cuba-mix-track">${segments}</span><span class="cuba-mix-value">${total}</span></div>`;
+  }).join("");
+  return `<div class="cuba-mix"><div class="cuba-mix-head"><span>País</span><span>Mezcla N1–N6</span><span>Solves</span></div>${rows}</div>
+    <div class="legend">${payload.levels.map((row, index) => `<span><i style="background:${levelColor(index)}"></i>${esc(row.label)}</span>`).join("")}</div>
+    <p class="note">La barra es el porcentaje; el número de la derecha, el total de problemas resueltos. Cuba concentra ${pct(100 * payload.levels[0].solves / payload.scope.solves)} en N1; el mundo, ${pct(100 * payload.comparison[2].levels[0] / payload.comparison[2].total)}.</p>`;
+}
+
+function specHtml(payload, dim) {
+  const items = payload[dim];
+  const rows = [...items].sort((left, right) => right.specialization - left.specialization);
+  const positive = rows.filter((row) => row.specialization > 0.002).slice(0, 5);
+  const negative = rows.filter((row) => row.specialization < -0.002).slice(-5).reverse();
+  const maxAbs = Math.max(...rows.map((row) => Math.abs(row.specialization)), 0.01);
+  const rowHtml = (row) => {
+    const width = Math.min(50, (Math.abs(row.specialization) / maxAbs) * 50);
+    return `<div class="cuba-spec-row" title="${esc(row.label)}: ${pct(100 * row.solves / payload.scope.solves)} de los solves cubanos · ${pct(100 * row.fieldShare)} del campo">
+      <span class="cuba-spec-name">${esc(row.label)}</span>
+      <span class="cuba-spec-track"><i class="cuba-spec-fill ${row.specialization >= 0 ? "pos" : "neg"}" style="width:${width}%"></i></span>
+      <span class="cuba-spec-value ${row.specialization >= 0 ? "pos" : "neg"}">${row.specialization >= 0 ? "+" : ""}${one(100 * row.specialization)} pp</span>
+    </div>`;
+  };
+  return `<div class="cuba-spec-head"><span>Más peso del esperado</span><span>vs. campo</span></div>
+    <div class="cuba-spec-list">${positive.length ? positive.map(rowHtml).join("") : '<p class="sub">Sin diferencias claras.</p>'}</div>
+    <div class="cuba-spec-head"><span>Menos peso del esperado</span><span>vs. campo</span></div>
+    <div class="cuba-spec-list">${negative.length ? negative.map(rowHtml).join("") : '<p class="sub">Sin diferencias claras.</p>'}</div>`;
+}
+
+function problemsHtml(payload, mode) {
+  const rows = payload[mode].slice(0, 10);
+  const body = rows.map((row) => `<tr>
+    <td><b>${esc(row.title)}</b><small>${row.year} ${esc(row.letter)} · N${row.level} · ${esc(row.areaLabel)} · ${esc(row.techniqueLabel)}</small></td>
+    <td class="n">${pct(100 * row.fieldRate)}</td><td class="n">${row.cubaAttempts}</td>
+  </tr>`).join("");
+  return `<div class="tablew cuba-problem-table"><table data-nosort><thead><tr><th>Problema</th><th class="n">Tasa campo</th><th class="n">Intentos Cuba</th></tr></thead><tbody>${body}</tbody></table></div>
+    <p class="note">${mode === "muros" ? "Muros: Cuba los intentó y no los resolvió." : "No intentados: no hay envío cubano registrado. No implica que no los haya leído; puede ser tiempo, prioridad o estrategia."} Se muestran los 10 con mayor tasa de resolución del campo.</p>`;
+}
+
+function practiceHtml(payload) {
+  const area = (id) => payload.areas.find((row) => row.id === id);
+  const tech = (id) => payload.techniques.find((row) => row.id === id);
+  const strings = area("strings");
+  const graphs = area("graphs");
+  const geometry = area("geometry");
+  const optimization = area("optimization");
+  const dp = tech("dynamic_programming");
+  const greedy = tech("greedy");
+  const simulation = tech("simulation");
+  return `<div class="cuba-practice-grid">
+    <section class="cuba-practice-col keep"><h3>Mantener</h3><ul>
+      <li><b>Strings:</b> ${strings?.solves ?? 0} solves, ${pct(100 * (strings?.conditionalSolveRate ?? 0))} de conversión.</li>
+      <li><b>Grafos:</b> ${graphs?.solves ?? 0} solves, ${pct(100 * (graphs?.conditionalSolveRate ?? 0))}.</li>
+      <li><b>Greedy:</b> ${greedy?.solves ?? 0} solves, ${pct(100 * (greedy?.conditionalSolveRate ?? 0))}.</li>
+      <li><b>Simulación:</b> ${simulation?.solves ?? 0} solves, ${pct(100 * (simulation?.conditionalSolveRate ?? 0))}.</li>
+      <li><b>Optimización:</b> ${optimization?.solves ?? 0} solves, ${pct(100 * (optimization?.conditionalSolveRate ?? 0))} de conversión.</li>
+    </ul></section>
+    <section class="cuba-practice-col middle"><h3>Prioridad media</h3><ul>
+      <li><b>Geometría:</b> ${geometry?.solves ?? 0} solves; se intenta ${pct(100 * (geometry?.attemptRate ?? 0))} y convierte ${pct(100 * (geometry?.conditionalSolveRate ?? 0))}.</li>
+      <li><b>Programación dinámica:</b> ${dp?.solves ?? 0} solves; se intenta ${pct(100 * (dp?.attemptRate ?? 0))} y convierte ${pct(100 * (dp?.conditionalSolveRate ?? 0))}.</li>
+      <li><b>Teoría de números y probabilidad:</b> pocos intentos y pocos solves.</li>
+    </ul></section>
+    <section class="cuba-practice-col high"><h3>Prioridad alta</h3><ul>
+      <li><b>Estructuras de datos, camino más corto y flujo:</b> 0 solves cubanos.</li>
+      <li><b>N4:</b> Cuba intenta 22% y convierte 25%; ahí está el salto inmediato.</li>
+      <li><b>N6:</b> no es la prioridad inmediata; Cuba casi no lo intenta y el campo tampoco lo resuelve masivamente.</li>
+    </ul></section>
+  </div>
+  <p class="callout"><b>El salto inmediato:</b> convertir N2/N3 y atreverse con N4. N6 no es la prioridad: Cuba casi no lo intenta y el campo tampoco lo resuelve masivamente.</p>`;
+}
+
+function uniLevelsHtml(payload) {
+  const rows = payload.universities.map((uni) => {
+    const total = uni.solves || 1;
+    const segments = uni.levels.map((value, index) => value
+      ? `<i style="width:${(100 * value) / total}%;background:${levelColor(index)}" title="N${index + 1}: ${value}"></i>`
+      : "").join("");
+    return `<div class="cuba-uni-level-row"><span class="cuba-uni-level-name">${esc(shortUni(uni.name))}</span><span class="cuba-uni-level-track">${segments}</span><span class="cuba-uni-level-value">${uni.solves}</span></div>`;
+  }).join("");
+  return `<div class="cuba-uni-levels">${rows}</div>
+    <div class="legend">${payload.levels.map((row, index) => `<span><i style="background:${levelColor(index)}"></i>${esc(row.label)}</span>`).join("")}</div>
+    <p class="note">La Habana es la única con N3/N4; el resto se queda en N1/N2. Muestras pequeñas: Oriente 14, UCI 8, UCLV 3, Pinar 2.</p>`;
+}
+
+function uniStrengthsHtml(payload) {
+  const rows = payload.universities.map((uni) => `<tr>
+    <td title="${esc(uni.name)}">${esc(shortUni(uni.name))}</td>
+    <td class="n">${uni.solves} · ${uni.meanLevel}</td>
+    <td class="n">${uni.levels[2] + uni.levels[3]}</td>
+    <td>${esc(uni.topAreaLabel ?? "—")}</td><td>${esc(uni.topTechniqueLabel ?? "—")}</td>
+  </tr>`).join("");
+  return `<div class="tablew cuba-uni-table"><table data-nosort><thead><tr><th>Universidad</th><th class="n">Resueltos · nivel</th><th class="n">N3–N4</th><th>Área</th><th>Técnica</th></tr></thead><tbody>${rows}</tbody></table></div>
+    <p class="note">La Habana concentra 45 de 72 solves (62,5%) y los dos N4. Las demás muestras son pequeñas; úsese como orientación.</p>`;
+}
+
+function drawCubaResult(el, payload) {
+  const c = colors();
+  const rows = payload.editions.filter((row) => row.cubaBestPct != null);
+  plot(el, {
+    legend: false,
+    tooltip: {
+      formatter: (params) => {
+        const row = params.data;
+        return `<b>${row.year}</b><br>Nivel medio de la final: <b>${row.meanLevel}</b><br>Percentil cubano: <b>${pct(row.cubaBestPct)}</b><br>${row.solves} solves · ${place(row.cubaBestRank)} de ${row.fieldSize}`;
+      },
+    },
+    grid: { left: 8, right: 18, top: 42, bottom: 34, containLabel: true },
+    xAxis: valueAxis({ min: 3, max: 5.3, name: "Nivel medio de la final", nameLocation: "middle", nameGap: 26 }),
+    yAxis: valueAxis({ min: 0, max: 100, name: "Percentil del mejor equipo", nameLocation: "end", nameGap: 8, nameTextStyle: { align: "left", color: c.dim }, axisLabel: { formatter: "{value}%" } }),
+    series: [{
+      type: "scatter",
+      data: rows.map((row) => ({
+        year: row.year, meanLevel: row.meanLevel, cubaBestPct: row.cubaBestPct,
+        cubaBestRank: row.cubaBestRank, fieldSize: row.fieldSize, solves: row.solves,
+        value: [row.meanLevel, row.cubaBestPct],
+        itemStyle: { color: row.year === 2025 ? c.red : [2017, 2023].includes(row.year) ? c.accent : c.blue, opacity: row.year === 2025 ? 1 : 0.8 },
+        label: {
+          show: [2017, 2023, 2025].includes(row.year), formatter: String(row.year), position: "top",
+          color: c.ink, fontSize: 11, fontWeight: 600,
+        },
+      })),
+      symbolSize: 9,
+      labelLayout: { hideOverlap: true },
+    }],
+  });
+}
+
+function draw(view, data, cuba, cubaMap, cubaComplexity) {
   document.title = "Cuba · Observatorio ICPC";
   readUi(cuba);
   view.insertAdjacentHTML("beforeend", `<nav class="cuba-subnav" aria-label="Secciones de Cuba">${SECTIONS.map(([id, label]) => `<a href="#${id}">${esc(label)}</a>`).join("")}</nav>`);
@@ -191,7 +372,7 @@ function draw(view, data, cuba, cubaMap) {
       formatter: (p) => `<b>${esc(p.data.es)}</b><br>Percentil medio del mejor equipo: <b>${one(p.data.meanBest)}</b><br>Mejor puesto: <b>${place(p.data.bestRank)}</b><br>${p.data.teams} equipos en ${p.data.editions} ediciones<br>${p.data.medals} medallas mundiales`,
     },
     xAxis: valueAxis({ min: 0, max: 100, name: "Percentil medio del mejor equipo", nameLocation: "middle", nameGap: 26 }),
-    yAxis: valueAxis({ inverse: true, min: 0, max: 90, name: "Mejor puesto", nameTextStyle: { color: c.dim } }),
+    yAxis: namedAxis("Mejor puesto", { inverse: true, min: 0, max: 90 }),
     series: [{
       type: "scatter",
       symbolSize: (value) => 6 + Math.sqrt(value[2]) * 1.15,
@@ -253,8 +434,8 @@ function draw(view, data, cuba, cubaMap) {
     legend: { data: ["Equipos cubanos", "Mejor percentil"] },
     xAxis: categoryAxis(cuba.years.map(String)),
     yAxis: [
-      valueAxis({ min: 0, max: cuba.totals.maxTeamsYear + 1, name: "Equipos", nameTextStyle: { color: c.dim } }),
-      valueAxis({ min: 0, max: 100, name: "Percentil", nameTextStyle: { color: c.dim } }),
+      namedAxis("Equipos", { min: 0, max: cuba.totals.maxTeamsYear + 1 }),
+      namedAxis("Percentil", { min: 0, max: 100 }),
     ],
     series: [
       {
@@ -285,7 +466,7 @@ function draw(view, data, cuba, cubaMap) {
     tooltip: { trigger: "axis" },
     legend: { data: ["Mejor equipo de La Habana", "Mejor equipo del resto de Cuba"] },
     xAxis: categoryAxis(cuba.years.map(String), { boundaryGap: false }),
-    yAxis: valueAxis({ min: 0, max: 100, name: "Percentil", nameTextStyle: { color: c.dim } }),
+    yAxis: namedAxis("Percentil", { min: 0, max: 100 }),
     series: [
       { name: "Mejor equipo de La Habana", type: "line", data: uhBest, connectNulls: false, symbolSize: 7, lineStyle: { width: 3, color: c.accent }, itemStyle: { color: c.accent } },
       { name: "Mejor equipo del resto de Cuba", type: "line", data: otherBest, connectNulls: true, symbolSize: 6, lineStyle: { width: 2, type: "dashed", color: c.blue }, itemStyle: { color: c.blue } },
@@ -464,7 +645,7 @@ function draw(view, data, cuba, cubaMap) {
     tooltip: { trigger: "axis" },
     legend: { data: ["Cuba (mejor equipo)", "Mediana del campo", "Corte del top 50", "Corte de medalla"] },
     xAxis: categoryAxis(cuba.years.map(String), { boundaryGap: false }),
-    yAxis: valueAxis({ min: 0, max: 16, name: "Problemas", nameTextStyle: { color: c.dim } }),
+    yAxis: namedAxis("Problemas", { min: 0, max: 16 }),
     series: [
       { name: "Corte de medalla", type: "line", data: cuba.field.map((row) => row.medalSolved), symbol: "none", lineStyle: { width: 1.5, type: "dashed", color: c.red }, itemStyle: { color: c.red } },
       { name: "Corte del top 50", type: "line", data: cuba.field.map((row) => row.top50Solved), symbol: "none", lineStyle: { width: 1.5, type: "dashed", color: c.gold }, itemStyle: { color: c.gold } },
@@ -637,8 +818,121 @@ function draw(view, data, cuba, cubaMap) {
   };
   updateSim();
 
-  // ----------------------------------------------------------- 06 universidades
-  const universities = section(view, "universidades", "06 · Universidades", "Cinco campus, un relevo",
+  // ----------------------------------------------------------- 06 dificultad
+  const difficulty = section(view, "dificultad", "06 · Dificultad", "Cuba y la escala N1–N6",
+    "Entre 2011 y 2025 Cuba resolvió 72 problemas: 53 N1, 13 N2, 4 N3, 2 N4 y ninguno N5–N6. La pregunta no es solo cuántos, sino cuáles intenta y cuáles convierte.");
+  if (!cubaComplexity) {
+    card(grid(difficulty), { span: 12, html: '<p class="sub">Los datos de dificultad de Cuba no están disponibles. Ejecuta <code>make data</code> y recarga.</p>' });
+  } else {
+    kpis(difficulty, [
+      [cubaComplexity.scope.solves, "problemas resueltos"],
+      [cubaComplexity.scope.solvedProblems, "problemas distintos"],
+      [cubaComplexity.scope.walls, "muros"],
+      [cubaComplexity.scope.untried, "no intentados"],
+    ]);
+    const d = grid(difficulty);
+
+    const attempt = chartCard(d, {
+      title: "Intenta o evita", span: 7, height: 320,
+      sub: "Porcentaje de problemas que Cuba intentó, por nivel, frente al campo. Cuba intenta casi todos los N1, pero menos de la mitad de los N3 y casi ningún N5–N6.",
+    });
+    drawCubaAttempts(attempt, cubaComplexity);
+
+    const conditional = chartCard(d, {
+      title: "Convierte o se atasca", span: 5, height: 320,
+      sub: "De los problemas que intentó, porcentaje que resolvió. En N3 el campo convierte 78%; Cuba, 31%.",
+    });
+    drawCubaConditional(conditional, cubaComplexity);
+
+    const mix = card(d, {
+      title: "La mezcla de lo resuelto", span: 5,
+      sub: "Porcentaje de problemas resueltos en cada nivel: Cuba, Latinoamérica y el mundo.",
+      html: mixHtml(cubaComplexity),
+    });
+    mix.closest(".card")?.classList.add("cuba-mix-card");
+
+    const spec = card(d, {
+      title: "Fortalezas y deudas", span: 7,
+      sub: "Diferencia entre el peso de cada área o técnica en los solves cubanos y el peso esperado por el campo, en puntos porcentuales.",
+      html: `<div class="filters" style="margin:0 0 8px;padding:0;border:0;background:none">
+        <label>Ver por<select id="cuba-spec-dim" data-plain><option value="areas">Áreas</option><option value="techniques">Técnicas</option></select></label>
+      </div><div id="cuba-spec-body"></div>`,
+    });
+    const specBody = spec.querySelector("#cuba-spec-body");
+    const specSelect = spec.querySelector("#cuba-spec-dim");
+    const renderSpec = () => { specBody.innerHTML = specHtml(cubaComplexity, specSelect.value); };
+    specSelect.onchange = renderSpec;
+    renderSpec();
+
+    const uniHeading = document.createElement("div");
+    uniHeading.className = "cuba-subhead s12";
+    uniHeading.innerHTML = `<h3>Las universidades cubanas</h3><p>La Habana concentra 45 de 72 solves y los dos N4; Oriente, UCI, UCLV y Pinar completan el mapa. La lectura por campus usa muestras pequeñas.</p>`;
+    d.append(uniHeading);
+    const uniLevels = card(d, {
+      title: "Nivel por campus", span: 6,
+      sub: "Problemas resueltos por nivel en cada universidad. La Habana es la única con N3 y N4.",
+      html: uniLevelsHtml(cubaComplexity),
+    });
+    uniLevels.closest(".card")?.classList.add("cuba-uni-level-card");
+    const uniStrengths = card(d, {
+      title: "Fortalezas por campus", span: 6,
+      sub: "Área y técnica primarias más frecuentes en lo resuelto por cada universidad.",
+      html: uniStrengthsHtml(cubaComplexity),
+    });
+    uniStrengths.closest(".card")?.classList.add("cuba-uni-strength-card");
+
+    const problems = card(d, {
+      title: "Muros y no intentados", span: 12,
+      sub: `Cuba intentó ${cubaComplexity.scope.attemptedProblems} problemas distintos y resolvió al menos uno de ${cubaComplexity.scope.solvedProblems}. Quedan ${cubaComplexity.scope.walls} muros y ${cubaComplexity.scope.untried} no intentados.`,
+      html: `<div class="seg cuba-problem-tabs" role="group" aria-label="Estado de los problemas">
+        <button type="button" data-cuba-problems="muros" aria-pressed="true">Muros (${cubaComplexity.scope.walls})</button>
+        <button type="button" data-cuba-problems="untried" aria-pressed="false">No intentados (${cubaComplexity.scope.untried})</button>
+      </div>
+      <div id="cuba-problems-body"></div>`,
+    });
+    const problemsBody = problems.querySelector("#cuba-problems-body");
+    const problemTabs = problems.querySelectorAll("[data-cuba-problems]");
+    const renderProblems = (mode) => {
+      problemsBody.innerHTML = problemsHtml(cubaComplexity, mode);
+      problemTabs.forEach((button) => button.setAttribute("aria-pressed", button.dataset.cubaProblems === mode));
+    };
+    problemTabs.forEach((button) => { button.onclick = () => renderProblems(button.dataset.cubaProblems); });
+    renderProblems("muros");
+
+    const result = chartCard(d, {
+      title: "La dificultad no explica el año", span: 7, height: 320,
+      sub: "Cada punto es una final: nivel medio del set frente al percentil del mejor equipo cubano. 2025 es el outlier.",
+    });
+    drawCubaResult(result, cubaComplexity);
+
+    const callout = cubaComplexity.callout2025;
+    const similar = cubaComplexity.similarCountries;
+    const calloutCard = card(d, {
+      title: "2025: la final más abierta, el peor resultado", span: 5,
+      sub: "La final más asequible del período coincidió con el peor percentil cubano.",
+      html: `<div class="cuba-2025">
+        <div class="cuba-2025-stat"><b>${callout.meanLevel}</b><span>nivel medio de la final</span></div>
+        <div class="cuba-2025-stat"><b>${place(callout.cubaBestRank)} / ${callout.fieldSize}</b><span>puesto del mejor equipo</span></div>
+        <div class="cuba-2025-stat"><b>${pct(callout.cubaBestPct)}</b><span>percentil</span></div>
+        <div class="cuba-2025-stat"><b>${callout.attemptedRows} / ${callout.solves}</b><span>intentados / resueltos</span></div>
+      </div>
+      <p class="note">Cuba intentó ${callout.attemptedRows} problemas y resolvió los ${callout.solves}. No falló: se quedó corta de volumen. En 2017 y 2023, sus mejores años, las finales tenían niveles medios de 3,67 y 3,55.</p>
+      <h3 class="cuba-minihead">Cuba se parece a…</h3>
+      <div class="cuba-similar">${similar.map((row) => `<span>${esc(row.label)}</span><b>${Math.round(100 * row.similarity)}%</b>`).join("")}</div>
+      <p class="note">Similitud de perfil por áreas y técnicas. Cuba se parece más a Egipto, México, Brasil y Colombia que a una excepción regional.</p>`,
+    });
+    calloutCard.closest(".card")?.classList.add("cuba-2025-card");
+
+    const practice = card(d, {
+      title: "Qué practicar", span: 12,
+      sub: "Prioridades a partir de la frecuencia en el campo y de la brecha cubana. No es una receta: es una lectura de los datos.",
+      html: practiceHtml(cubaComplexity),
+    });
+    practice.closest(".card")?.classList.add("cuba-practice-card");
+  }
+
+  // ----------------------------------------------------------- 07 universidades
+  const universities = section(view, "universidades", "07 · Universidades", "Cinco campus, un relevo",
     "La Habana no es toda Cuba: UCI, Las Villas, Oriente y Pinar también han llevado equipos. El mapa y el relevo muestran cuándo y desde dónde.");
   kpis(universities, [
     [cuba.totals.universities, "universidades"],
@@ -723,8 +1017,8 @@ function draw(view, data, cuba, cubaMap) {
   });
   relayNote.closest(".card")?.classList.add("cuba-relay-note-card", "cuba-aside");
 
-  // --------------------------------------------------------------- 07 personas
-  const people = section(view, "personas", "07 · Personas", "Cincuenta y siete nombres",
+  // --------------------------------------------------------------- 08 personas
+  const people = section(view, "personas", "08 · Personas", "Cincuenta y siete nombres",
     "Cuba ha llevado 57 personas distintas. 21 repitieron; nadie llegó a tres finales. La experiencia se nota, aunque la muestra es pequeña.");
   kpis(people, [
     [cuba.people.total, "personas"],
@@ -740,7 +1034,7 @@ function draw(view, data, cuba, cubaMap) {
     tooltip: { trigger: "axis" },
     legend: { data: ["Debutantes", "Apariciones de repetidores"] },
     xAxis: categoryAxis(cuba.years.map(String), { boundaryGap: false }),
-    yAxis: valueAxis({ min: 0, max: 8, name: "Personas", nameTextStyle: { color: c.dim } }),
+    yAxis: namedAxis("Personas", { min: 0, max: 8 }),
     series: [
       { name: "Debutantes", type: "bar", data: cuba.people.newByYear, barMaxWidth: 22, itemStyle: { color: c.blue, borderRadius: [3, 3, 0, 0] } },
       { name: "Apariciones de repetidores", type: "bar", data: cuba.people.repeatByYear, barMaxWidth: 22, itemStyle: { color: c.accent, borderRadius: [3, 3, 0, 0] } },
@@ -754,7 +1048,7 @@ function draw(view, data, cuba, cubaMap) {
     tooltip: { trigger: "axis" },
     legend: { data: ["Mundo", "Cuba"] },
     xAxis: categoryAxis(["0 veteranos", "1 veterano", "2 veteranos", "3 veteranos"]),
-    yAxis: valueAxis({ min: 0, max: 100, name: "Percentil medio", nameTextStyle: { color: c.dim } }),
+    yAxis: namedAxis("Percentil medio", { min: 0, max: 100 }),
     series: [
       { name: "Mundo", type: "bar", data: cuba.experience.global.map((row) => row.meanPct), barMaxWidth: 26, itemStyle: { color: c.blue, opacity: 0.65 }, label: { show: true, position: "top", color: c.dim, fontSize: 11 } },
       { name: "Cuba", type: "bar", data: cuba.experience.cuba.map((row) => row.meanPct), barMaxWidth: 26, itemStyle: { color: c.accent }, label: { show: true, position: "top", color: c.ink, fontSize: 11, formatter: (p) => (p.value == null ? "sin datos" : one(p.value)) } },
@@ -777,8 +1071,8 @@ function draw(view, data, cuba, cubaMap) {
     ])) + `<p class="note">La Habana aporta 26 de las 57 personas y 39 de las 78 plazas. UCI tiene la mayor proporción de debutantes: 8 de sus 10 personas jugaron una sola final.</p>`,
   });
 
-  // ---------------------------------------------------------------- 08 género
-  const gender = section(view, "genero", "08 · Género", "Cuatro mujeres en el agregado",
+  // ---------------------------------------------------------------- 09 género
+  const gender = section(view, "genero", "09 · Género", "Cuatro mujeres en el agregado",
     "Publicamos solo agregados: 4 mujeres y 53 hombres entre las 57 personas cubanas. El detalle individual no se sirve en los datos del sitio.");
   kpis(gender, [
     [cuba.gender.women, "mujeres"],
@@ -796,7 +1090,7 @@ function draw(view, data, cuba, cubaMap) {
     tooltip: { trigger: "axis" },
     legend: { data: ["Mujeres en la delegación", "Equipos con al menos una mujer"] },
     xAxis: categoryAxis(cuba.years.map(String)),
-    yAxis: valueAxis({ min: 0, max: 3, name: "Cantidad", nameTextStyle: { color: c.dim } }),
+    yAxis: namedAxis("Cantidad", { min: 0, max: 3 }),
     series: [
       { name: "Mujeres en la delegación", type: "bar", data: cuba.gender.timeline.map((row) => row.women), barMaxWidth: 22, itemStyle: { color: c.accent, borderRadius: [3, 3, 0, 0] }, label: { show: true, position: "top", color: c.ink, formatter: (p) => (p.value ? p.value : "") } },
       { name: "Equipos con al menos una mujer", type: "line", data: cuba.gender.timeline.map((row) => row.teams), symbolSize: 6, lineStyle: { width: 2, type: "dashed", color: c.blue }, itemStyle: { color: c.blue } },
@@ -844,8 +1138,8 @@ function draw(view, data, cuba, cubaMap) {
     html: `<div class="callout">El género se publica solo en agregado. El archivo curado con la clasificación individual (57 filas) vive en <code>data/curated/cuba-gender.csv</code> y <b>no</b> se copia a <code>site/data</code>. Esta página no asocia nombres a género; solo cuenta.</div>`,
   });
 
-  // ----------------------------------------------------------------- 09 futuro
-  const future = section(view, "futuro", "09 · Futuro", "Lo que se puede esperar de 2026",
+  // ----------------------------------------------------------------- 10 futuro
+  const future = section(view, "futuro", "10 · Futuro", "Lo que se puede esperar de 2026",
     "Una proyección, no una promesa: la Universidad de La Habana aparece en el campo previsto con UH Pop.");
   const projection = cuba.projection;
   const country = projection.country;
@@ -870,7 +1164,7 @@ function draw(view, data, cuba, cubaMap) {
     grid: { left: 8, right: 18, top: 26, bottom: 30, containLabel: true },
     tooltip: { trigger: "axis", valueFormatter: (value) => `${one(value, 1)}%` },
     xAxis: categoryAxis(projection.places.map((value) => `≤${value}`)),
-    yAxis: valueAxis({ min: 0, max: 60, name: "%", nameTextStyle: { color: c.dim } }),
+    yAxis: namedAxis("%", { min: 0, max: 60 }),
     series: [{
       type: "line", smooth: 0.25, symbolSize: 7, data: country.chances.map((value) => value * 100),
       lineStyle: { width: 3, color: c.accent }, itemStyle: { color: c.accent }, areaStyle: { color: c.accent, opacity: 0.12 },
@@ -906,8 +1200,8 @@ function draw(view, data, cuba, cubaMap) {
       <div><p class="note">Países con una trayectoria parecida a la cubana en el modelo:</p><div class="chips">${projection.similar.map((row) => `<a class="chip" href="${countryUrl(row.country)}">${esc(row.es)}</a>`).join("")}</div><p class="note">Cuba llega con un solo equipo previsto. En 2026, como en siete de las 16 finales, la historia cubana se juega en una sola formación.</p></div></div>`,
   });
 
-  // ------------------------------------------------------------------ 10 álbum
-  const album = section(view, "album", "10 · Álbum", "Veintiséis equipos, uno por uno",
+  // ------------------------------------------------------------------ 11 álbum
+  const album = section(view, "album", "11 · Álbum", "Veintiséis equipos, uno por uno",
     "La ficha de cada equipo y las tres personas que lo formaron. Los nombres enlazan a cada competidor; los escudos, a su universidad.");
   const al = grid(album);
   card(al, {
@@ -916,8 +1210,8 @@ function draw(view, data, cuba, cubaMap) {
     html: `<div class="cuba-album">${cuba.teams.map(teamCard).join("")}</div>`,
   });
 
-  // ----------------------------------------------------------------- 11 método
-  const method = section(view, "metodo", "11 · Método", "Qué se puede afirmar y qué no",
+  // ----------------------------------------------------------------- 12 método
+  const method = section(view, "metodo", "12 · Método", "Qué se puede afirmar y qué no",
     "Las definiciones que sostienen la página, las fuentes y los límites de cada lectura.");
   const m = grid(method);
   card(m, {
@@ -956,6 +1250,12 @@ function draw(view, data, cuba, cubaMap) {
     </ul>`,
   });
   card(m, {
+    title: "Dificultad: alcance y límites", span: 12,
+    html: `<div class="prose cuba-wide"><p>La sección de dificultad cubre <b>2011–2025</b>: 25 equipos-edición y 72 problemas resueltos. El equipo de 2010 queda fuera porque la taxonomía empieza en 2011; por eso el héroe dice 26 equipos y esta sección dice 25.</p>
+      <p><b>Intenta</b> = el equipo registró al menos un envío al problema. <b>Convierte</b> = de los problemas intentados, cuántos resolvió. <b>No intentado</b> = no hay envío cubano registrado; no implica que no lo haya leído, puede ser tiempo, prioridad o estrategia. <b>Muro</b> = intentado y no resuelto.</p>
+      <p>Las tasas se calculan sobre filas equipo-problema, no sobre problemas únicos. Las universidades con 2–3 solves son muestras pequeñas: sus áreas y técnicas son orientativas. La comparación con el campo usa todos los equipos de 2011–2025.</p></div>`,
+  });
+  card(m, {
     title: "Lo que no se puede afirmar", span: 12,
     html: `<div class="prose cuba-wide"><p>La página no demuestra que La Habana sea la causa del rendimiento cubano, ni que la experiencia sea la causa de los mejores percentiles, ni que el visado explique por sí solo la ausencia de Pinar en 2017. Son asociaciones y hechos documentados, con muestras pequeñas. El mapa usa geometrías provinciales de cuba-geojsons (MIT) y coordenadas aproximadas de las sedes. El podio latinoamericano es una construcción analítica, no un premio del ICPC.</p>
       <p>Los datos de resultados y medallas vienen de <a href="https://www.cphof.org/">cphof.org</a> y se contrastan con <a href="https://icpc.global/worldfinals/results">icpc.global</a> cuando publica la final. Regiones, nombres en español y el catálogo de análisis vienen de <a href="https://github.com/yudivian/icpc">yudivian/icpc</a> (Apache-2.0).</p></div>`,
@@ -968,12 +1268,15 @@ startPage({
   subtitle: "Dieciséis finales, veintiséis equipos y un podio mundial que todavía no llega.",
   render(view, data) {
     const token = ++renderToken;
-    cubaPromise ??= Promise.all(["cuba.json", "cuba-map.json"].map((name) => fetch(`data/${name}`).then((response) => {
-      if (!response.ok) throw new Error(`${name}: ${response.status}`);
-      return response.json();
-    }))).then(([cuba, cubaMap]) => ({ cuba, cubaMap }));
+    cubaPromise ??= Promise.all([
+      ...["cuba.json", "cuba-map.json"].map((name) => fetch(`data/${name}`).then((response) => {
+        if (!response.ok) throw new Error(`${name}: ${response.status}`);
+        return response.json();
+      })),
+      fetch("data/cuba-complexity.json").then((response) => (response.ok ? response.json() : null)).catch(() => null),
+    ]).then(([cuba, cubaMap, cubaComplexity]) => ({ cuba, cubaMap, cubaComplexity }));
     cubaPromise
-      .then((payload) => { if (token === renderToken) draw(view, data, payload.cuba, payload.cubaMap); })
+      .then((payload) => { if (token === renderToken) draw(view, data, payload.cuba, payload.cubaMap, payload.cubaComplexity); })
       .catch((error) => {
         if (token !== renderToken) return;
         console.error(error);

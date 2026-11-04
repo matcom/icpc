@@ -205,7 +205,9 @@ def test_every_logo_has_a_file_and_a_university(built):
     for uni, logo in core["logos"].items():
         assert uni in ids, uni
         assert logo["source"] and logo["licence"]
+        assert logo.get("v"), uni
         assert (build_data.SITE / "logos" / f"{uni}.png").exists(), uni
+    assert core["logos"]["universidad-de-la-habana"]["v"] == "2112"
 
 
 def test_cuba_slice_has_the_expected_totals(built):
@@ -469,3 +471,42 @@ def test_order_and_retries_are_published(built):
     problem = next(item for item in complexity["problems"] if item["id"] == "wf-2014-i")
     assert problem["firstSolveOrder"] == 4
     assert problem["attemptsPerSolve"] == 22.7
+
+
+def test_cuba_complexity_is_consistent(built):
+    cuba = built["cuba_complexity"]
+    assert cuba["scope"]["teamEditions"] == 25
+    assert cuba["scope"]["solves"] == 72
+    assert cuba["totals"]["levels"] == [53, 13, 4, 2, 0, 0]
+    assert cuba["scope"]["walls"] == 21
+    assert cuba["scope"]["untried"] == 108
+    assert cuba["levels"][0]["attemptRate"] > cuba["levels"][5]["attemptRate"]
+    assert cuba["levels"][2]["conditionalSolveRate"] < cuba["levels"][1]["conditionalSolveRate"]
+    assert len(cuba["universities"]) == 5
+    assert cuba["universities"][0]["name"] == "Universidad de La Habana"
+    assert cuba["callout2025"]["cubaBestRank"] == 132
+
+
+def test_best_result_breaks_ties_by_solved_then_time_then_year():
+    rows = [
+        {"year": 2004, "rank": 1, "solved": 7, "time": 1204},
+        {"year": 2015, "rank": 1, "solved": 13, "time": 1801},
+        {"year": 2017, "rank": 1, "solved": 10, "time": 1093},
+    ]
+    assert build_data.best_result(rows)["year"] == 2015
+    same = [
+        {"year": 2020, "rank": 4, "solved": 9, "time": 900},
+        {"year": 2021, "rank": 4, "solved": 9, "time": 800},
+    ]
+    assert build_data.best_result(same)["year"] == 2021
+    early = [
+        {"year": 2019, "rank": 6, "solved": 8, "time": 700},
+        {"year": 2022, "rank": 6, "solved": 8, "time": 700},
+    ]
+    assert build_data.best_result(early)["year"] == 2019
+
+
+def test_itmo_best_result_is_the_final_where_it_solved_everything(built):
+    uni = next(u for u in built["core"]["universities"] if u["name"] == "St. Petersburg ITMO University")
+    best = build_data.best_result(uni["results"])
+    assert (best["year"], best["rank"], best["solved"]) == (2015, 1, 13)

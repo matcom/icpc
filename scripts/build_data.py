@@ -7,6 +7,7 @@ llms.txt and the Markdown twin of each page.
 from __future__ import annotations
 
 import csv
+import hashlib
 import json
 import math
 import re
@@ -50,6 +51,36 @@ def parse_rank(position: object) -> float | None:
 
 def to_int(value: object) -> int | None:
     return int(value) if str(value).strip().isdigit() else None
+
+
+def best_result(rows: list[dict]) -> dict | None:
+    """Best final: rank first, then problems solved, then time, then earliest year."""
+    ranked = [row for row in rows if row.get("rank") is not None]
+    if not ranked:
+        return None
+    best = ranked[0]
+    for row in ranked[1:]:
+        if row["rank"] < best["rank"]:
+            best = row
+            continue
+        if row["rank"] > best["rank"]:
+            continue
+        row_solved = row.get("solved") or 0
+        best_solved = best.get("solved") or 0
+        if row_solved != best_solved:
+            if row_solved > best_solved:
+                best = row
+            continue
+        row_time = row.get("time")
+        best_time = best.get("time")
+        if row_time is not None and best_time is not None:
+            if row_time != best_time:
+                if row_time < best_time:
+                    best = row
+                continue
+        if row["year"] < best["year"]:
+            best = row
+    return best
 
 
 def percentile(rank: float | None, field_size: int) -> float | None:
@@ -98,6 +129,19 @@ def canonical_names(contests: dict[int, list[dict]], key: str, aliases: dict[str
 def load_aliases() -> dict[str, str]:
     path = SOURCES / "university-aliases.json"
     return json.loads(path.read_text()) if path.exists() else {}
+
+
+def load_logos() -> dict[str, dict]:
+    """Logo metadata plus a cache-busting version: the scoreboard id when known."""
+    logos = json.loads((SOURCES / "logos.json").read_text())
+    for uni, logo in logos.items():
+        match = re.search(r"/affiliations/(\d+)\.png", logo.get("source", ""))
+        path = SITE / "logos" / f"{uni}.png"
+        if match:
+            logo["v"] = match[1]
+        elif path.exists():
+            logo["v"] = hashlib.sha256(path.read_bytes()).hexdigest()[:8]
+    return logos
 
 
 EXTRA_COUNTRIES = {"North Macedonia": {"es": "Macedonia del Norte", "region": "eu"}}
@@ -516,7 +560,7 @@ def build_cuba(universities: list[dict], countries: dict, predictions: dict, pro
         ranked = [r for r in all_rows if r["year"] == year and r["rank"] is not None]
         solved = [r["solved"] for r in ranked if r["solved"] is not None]
         cuba = [r for r in cuba_rows if r["year"] == year]
-        best = min(cuba, key=lambda r: r["rank"] if r["rank"] is not None else 1e9) if cuba else None
+        best = best_result(cuba)
         ordered = sorted(ranked, key=lambda r: r["rank"])
         top50 = ordered[49] if len(ordered) >= 50 else ordered[-1]
         medalists = [r for r in ranked if r["medal"] and r["solved"] is not None]
@@ -717,7 +761,7 @@ def build_cuba(universities: list[dict], countries: dict, predictions: dict, pro
     absent_best = []
     for year in absent:
         rows = [r for r in cuba_rows if r["year"] == year]
-        best = min(rows, key=lambda r: r["rank"] if r["rank"] is not None else 1e9)
+        best = best_result(rows)
         absent_best.append(brief(best))
     present_best = []
     for year in years:
@@ -725,13 +769,13 @@ def build_cuba(universities: list[dict], countries: dict, predictions: dict, pro
             continue
         rows = [r for r in cuba_rows if r["year"] == year and r["uni"] == "universidad-de-la-habana"]
         if rows:
-            present_best.append(brief(min(rows, key=lambda r: r["rank"] if r["rank"] is not None else 1e9)))
+            present_best.append(brief(best_result(rows)))
     counterfactual = {
         "absentYears": absent,
         "absent": absent_best,
         "presentCount": len(present_best),
         "presentTop70": sum(1 for r in present_best if r["rank"] is not None and r["rank"] <= 70),
-        "presentBest": min(present_best, key=lambda r: r["rank"] if r["rank"] is not None else 1e9) if present_best else None,
+        "presentBest": best_result(present_best) if present_best else None,
         "note": "No es causal: en esos años también cambió el resto de la delegación.",
     }
 
@@ -834,7 +878,7 @@ def build_cuba(universities: list[dict], countries: dict, predictions: dict, pro
     uni_rows = []
     for uni in cuba_unis:
         rows = uni["results"]
-        best = min(rows, key=lambda r: r["rank"] if r["rank"] is not None else 1e9)
+        best = best_result(rows)
         podiums_of_uni = sum(1 for p in cuba_podiums if p["uni"] == uni["id"])
         uni_rows.append({
             "id": uni["id"],
@@ -869,7 +913,7 @@ def build_cuba(universities: list[dict], countries: dict, predictions: dict, pro
         person["finals"] = len(person["years"])
         person["years"] = sorted(person["years"])
         person["unis"] = sorted(person["unis"])
-        best = min(rows, key=lambda r: r["rank"] if r["rank"] is not None else 1e9)
+        best = best_result(rows)
         person["bestRank"] = round(best["rank"], 1) if best["rank"] is not None else None
         person["bestYear"] = best["year"]
         person["first"] = min(person["years"])
@@ -937,7 +981,7 @@ def build_cuba(universities: list[dict], countries: dict, predictions: dict, pro
             break
         last_gap.append(row["year"])
     last_gap.reverse()
-    best_team = min(teams_with_women, key=lambda r: r["rank"] if r["rank"] is not None else 1e9) if teams_with_women else None
+    best_team = best_result(teams_with_women) if teams_with_women else None
     gender_section = {
         "women": len(women_people),
         "men": len(people_list) - len(women_people),
@@ -964,7 +1008,7 @@ def build_cuba(universities: list[dict], countries: dict, predictions: dict, pro
     fastest = min(fastest_pool, key=lambda r: (r["group"]["position"] - 1) / (r["group"]["size"] - 1)) if fastest_pool else None
     slowest = max(fastest_pool, key=lambda r: (r["group"]["position"] - 1) / (r["group"]["size"] - 1)) if fastest_pool else None
     records = {
-        "best": brief(min(cuba_rows, key=lambda r: r["rank"] if r["rank"] is not None else 1e9)),
+        "best": brief(best_result(cuba_rows)),
         "worst": brief(max(cuba_rows, key=lambda r: r["rank"] if r["rank"] is not None else -1)),
         "bestPct": brief(max(cuba_rows, key=lambda r: r["pct"] if r["pct"] is not None else -1)),
         "worstPct": brief(min(cuba_rows, key=lambda r: r["pct"] if r["pct"] is not None else 1e9)),
@@ -1567,6 +1611,270 @@ def build_problem_statements(complexity: dict) -> dict:
     return statements
 
 
+
+# --------------------------------------------------------------- Cuba x complexity
+
+def build_cuba_complexity(complexity: dict, cuba: dict) -> dict:
+    """Cross the 2011-2025 scoreboard matrix with the taxonomy, Cuba only."""
+    problems = {problem["id"]: problem for problem in complexity["problems"]}
+    area_label = {area["id"]: area["label"] for area in complexity["areas"]}
+    tech_label = {technique["id"]: technique["label"] for technique in complexity["techniques"]}
+    matrix = [row for row in read_curated_csv("scoreboard-matrix.csv") if 2011 <= int(row["year"]) <= 2025]
+    cuba_rows = [row for row in matrix if row["country"] == "Cuba"]
+
+    field_levels = {level: {"rows": 0, "attempted": 0, "solved": 0} for level in range(1, 7)}
+    for row in matrix:
+        problem = problems[f'wf-{row["year"]}-{row["letter"].lower()}']
+        stats = field_levels[problem["level"]]
+        stats["rows"] += 1
+        stats["attempted"] += 1 if int(row["attempts"] or 0) > 0 else 0
+        stats["solved"] += 1 if int(row["solved"] or 0) > 0 else 0
+
+    by_problem = defaultdict(lambda: {"teams": 0, "solved": 0, "attempts": 0})
+    level_stats = {level: {"rows": 0, "attempted": 0, "solved": 0} for level in range(1, 7)}
+    area_stats = defaultdict(lambda: {"rows": 0, "attempted": 0, "solved": 0})
+    tech_stats = defaultdict(lambda: {"rows": 0, "attempted": 0, "solved": 0})
+    solved_problem_ids = set()
+    attempted_problem_ids = set()
+
+    for row in cuba_rows:
+        problem = problems[f'wf-{row["year"]}-{row["letter"].lower()}']
+        solved = int(row["solved"] or 0)
+        attempts = int(row["attempts"] or 0)
+        target = by_problem[problem["id"]]
+        target["teams"] += 1
+        target["solved"] += solved
+        target["attempts"] += attempts
+        for stats in (level_stats[problem["level"]], area_stats[problem["area"]], tech_stats[problem["technique"]]):
+            stats["rows"] += 1
+            stats["attempted"] += 1 if attempts > 0 else 0
+            stats["solved"] += 1 if solved > 0 else 0
+        if solved:
+            solved_problem_ids.add(problem["id"])
+        if attempts:
+            attempted_problem_ids.add(problem["id"])
+
+    total_solves = sum(problem["solved"] for problem in complexity["problems"])
+    cuba_total_solves = sum(stats["solved"] for stats in level_stats.values())
+
+    def rate(value: int, total: int) -> float | None:
+        return round(value / total, 4) if total else None
+
+    def problem_payload(problem: dict) -> dict:
+        stats = by_problem.get(problem["id"], {"teams": 0, "solved": 0, "attempts": 0})
+        status = "solved" if stats["solved"] else "attempted" if stats["attempts"] else "not-attempted"
+        return {
+            "id": problem["id"], "year": problem["year"], "letter": problem["letter"],
+            "title": problem["title"], "level": problem["level"], "levelLabel": problem["levelLabel"],
+            "area": problem["area"], "areaLabel": area_label.get(problem["area"], problem["area"]),
+            "technique": problem["technique"], "techniqueLabel": tech_label.get(problem["technique"], problem["technique"]),
+            "fieldRate": problem["solveRate"], "fieldSolved": problem["solved"], "fieldTeams": problem["teams"],
+            "cubaTeams": stats["teams"], "cubaSolved": stats["solved"], "cubaAttempts": stats["attempts"],
+            "status": status,
+        }
+
+    problems_payload = [problem_payload(problem) for problem in complexity["problems"]]
+    muros = sorted(
+        (problem for problem in problems_payload if problem["status"] == "attempted"),
+        key=lambda problem: (-problem["fieldRate"], problem["year"], problem["letter"]),
+    )
+    untried = sorted(
+        (problem for problem in problems_payload if problem["status"] == "not-attempted"),
+        key=lambda problem: (-problem["fieldRate"], problem["year"], problem["letter"]),
+    )
+
+    levels_payload = []
+    for level in complexity["levels"]:
+        stats = level_stats[level["level"]]
+        field = field_levels[level["level"]]
+        levels_payload.append({
+            "level": level["level"], "label": level["label"],
+            "range": f"{round(100 * level['min'])}–{round(100 * level['max'])}%",
+            "solves": stats["solved"], "teamProblemRows": stats["rows"], "attemptedRows": stats["attempted"],
+            "attemptRate": rate(stats["attempted"], stats["rows"]),
+            "solveRate": rate(stats["solved"], stats["rows"]),
+            "conditionalSolveRate": rate(stats["solved"], stats["attempted"]),
+            "fieldAttemptRate": rate(field["attempted"], field["rows"]),
+            "fieldConditionalSolveRate": rate(field["solved"], field["attempted"]),
+        })
+
+    def dimension_payload(items: list[dict], stats_by_id: dict, field_totals: dict, label_map: dict) -> list[dict]:
+        rows = []
+        for item in items:
+            stats = stats_by_id[item["id"]]
+            cuba_share = stats["solved"] / cuba_total_solves if cuba_total_solves else 0
+            field_share = (field_totals.get(item["id"], 0) / total_solves) if total_solves else 0
+            rows.append({
+                "id": item["id"], "label": label_map.get(item["id"], item["id"]), "count": item["count"],
+                "solves": stats["solved"], "teamProblemRows": stats["rows"], "attemptedRows": stats["attempted"],
+                "attemptRate": rate(stats["attempted"], stats["rows"]),
+                "solveRate": rate(stats["solved"], stats["rows"]),
+                "conditionalSolveRate": rate(stats["solved"], stats["attempted"]),
+                "cubaShare": round(cuba_share, 4), "fieldShare": round(field_share, 4),
+                "specialization": round(cuba_share - field_share, 4),
+            })
+        return sorted(rows, key=lambda row: (-row["solves"], row["label"]))
+
+    areas_payload = dimension_payload(complexity["areas"], area_stats, complexity["totals"]["solvedAreas"], area_label)
+    techniques_payload = dimension_payload(complexity["techniques"], tech_stats, complexity["totals"]["solvedTechniques"], tech_label)
+
+    cuba_by_year = defaultdict(list)
+    for row in cuba_rows:
+        cuba_by_year[int(row["year"])].append(row)
+    cuba_field = {row["year"]: row for row in cuba["field"]}
+    editions_payload = []
+    for edition in complexity["editions"]:
+        rows = cuba_by_year.get(edition["year"], [])
+        if not rows:
+            continue
+        levels = [0] * 6
+        for row in rows:
+            problem = problems[f'wf-{row["year"]}-{row["letter"].lower()}']
+            levels[problem["level"] - 1] += int(row["solved"] or 0)
+        field = cuba_field.get(edition["year"], {})
+        editions_payload.append({
+            "year": edition["year"], "teams": len({(row["university"], row["team"]) for row in rows}),
+            "solves": sum(levels), "levels": levels,
+            "teamProblemRows": len(rows), "attemptedRows": sum(1 for row in rows if int(row["attempts"] or 0) > 0),
+            "meanLevel": edition["meanLevel"], "fieldSize": field.get("field"),
+            "cubaBestPct": field.get("cubaBestPct"), "cubaBestRank": field.get("cubaBestRank"),
+            "cubaBestSolved": field.get("cubaBestSolved"),
+        })
+
+    university_rows = defaultdict(list)
+    for row in cuba_rows:
+        university_rows[row["university"]].append(row)
+    universities_payload = []
+    for university in complexity["universities"]:
+        if university["country"] != "Cuba":
+            continue
+        rows = university_rows.get(university["name"], [])
+        solved_ids = {
+            f'wf-{row["year"]}-{row["letter"].lower()}'
+            for row in rows if int(row["solved"] or 0) > 0
+        }
+        attempted_ids = {
+            f'wf-{row["year"]}-{row["letter"].lower()}'
+            for row in rows if int(row["attempts"] or 0) > 0
+        }
+        top_area = max(university["areas"].items(), key=lambda item: item[1])[0] if university["areas"] else None
+        top_technique = max(university["techniques"].items(), key=lambda item: item[1])[0] if university["techniques"] else None
+        item = dict(university)
+        item.update({
+            "share": round(university["solves"] / cuba_total_solves, 4) if cuba_total_solves else 0,
+            "solvedProblems": len(solved_ids), "attemptedProblems": len(attempted_ids),
+            "topArea": top_area, "topAreaLabel": area_label.get(top_area, top_area) if top_area else None,
+            "topTechnique": top_technique, "topTechniqueLabel": tech_label.get(top_technique, top_technique) if top_technique else None,
+        })
+        universities_payload.append(item)
+    universities_payload.sort(key=lambda university: (-university["solves"], university["name"]))
+
+    cuba_country = next(country for country in complexity["countries"] if country["name"] == "Cuba")
+
+    def profile_vector(entity: dict) -> list[float]:
+        total = entity["solves"] or 1
+        areas = [
+            entity["areas"].get(area["id"], 0) / total - complexity["totals"]["solvedAreas"].get(area["id"], 0) / total_solves
+            for area in complexity["areas"]
+        ]
+        techniques = [
+            entity["techniques"].get(technique["id"], 0) / total - complexity["totals"]["solvedTechniques"].get(technique["id"], 0) / total_solves
+            for technique in complexity["techniques"]
+        ]
+        return areas + techniques
+
+    def similarity(left: list[float], right: list[float]) -> float:
+        distance = sum(abs(a - b) for a, b in zip(left, right)) / 2
+        return max(0.0, min(1.0, 1 - distance))
+
+    cuba_vector = profile_vector(cuba_country)
+    similar_countries = []
+    for country in complexity["countries"]:
+        if country["name"] == "Cuba" or country["solves"] < 20:
+            continue
+        similar_countries.append({
+            "name": country["name"], "label": country["label"], "solves": country["solves"],
+            "meanLevel": country["meanLevel"], "levels": country["levels"],
+            "similarity": round(similarity(cuba_vector, profile_vector(country)), 4),
+        })
+    similar_countries.sort(key=lambda country: -country["similarity"])
+
+    first_rows = []
+    by_team = defaultdict(list)
+    for row in cuba_rows:
+        if int(row["solved"] or 0) and row["time_min"].strip():
+            problem = problems[f'wf-{row["year"]}-{row["letter"].lower()}']
+            by_team[(int(row["year"]), row["university"], row["team"])].append((float(row["time_min"]), problem))
+    for (year, university, team), items in by_team.items():
+        time_min, problem = min(items, key=lambda item: item[0])
+        first_rows.append({
+            "year": year, "university": university, "team": team, "timeMin": time_min,
+            "letter": problem["letter"], "title": problem["title"], "level": problem["level"],
+            "area": problem["area"], "areaLabel": area_label.get(problem["area"], problem["area"]),
+            "technique": problem["technique"],
+        })
+    first_rows.sort(key=lambda row: (row["year"], row["university"], row["team"]))
+    first_by_level = [0] * 6
+    first_by_area = Counter()
+    for row in first_rows:
+        first_by_level[row["level"] - 1] += 1
+        first_by_area[row["area"]] += 1
+
+    comparison = [
+        {"label": "Cuba", "levels": cuba_country["levels"], "total": cuba_country["solves"]},
+        {"label": "Latinoamérica", "levels": next(region["levels"] for region in complexity["regions"] if region["id"] == "la"),
+         "total": next(region["solves"] for region in complexity["regions"] if region["id"] == "la")},
+        {"label": "Mundo", "levels": complexity["totals"]["solvedLevels"], "total": total_solves},
+    ]
+
+    edition_2025 = next((edition for edition in complexity["editions"] if edition["year"] == 2025), None)
+    field_2025 = cuba_field.get(2025, {})
+    rows_2025 = cuba_by_year.get(2025, [])
+    levels_2025 = [0] * 6
+    for row in rows_2025:
+        problem = problems[f'wf-2025-{row["letter"].lower()}']
+        levels_2025[problem["level"] - 1] += int(row["solved"] or 0)
+
+    return {
+        "scope": {
+            "from": 2011, "to": 2025, "editions": len(editions_payload),
+            "teamEditions": len({(row["year"], row["university"], row["team"]) for row in cuba_rows}),
+            "problems": len(problems), "solves": cuba_total_solves,
+            "solvedProblems": len(solved_problem_ids), "attemptedProblems": len(attempted_problem_ids),
+            "walls": len(muros), "untried": len(untried),
+        },
+        "totals": {
+            "teamProblemRows": len(cuba_rows),
+            "attemptedRows": sum(1 for row in cuba_rows if int(row["attempts"] or 0) > 0),
+            "solvedRows": sum(1 for row in cuba_rows if int(row["solved"] or 0) > 0),
+            "attempts": sum(int(row["attempts"] or 0) for row in cuba_rows),
+            "solves": cuba_total_solves,
+            "levels": [level_stats[level]["solved"] for level in range(1, 7)],
+        },
+        "levels": levels_payload,
+        "areas": areas_payload,
+        "techniques": techniques_payload,
+        "editions": editions_payload,
+        "problems": problems_payload,
+        "muros": muros,
+        "untried": untried,
+        "universities": universities_payload,
+        "similarCountries": similar_countries[:5],
+        "comparison": comparison,
+        "firstSolve": {
+            "teams": len(first_rows), "byLevel": first_by_level,
+            "byArea": dict(first_by_area), "rows": first_rows,
+        },
+        "callout2025": {
+            "year": 2025, "meanLevel": edition_2025["meanLevel"] if edition_2025 else None,
+            "cubaBestPct": field_2025.get("cubaBestPct"), "cubaBestRank": field_2025.get("cubaBestRank"),
+            "fieldSize": field_2025.get("field"), "teams": len({(row["university"], row["team"]) for row in rows_2025}),
+            "solves": sum(levels_2025), "levels": levels_2025,
+            "attemptedRows": sum(1 for row in rows_2025 if int(row["attempts"] or 0) > 0),
+        },
+    }
+
+
 def write_cuba_csv(cuba: dict) -> None:
     with (OUT / "cuba.csv").open("w", newline="") as handle:
         writer = csv.writer(handle)
@@ -1649,7 +1957,47 @@ def _best_area(profile: dict, area_label: dict, solved_areas: dict, global_total
     return f"{area_label.get(area, area)} ({diff * 100:+.1f} pp)"
 
 
-def write_markdown_twins(universities: list[dict], countries: dict, predictions: dict, years: list[int], cuba: dict, sedes: dict, complexity: dict) -> None:
+def _pct(value: float | None) -> str:
+    return "—" if value is None else f"{round(100 * value)}%"
+
+
+def cuba_complexity_markdown(payload: dict | None, table_fn) -> str:
+    if not payload:
+        return "Dificultad 2011–2025: datos no disponibles."
+    scope = payload["scope"]
+    callout = payload["callout2025"]
+    parts = [
+        f"## Dificultad 2011–2025\n\n"
+        f"{scope['teamEditions']} equipos-edición, {scope['solves']} problemas resueltos, "
+        f"{scope['solvedProblems']} problemas distintos con al menos un solve cubano, "
+        f"{scope['walls']} muros (intentados y no resueltos) y {scope['untried']} no intentados. "
+        "El equipo de 2010 queda fuera porque la taxonomía empieza en 2011.",
+        table_fn(["Nivel", "Resueltos", "Intenta", "Convierte", "Campo intenta", "Campo convierte"], [
+            [f"N{l['level']} · {l['label']}", l["solves"], _pct(l["attemptRate"]), _pct(l["conditionalSolveRate"]),
+             _pct(l["fieldAttemptRate"]), _pct(l["fieldConditionalSolveRate"])]
+            for l in payload["levels"]]),
+        table_fn(["Área", "Resueltos", "Intenta", "Convierte", "Especialización"], [
+            [a["label"], a["solves"], _pct(a["attemptRate"]), _pct(a["conditionalSolveRate"]),
+             f"{a['specialization'] * 100:+.1f} pp"] for a in payload["areas"][:10]]),
+        table_fn(["Universidad", "Resueltos", "Nivel medio", "N1", "N2", "N3", "N4", "N5", "N6"], [
+            [u["name"], u["solves"], u["meanLevel"], *u["levels"]] for u in payload["universities"]]),
+        "Muros: problemas que Cuba intentó y no resolvió, ordenados por la tasa del campo.",
+        table_fn(["Problema", "Edición", "Nivel", "Área", "Tasa campo", "Intentos Cuba"], [
+            [m["title"], f'{m["year"]} {m["letter"]}', f'N{m["level"]}', m["areaLabel"],
+             _pct(m["fieldRate"]), m["cubaAttempts"]] for m in payload["muros"][:10]]),
+        "No intentados: problemas que el campo resolvió y Cuba no envió. No implica que no los haya leído; "
+        "puede ser tiempo, prioridad o estrategia.",
+        table_fn(["Problema", "Edición", "Nivel", "Área", "Tasa campo"], [
+            [m["title"], f'{m["year"]} {m["letter"]}', f'N{m["level"]}', m["areaLabel"], _pct(m["fieldRate"])]
+            for m in payload["untried"][:8]]),
+        f"2025: final más abierta del período (nivel medio {callout['meanLevel']}), peor resultado cubano "
+        f"({callout['cubaBestRank']}.º de {callout['fieldSize']}, percentil {callout['cubaBestPct']}). "
+        f"Cuba intentó {callout['attemptedRows']} problemas y resolvió {callout['solves']}.",
+    ]
+    return "\n\n".join(parts)
+
+
+def write_markdown_twins(universities: list[dict], countries: dict, predictions: dict, years: list[int], cuba: dict, sedes: dict, complexity: dict, cuba_complexity: dict | None = None) -> None:
     """One Markdown twin per page plus llms.txt, regenerated on every build."""
     area_label = {a["id"]: a["label"] for a in (complexity or {}).get("areas", [])}
     tech_label = {t["id"]: t["label"] for t in (complexity or {}).get("techniques", [])}
@@ -1751,6 +2099,7 @@ def write_markdown_twins(universities: list[dict], countries: dict, predictions:
             f'2026 projection: {cuba["projection"]["country"].get("rank")} '
             f'({cuba["projection"]["country"].get("rank_best")}–{cuba["projection"]["country"].get("rank_worst")}) '
             f'of {cuba["projection"]["field"]}, percentile {cuba["projection"]["country"].get("pct")}.',
+            cuba_complexity_markdown(cuba_complexity, table),
         ]),
         "complejidad": "Datos de complejidad no disponibles. Ejecuta `make data` con los archivos de `data/curated/`." if complexity is None else "\n\n".join([
             "Esta página cubre solo las finales de **2011 a 2025**: 15 ediciones, 179 problemas y 1.893 equipos-edición. "
@@ -1848,6 +2197,7 @@ def write_markdown_twins(universities: list[dict], countries: dict, predictions:
         f"- [cuba.json]({SITE_URL}/data/cuba.json): the Cuban slice: teams, field gaps, Latin-American podiums, people, gender aggregates, records and projection.\n"
         f"- [complexity.json]({SITE_URL}/data/complexity.json): problem-level difficulty, multi-label topics, editions and university/country profiles, 2011–2025.\n"
         f"- [problem-statements.json]({SITE_URL}/data/problem-statements.json): extracted statements for the 2011–2025 problems.\n"
+        f"- [cuba-complexity.json]({SITE_URL}/data/cuba-complexity.json): Cuba's 2011–2025 difficulty, attempts, walls, universities and practice gaps.\n"
         f"- [cuba.csv]({SITE_URL}/data/cuba.csv): one row per Cuban team and final.\n"
         f"- [cuba-map.json]({SITE_URL}/data/cuba-map.json): province boundaries used by the Cuba map (cuba-geojsons, MIT).\n"
         f"- [world.json]({SITE_URL}/data/world.json): GeoJSON used by the world map.\n"
@@ -1872,7 +2222,7 @@ def build() -> dict:
         "regions": region_names,
         "countries": countries,
         "next_final": NEXT_FINAL,
-        "logos": json.loads((SOURCES / "logos.json").read_text()),
+        "logos": load_logos(),
         "universities": universities,
     }
     cuba = build_cuba(universities, countries, predictions, problems)
@@ -1893,11 +2243,18 @@ def build() -> dict:
             write_json("problem-statements.json", build_problem_statements(complexity))
         except Exception as exc:
             print(f"statements skipped: {exc}")
+        try:
+            cuba_complexity = build_cuba_complexity(complexity, cuba)
+            write_json("cuba-complexity.json", cuba_complexity)
+        except Exception as exc:
+            print(f"cuba complexity skipped: {exc}")
+            cuba_complexity = None
     except Exception as exc:
         print(f"complexity skipped: {exc}")
         complexity = None
-    write_markdown_twins(universities, countries, predictions, years, cuba, sedes, complexity)
-    return {"core": core, "predictions": predictions, "cuba": cuba, "sedes": sedes, "complexity": complexity}
+        cuba_complexity = None
+    write_markdown_twins(universities, countries, predictions, years, cuba, sedes, complexity, cuba_complexity)
+    return {"core": core, "predictions": predictions, "cuba": cuba, "sedes": sedes, "complexity": complexity, "cuba_complexity": cuba_complexity}
 
 
 if __name__ == "__main__":

@@ -22,7 +22,19 @@ const plural = (n, one, many) => `${n} ${n === 1 ? one : many}`;
 
 export const placeText = (r, field) => `puesto ${Math.round(r.rank)} de ${field[r.year]} en ${r.year}${r.solved != null ? `, con ${plural(r.solved, "problema resuelto", "problemas resueltos")}` : ""}`;
 
-const bestResult = (rows) => [...rows].filter((r) => r.rank != null).sort((a, b) => a.rank - b.rank || a.year - b.year)[0];
+const bestResult = (rows) => {
+  const ranked = rows.filter((row) => row.rank != null);
+  if (!ranked.length) return undefined;
+  return ranked.reduce((best, row) => {
+    if (row.rank < best.rank) return row;
+    if (row.rank > best.rank) return best;
+    const rowSolved = row.solved ?? 0;
+    const bestSolved = best.solved ?? 0;
+    if (rowSolved !== bestSolved) return rowSolved > bestSolved ? row : best;
+    if (row.time != null && best.time != null && row.time !== best.time) return row.time < best.time ? row : best;
+    return row.year < best.year ? row : best;
+  });
+};
 
 const titleFacts = (rows) => {
   const byTitle = new Map();

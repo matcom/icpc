@@ -52,10 +52,13 @@ const logoByName = new Map();
 export async function loadData() {
   if (cache) return cache;
   const [core, predictions, world] = await Promise.all(
-    ["core", "predictions", "world"].map((name) => fetch(`data/${name}.json`).then((r) => r.json())),
+    ["core", "predictions", "world"].map((name) => fetch(`data/${name}.json`, { cache: "no-cache" }).then((r) => r.json())),
   );
   cache = index(core, predictions, world);
-  for (const u of core.universities) if (core.logos[u.id]) logoByName.set(u.name, `logos/${u.id}.png`);
+  for (const u of core.universities) {
+    const logo = core.logos[u.id];
+    if (logo) logoByName.set(u.name, `logos/${u.id}.png${logo.v ? `?v=${logo.v}` : ""}`);
+  }
   return cache;
 }
 

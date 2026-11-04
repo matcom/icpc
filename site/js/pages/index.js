@@ -398,7 +398,7 @@ startPage({
     };
     const wallSubtitle = () => {
       const region = wallState.region === "all" ? "" : ` · ${data.regions[wallState.region]}`;
-      return `Las universidades con más finales${region}. Escudos provisionales: monogramas generados.`;
+      return `Las universidades con más finales${region}. Escudo oficial si consta en los tableros de 2022–2023; si no, monograma.`;
     };
     const wallBody = card(wallRow, {
       title: "El muro de los veteranos", sub: wallSubtitle(), span: 12,

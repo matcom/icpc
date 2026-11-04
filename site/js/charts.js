@@ -33,7 +33,11 @@ export function plot(el, option, { onClick } = {}) {
   const c = colors();
   const legendNames = option.legend?.data ?? (option.series ?? []).flatMap((s) => (s.type === "pie" ? s.data.map((d) => d.name) : s.name ? [s.name] : []));
   const rows = legendRows(legendNames, el.clientWidth || 600);
-  const { baseOption, options, ...rest } = option;
+  const { baseOption, options, grid: gridOption, ...rest } = option;
+  const yAxes = Array.isArray(option.yAxis) ? option.yAxis : option.yAxis ? [option.yAxis] : [];
+  const axisPosition = (axis, index) => axis?.position ?? (index === 0 ? "left" : "right");
+  const leftName = yAxes.some((axis, index) => axis?.name && axisPosition(axis, index) !== "right");
+  const rightName = yAxes.some((axis, index) => axis?.name && axisPosition(axis, index) === "right");
   const merged = {
     color: palette(),
     animationDuration: 700,
@@ -44,11 +48,20 @@ export function plot(el, option, { onClick } = {}) {
       borderColor: c.line,
       textStyle: { color: c.ink, fontFamily: "Jost, system-ui, sans-serif" },
     },
-    grid: { left: 8, right: 16, top: 26, bottom: option.legend === false ? 8 : 10 + rows * 22, containLabel: true },
+    grid: {
+      left: leftName ? 46 : 8,
+      right: rightName ? 46 : 16,
+      top: 26,
+      bottom: option.legend === false ? 8 : 10 + rows * 22,
+      containLabel: true,
+      ...(gridOption ?? {}),
+    },
     ...rest,
     legend: option.legend === false ? { show: false } : { textStyle: { color: c.dim }, type: "plain", bottom: 0, left: "center", itemWidth: 12, itemHeight: 10, itemGap: 10, ...(option.legend ?? {}) },
     ...(baseOption ?? {}),
   };
+  if (leftName && typeof merged.grid.left === "number" && merged.grid.left < 46) merged.grid.left = 46;
+  if (rightName && typeof merged.grid.right === "number" && merged.grid.right < 46) merged.grid.right = 46;
   chart.setOption(baseOption ? { baseOption: merged, options } : merged);
   if (onClick) chart.on("click", onClick);
   live.add(chart);

@@ -3,7 +3,7 @@ import {
   medalCounts, params, personUrl, quantile, teamKey, teamSeries, teamUrl,
   uniSeries, uniUrl,
 } from "../core.js";
-import { categoryAxis, colors, palette, plot, valueAxis } from "../charts.js";
+import { categoryAxis, colors, dispose, palette, plot, valueAxis } from "../charts.js";
 import { bestResult } from "../profile.js";
 import { card, chartCard, grid, isDark, startPage } from "../shell.js";
 
@@ -172,7 +172,9 @@ startPage({
     };
     const items = keys.map(entity);
     const go = (nextKind, nextKeys) => {
-      history.replaceState(null, "", compareUrl(nextKind, nextKeys));
+      const topic = new URLSearchParams(location.search).get("tema");
+      const suffix = topic ? `&tema=${encodeURIComponent(topic)}` : "";
+      history.replaceState(null, "", `${compareUrl(nextKind, nextKeys)}${suffix}`);
       redraw();
     };
 
@@ -533,40 +535,14 @@ startPage({
       });
     }
 
-    // Areas, techniques, specialization, tasks and burden.
+    // Topics: one heatmap with an area/technique selector.
     if (withProfile.length) {
       const areas = cx.areas;
-
       const areaValues = withProfile.map((s) => areas.map((area) => {
         const count = s.profile.areas[area.id] ?? 0;
         return { count, share: s.totalAreas ? (100 * count) / s.totalAreas : 0 };
       }));
       const areaMax = Math.max(1, ...areaValues.flat().map((item) => item.share));
-      const areaBody = card(a, {
-        title: "Áreas", span: 12,
-        sub: "Porcentaje de solves de cada entidad en cada área principal, 2011–2025.",
-        html: `<p class="mobile-hint">Desliza para ver todas las áreas →</p><div class="plot-scroll"><div class="plot" id="area-heat" style="height:${Math.max(230, withProfile.length * 48 + 100)}px;min-width:760px"></div></div><p class="note">Más intenso = mayor cuota. Solo el área principal de cada problema.</p>`,
-      });
-      plot(areaBody.querySelector("#area-heat"), {
-        tooltip: {
-          formatter: (point) => {
-            const value = point.value;
-            return `<b>${esc(areas[value[0]].label)}</b><br>${esc(withProfile[value[1]].item.name)}: ${fmt(value[2], 1)}% (${value[3]} solves)`;
-          },
-        },
-        grid: { left: 8, right: 16, top: 12, bottom: 72, containLabel: true },
-        xAxis: categoryAxis(areas.map((area) => area.label), { axisLabel: { interval: 0, rotate: 30, fontSize: 10 } }),
-        yAxis: categoryAxis(withProfile.map((s) => axisName(s.item.name)), { inverse: true, axisLabel: { interval: 0, fontSize: 10 } }),
-        series: [{
-          type: "heatmap",
-          data: withProfile.flatMap((s, y) => areas.map((area, x) => {
-            const item = areaValues[y][x];
-            return { value: [x, y, item.share, item.count], itemStyle: { color: heatColor(item.share, areaMax) }, label: { color: heatInk(item.share, areaMax) } };
-          })),
-          label: { show: true, color: c.ink, fontSize: 10, formatter: (point) => (point.value[2] ? `${fmt(point.value[2], 1)}%` : "") },
-          itemStyle: { borderColor: c.panel, borderWidth: 2 },
-        }],
-      });
 
       const techniques = [...cx.techniques].sort((x, y) => {
         const bx = withProfile.reduce((total, s) => total + (s.profile.techniques[y.id] ?? 0), 0);
@@ -578,64 +554,109 @@ startPage({
         return { count, share: s.totalTechniques ? (100 * count) / s.totalTechniques : 0 };
       }));
       const techMax = Math.max(1, ...techValues.flat().map((item) => item.share));
-      const techBody = card(a, {
-        title: "Técnicas", span: 12,
-        sub: "Las 12 técnicas con más solves entre las entidades elegidas, 2011–2025.",
-        html: `<p class="mobile-hint">Desliza para ver todas las técnicas →</p><div class="plot-scroll"><div class="plot" id="tech-heat" style="height:${Math.max(250, withProfile.length * 48 + 110)}px;min-width:760px"></div></div><p class="note">Porcentaje sobre los solves de cada entidad. Solo la técnica principal de cada problema.</p>`,
+
+      const topicSets = {
+        area: {
+          columns: areas, values: areaValues, max: areaMax, rotate: 30, fontSize: 10, bottom: 72,
+          height: Math.max(230, withProfile.length * 48 + 100),
+          hint: "Desliza para ver todas las áreas →", foot: "Más intenso = mayor cuota. Solo el área principal de cada problema.",
+        },
+        tecnica: {
+          columns: techniques, values: techValues, max: techMax, rotate: 32, fontSize: 9, bottom: 82,
+          height: Math.max(250, withProfile.length * 48 + 110),
+          hint: "Desliza para ver todas las técnicas →", foot: "Porcentaje sobre los solves de cada entidad. Solo la técnica principal de cada problema.",
+        },
+      };
+      let topicKind = url.get("tema") === "tecnica" ? "tecnica" : "area";
+      const topicBody = card(a, {
+        title: "Temas", span: 12,
+        sub: "Áreas o técnicas de los problemas resueltos, 2011–2025. Cambia la vista sin salir de la comparación.",
+        html: `<div class="compare-topic-toolbar"><span class="seg" role="group" aria-label="Ver áreas o técnicas"><button data-topic="area" aria-pressed="true">Áreas</button><button data-topic="tecnica" aria-pressed="false">Técnicas</button></span></div><p class="mobile-hint" id="topic-hint"></p><div class="plot-scroll"><div class="plot" id="topic-heat" style="min-width:760px"></div></div><p class="note" id="topic-foot"></p>`,
       });
-      plot(techBody.querySelector("#tech-heat"), {
+      const topicDiv = topicBody.querySelector("#topic-heat");
+      const topicHint = topicBody.querySelector("#topic-hint");
+      const topicFoot = topicBody.querySelector("#topic-foot");
+      const topicOption = (set) => ({
         tooltip: {
           formatter: (point) => {
             const value = point.value;
-            return `<b>${esc(techniques[value[0]].label)}</b><br>${esc(withProfile[value[1]].item.name)}: ${fmt(value[2], 1)}% (${value[3]} solves)`;
+            return `<b>${esc(set.columns[value[0]].label)}</b><br>${esc(withProfile[value[1]].item.name)}: ${fmt(value[2], 1)}% (${value[3]} solves)`;
           },
         },
-        grid: { left: 8, right: 16, top: 12, bottom: 82, containLabel: true },
-        xAxis: categoryAxis(techniques.map((tech) => tech.label), { axisLabel: { interval: 0, rotate: 32, fontSize: 9 } }),
+        grid: { left: 8, right: 16, top: 12, bottom: set.bottom, containLabel: true },
+        xAxis: categoryAxis(set.columns.map((column) => column.label), { axisLabel: { interval: 0, rotate: set.rotate, fontSize: set.fontSize } }),
         yAxis: categoryAxis(withProfile.map((s) => axisName(s.item.name)), { inverse: true, axisLabel: { interval: 0, fontSize: 10 } }),
         series: [{
           type: "heatmap",
-          data: withProfile.flatMap((s, y) => techniques.map((tech, x) => {
-            const item = techValues[y][x];
-            return { value: [x, y, item.share, item.count], itemStyle: { color: heatColor(item.share, techMax) }, label: { color: heatInk(item.share, techMax) } };
+          data: withProfile.flatMap((s, y) => set.columns.map((column, x) => {
+            const item = set.values[y][x];
+            return { value: [x, y, item.share, item.count], itemStyle: { color: heatColor(item.share, set.max) }, label: { color: heatInk(item.share, set.max) } };
           })),
-          label: { show: true, color: c.ink, fontSize: 9, formatter: (point) => (point.value[2] ? `${fmt(point.value[2], 1)}%` : "") },
+          label: { show: true, fontSize: set.fontSize, formatter: (point) => (point.value[2] ? `${fmt(point.value[2], 1)}%` : "") },
           itemStyle: { borderColor: c.panel, borderWidth: 2 },
         }],
       });
+      let topicChart = null;
+      const drawTopic = () => {
+        const set = topicSets[topicKind];
+        if (topicChart) dispose(topicChart);
+        topicDiv.style.height = `${set.height}px`;
+        topicChart = plot(topicDiv, topicOption(set));
+        topicHint.textContent = set.hint;
+        topicFoot.textContent = set.foot;
+        topicBody.querySelectorAll("[data-topic]").forEach((button) => button.setAttribute("aria-pressed", String(button.dataset.topic === topicKind)));
+      };
+      topicBody.querySelectorAll("[data-topic]").forEach((button) => {
+        button.onclick = () => {
+          if (button.dataset.topic === topicKind) return;
+          topicKind = button.dataset.topic;
+          const query = new URLSearchParams(location.search);
+          query.set("tema", topicKind);
+          history.replaceState(null, "", `${location.pathname}?${query}`);
+          drawTopic();
+        };
+      });
+      drawTopic();
 
+      // Specialization as a dot plot: one row per area, one dot per entity.
       const fieldAreas = cx.totals.solvedAreas ?? {};
       const fieldTotal = sum(Object.values(fieldAreas));
-      const specPoints = [];
-      withProfile.forEach((s) => {
-        const total = s.totalAreas;
-        if (!total) return;
-        const diffs = areas.map((area) => {
-          const own = (100 * (s.profile.areas[area.id] ?? 0)) / total;
-          const field = fieldTotal ? (100 * (fieldAreas[area.id] ?? 0)) / fieldTotal : 0;
-          return { label: area.label, value: own - field, count: s.profile.areas[area.id] ?? 0 };
-        }).filter((item) => item.count > 0).sort((x, y) => y.value - x.value);
-        const selected = [...diffs.filter((item) => item.value > 0).slice(0, 2), ...diffs.filter((item) => item.value < 0).sort((x, y) => x.value - y.value).slice(0, 2)];
-        for (const item of selected) {
-          specPoints.push({ name: `${chartName(s.item.name)} · ${item.label}`, value: item.value, entity: s.item.name, area: item.label });
-        }
-      });
-      if (specPoints.length) {
+      const specRows = areas.map((area) => {
+        const field = fieldTotal ? (100 * (fieldAreas[area.id] ?? 0)) / fieldTotal : 0;
+        const points = withProfile.map((s) => {
+          const count = s.profile.areas[area.id] ?? 0;
+          const own = s.totalAreas ? (100 * count) / s.totalAreas : 0;
+          return { count, own, diff: own - field };
+        });
+        return { area, field, points, spread: Math.max(...points.map((point) => Math.abs(point.diff))) };
+      }).filter((row) => row.points.some((point) => point.count > 0)).sort((x, y) => y.spread - x.spread);
+      if (specRows.length) {
+        const diffs = specRows.flatMap((row) => row.points.filter((point) => point.count > 0).map((point) => point.diff));
         const specBody = card(a, {
           title: "Especialización por área", span: 12,
-          sub: "Diferencia entre la cuota de la entidad y la cuota global. Azul: más presente; rojo: menos presente.",
-          html: '<div class="plot" id="spec-chart" style="height:340px"></div><p class="note">Se muestran hasta dos áreas por encima y dos por debajo de lo esperado para cada entidad.</p>',
+          sub: "Cada punto es una entidad. La línea 0 es la cuota global; arriba, las áreas que más diferencian a las entidades.",
+          html: `<p class="mobile-hint">Desliza para ver todas las áreas →</p><div class="plot-scroll"><div class="plot" id="spec-dot" style="height:${Math.max(320, specRows.length * 30 + 70)}px;min-width:680px"></div></div><p class="note">Puntos a la derecha: más presentes de lo esperado. Puntos a la izquierda: menos presentes. Solo áreas con solves.</p>`,
         });
-        plot(specBody.querySelector("#spec-chart"), {
-          tooltip: { formatter: (point) => `<b>${esc(point.data.entity)}</b><br>${esc(point.data.area)}: ${signed(point.value)} puntos porcentuales` },
-          grid: { left: 8, right: 42, top: 12, bottom: 18, containLabel: true },
-          xAxis: valueAxis({ name: "puntos porcentuales", nameLocation: "middle", nameGap: 26, nameTextStyle: { color: c.dim } }),
-          yAxis: categoryAxis(specPoints.map((point) => point.name), { inverse: true, axisLabel: { interval: 0, fontSize: 10 } }),
-          series: [{
-            type: "bar", barMaxWidth: 15,
-            data: specPoints.map((point) => ({ value: point.value, itemStyle: { color: point.value >= 0 ? c.blue : c.red }, entity: point.entity, area: point.area })),
-            label: { show: true, position: "right", color: c.dim, fontSize: 10, formatter: (point) => signed(point.value) },
-          }],
+        plot(specBody.querySelector("#spec-dot"), {
+          tooltip: {
+            formatter: (point) => {
+              const data = point.data;
+              return `<b>${esc(data.entity)}</b><br>${esc(data.area)}: ${signed(point.value[0])} pp<br>Cuota ${fmt(data.own, 1)}% · campo ${fmt(data.field, 1)}%`;
+            },
+          },
+          grid: { left: 8, right: 28, top: 12, bottom: 48, containLabel: true },
+          xAxis: valueAxis({ min: Math.floor(Math.min(0, ...diffs) - 2), max: Math.ceil(Math.max(0, ...diffs) + 2), name: "puntos porcentuales", nameLocation: "middle", nameGap: 26, nameTextStyle: { color: c.dim } }),
+          yAxis: categoryAxis(specRows.map((row) => row.area.label), { inverse: true, axisLabel: { interval: 0, fontSize: 10 } }),
+          series: withProfile.map((s, index) => ({
+            name: s.item.name, type: "scatter", symbolSize: 11,
+            itemStyle: { color: tint[stats.indexOf(s)] },
+            data: specRows.map((row, y) => {
+              const point = row.points[index];
+              if (!point.count) return null;
+              return { value: [point.diff, y], entity: s.item.name, area: row.area.label, own: point.own, field: row.field };
+            }).filter(Boolean),
+            markLine: index === 0 ? { silent: true, symbol: "none", label: { show: false }, lineStyle: { color: c.dim, type: "dashed", width: 1 }, data: [{ xAxis: 0 }] } : undefined,
+          })),
         });
       } else {
         card(a, { title: "Especialización por área", span: 12, html: '<p class="sub">Sin solves suficientes para calcular la especialización.</p>' });

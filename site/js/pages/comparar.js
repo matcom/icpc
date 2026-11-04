@@ -5,7 +5,7 @@ import {
 } from "../core.js";
 import { categoryAxis, colors, palette, plot, valueAxis } from "../charts.js";
 import { bestResult } from "../profile.js";
-import { card, chartCard, grid, startPage, table } from "../shell.js";
+import { card, chartCard, grid, isDark, startPage } from "../shell.js";
 
 const MAX = 4;
 const CLASS = {
@@ -45,51 +45,58 @@ const stdev = (values) => {
   const mean = avg(values);
   return Math.sqrt(avg(values.map((v) => (v - mean) ** 2)));
 };
-const share = (value, total) => (total ? (100 * value) / total : null);
 const fmt = (value, digits = 0) => (value == null ? "—" : Number(value).toLocaleString("es", { minimumFractionDigits: digits, maximumFractionDigits: digits }));
 const pctText = (value) => (value == null ? "—" : `${fmt(value, 1)}%`);
 const signed = (value) => (value == null ? "—" : `${value > 0 ? "+" : ""}${fmt(value, 1)}`);
 const place = (value) => (value == null ? "—" : fmt(Math.round(value)));
 const topKey = (counts) => Object.entries(counts ?? {}).sort((a, b) => b[1] - a[1])[0]?.[0] ?? null;
 const sum = (values) => values.reduce((total, value) => total + value, 0);
-const chartName = (name) => {
-  const clean = name.replace(/^Universidad (de |del |de la |de las )?/i, "").replace(/^University of /i, "");
-  return clean.length > 21 ? `${clean.slice(0, 20)}…` : clean;
+
+const heatColor = (value, max) => {
+  if (!value) return "transparent";
+  const t = max ? Math.min(1, Math.max(0, value / max)) : 0;
+  const [from, to] = isDark() ? [[109, 34, 46], [253, 184, 48]] : [[232, 216, 178], [109, 34, 46]];
+  return `rgba(${from.map((channel, index) => Math.round(channel + (to[index] - channel) * t)).join(",")},${(0.18 + 0.52 * t).toFixed(2)})`;
+};
+const heatInk = (value, max) => {
+  const t = max ? Math.min(1, Math.max(0, value / max)) : 0;
+  return isDark()
+    ? (t > 0.55 ? "#2b0d12" : "#fbf4e4")
+    : (t > 0.55 ? "#fbf4e4" : "#2b0d12");
 };
 
-function compareTable(stats, groups) {
-  const head = `<thead><tr><th></th>${stats.map((s) => `<th><a href="${s.item.url}">${esc(s.item.name)}</a></th>`).join("")}</tr></thead>`;
-  const body = groups.map((group) => {
-    const rows = group.rows.map((row) => {
-      const values = stats.map((s) => row.value(s));
-      let bestIndex = -1;
-      if (row.best && stats.length > 1) {
-        const numbers = stats.map((s) => row.best(s));
-        const valid = numbers.map((value, index) => [value, index]).filter(([value]) => value != null && Number.isFinite(value));
-        if (valid.length) {
-          bestIndex = (row.dir === "min"
-            ? valid.reduce((a, b) => (b[0] < a[0] ? b : a))
-            : valid.reduce((a, b) => (b[0] > a[0] ? b : a)))[1];
-        }
-      }
-      return `<tr><th>${esc(row.label)}</th>${values.map((value, index) => `<td${row.num === false ? "" : ' class="n"'}${index === bestIndex ? ' data-best="1"' : ""}>${value}</td>`).join("")}</tr>`;
-    }).join("");
-    return `<tr class="compare-group"><th colspan="${stats.length + 1}">${esc(group.label)}</th></tr>${rows}`;
-  }).join("");
-  return `<div class="tablew compare-table"><table data-nosort>${head}<tbody>${body}</tbody></table></div>`;
+function metricBoard(stats, groups, tint) {
+  const widthOf = (row, stat) => {
+    if (!row.best) return null;
+    const values = stats.map(row.best).filter((value) => value != null && Number.isFinite(value));
+    const value = row.best(stat);
+    if (!values.length || value == null || !Number.isFinite(value)) return null;
+    const max = Math.max(...values);
+    const min = Math.min(...values.filter((item) => item > 0));
+    if (row.dir === "min") {
+      if (value <= 0) return max > 0 ? 100 : 0;
+      return min ? Math.min(100, (100 * min) / value) : 0;
+    }
+    return max > 0 ? Math.min(100, (100 * value) / max) : 0;
+  };
+  return `<div class="compare-metric-groups">${groups.map((group) => `<section class="compare-metric-group"><h3>${esc(group.label)}</h3><div class="compare-metric-grid">${group.rows.map((row) => `<article class="compare-metric"><h4>${esc(row.label)}</h4><div class="compare-metric-lines">${stats.map((stat, index) => {
+    const value = row.value(stat);
+    const width = widthOf(row, stat);
+    const hasBar = width != null && width > 0;
+    return `<div class="compare-metric-line" style="--c:${tint[index]}" title="${esc(stat.item.name)}: ${value}"><span class="compare-metric-name">${esc(axisName(stat.item.name))}</span><span class="compare-metric-track${hasBar ? "" : " empty"}">${hasBar ? `<i style="width:${Math.max(2, width).toFixed(1)}%"></i>` : ""}</span><b>${value}</b></div>`;
+  }).join("")}</div></article>`).join("")}</div></section>`).join("")}</div>`;
 }
 
-function heatTable(stats, columns, valueOf, totalOf, label) {
-  return `<div class="tablew compare-heat"><table data-nosort><thead><tr><th>${esc(label)}</th>${columns.map((c) => `<th>${esc(c.label)}</th>`).join("")}</tr></thead><tbody>${stats.map((s) => {
-    const total = totalOf(s);
-    return `<tr><th><a href="${s.item.url}">${esc(s.item.name)}</a></th>${columns.map((c) => {
-      const value = valueOf(s, c);
-      const size = total ? value / total : 0;
-      const alpha = 0.04 + 0.46 * Math.min(1, size * 3);
-      return `<td style="background:rgba(175,50,39,${alpha.toFixed(3)})" title="${esc(c.label)}: ${value}">${total ? fmt(100 * size, 1) : "—"}</td>`;
-    }).join("")}</tr>`;
-  }).join("")}</tbody></table></div>`;
-}
+const chartName = (name) => {
+  const clean = name
+    .replace(/^Universidad de las /i, "")
+    .replace(/^Universidad del /i, "")
+    .replace(/^Universidad de la /i, "La ")
+    .replace(/^Universidad de /i, "")
+    .replace(/^University of /i, "");
+  return clean.length > 21 ? `${clean.slice(0, 20)}…` : clean;
+};
+const axisName = (name) => chartName(name).replace(/\s*-\s*Sede.*$/i, "").replace(/\s*\(.*\)$/, "").trim();
 
 function categoryLabel(cx, kind, id) {
   if (!id) return "—";
@@ -261,9 +268,11 @@ startPage({
       };
     });
 
+    const tint = palette();
+    const c = colors();
     const summary = document.createElement("div");
     summary.className = "compare-cards";
-    summary.innerHTML = stats.map((s) => `<article class="compare-card">
+    summary.innerHTML = stats.map((s, index) => `<article class="compare-card" style="--compare-color:${tint[index]}">
       <div class="compare-card-head">${crest(s.item.crest, 44)}<div><a href="${s.item.url}">${esc(s.item.name)}</a><small>${s.item.subUrl ? `<a href="${s.item.subUrl}">${esc(s.item.sub)}</a>` : esc(s.item.sub)}</small></div></div>
       <div class="compare-card-grid">
         <span><b>${s.best ? place(s.best.rank) : "—"}</b><small>mejor puesto</small></span>
@@ -276,8 +285,22 @@ startPage({
     </article>`).join("");
     view.append(summary);
 
-    const tint = palette();
-    const c = colors();
+    const withProfile = stats.filter((s) => s.profile);
+    const fieldSolved = cx ? new Set(cx.problems.filter((problem) => problem.solved > 0).map((problem) => problem.id)) : new Set();
+    const wallRows = withProfile.map((s) => {
+      const walls = [...s.attemptedSet].filter((id) => fieldSolved.has(id) && !s.solvedSet.has(id));
+      const untried = [...fieldSolved].filter((id) => !s.attemptedSet.has(id));
+      const byLevel = (ids) => {
+        const counts = [0, 0, 0, 0, 0, 0];
+        for (const id of ids) {
+          const problem = cx.problemById.get(id);
+          if (problem) counts[problem.level - 1] += 1;
+        }
+        return counts;
+      };
+      return { s, walls, untried, wallLevels: byLevel(walls), untriedLevels: byLevel(untried) };
+    });
+
     const years = data.years;
     const a = grid(view);
 
@@ -310,7 +333,7 @@ startPage({
         },
       },
       grid: { bottom: stats.length > 2 ? 54 : 32 },
-      xAxis: categoryAxis(stats.map((s) => chartName(s.item.name)), { axisLabel: { interval: 0, rotate: stats.length > 2 ? 24 : 0, fontSize: stats.length > 2 ? 9 : 10 } }),
+      xAxis: categoryAxis(stats.map((s) => axisName(s.item.name)), { axisLabel: { interval: 0, rotate: stats.length > 2 ? 24 : 0, fontSize: stats.length > 2 ? 9 : 10 } }),
       yAxis: valueAxis({ min: 0, max: 100 }),
       series: [{ type: "boxplot", data: box, boxWidth: [12, 38] }],
     });
@@ -369,7 +392,7 @@ startPage({
           },
         },
         grid: { bottom: levelStats.length > 2 ? 54 : 32 },
-        xAxis: categoryAxis(levelStats.map((s) => chartName(s.item.name)), { axisLabel: { interval: 0, rotate: levelStats.length > 2 ? 24 : 0, fontSize: levelStats.length > 2 ? 9 : 10 } }),
+        xAxis: categoryAxis(levelStats.map((s) => axisName(s.item.name)), { axisLabel: { interval: 0, rotate: levelStats.length > 2 ? 24 : 0, fontSize: levelStats.length > 2 ? 9 : 10 } }),
         yAxis: valueAxis({ min: 0, max: 100, axisLabel: { formatter: "{value}%" } }),
         series: levelNames.map((name, level) => ({
           name, type: "bar", stack: "levels", barMaxWidth: 42,
@@ -384,20 +407,38 @@ startPage({
       card(a, { title: "Niveles de dificultad", span: 6, html: '<p class="sub">Sin perfil de complejidad para estas entidades en 2011–2025.</p>' });
     }
 
+    if (wallRows.length) {
+      const wallBody = card(a, {
+        title: "Muros por nivel", span: 6,
+        sub: "Problemas que el campo resolvió y la entidad intentó sin resolver, 2011–2025.",
+        html: `<div class="plot" id="wall-chart" style="height:280px"></div><p class="note">No intentados: ${wallRows.map((row) => `${esc(row.s.item.name)}: ${row.untried.length}`).join(" · ")}.</p>`,
+      });
+      const wallGroups = [["N1–N2", 0, 1], ["N3–N4", 2, 3], ["N5–N6", 4, 5]];
+      plot(wallBody.querySelector("#wall-chart"), {
+        tooltip: { trigger: "axis", axisPointer: { type: "shadow" } },
+        grid: { bottom: wallRows.length > 2 ? 54 : 34 },
+        xAxis: categoryAxis(wallRows.map((row) => axisName(row.s.item.name)), { axisLabel: { interval: 0, rotate: wallRows.length > 2 ? 24 : 0, fontSize: 9 } }),
+        yAxis: valueAxis({ minInterval: 1 }),
+        series: wallGroups.map(([name, from, to], index) => ({
+          name, type: "bar", stack: "walls", barMaxWidth: 38,
+          itemStyle: { color: ["#c9a86a", "#d97f45", "#af3227"][index] },
+          data: wallRows.map((row) => row.wallLevels[from] + row.wallLevels[to]),
+        })),
+      });
+    } else {
+      card(a, { title: "Muros por nivel", span: 6, html: '<p class="sub">Sin perfil de complejidad para estas entidades en 2011–2025.</p>' });
+    }
+
     const groups = [
       {
         label: "Resultados",
         rows: [
           { label: "Finales", value: (s) => s.finals, best: (s) => s.finals, dir: "max" },
-          { label: "Participaciones", value: (s) => s.participations, best: (s) => s.participations, dir: "max" },
-          { label: "Primera / última", value: (s) => s.years.length ? `${s.years[0]}–${s.years[s.years.length - 1]}` : "—", num: false },
-          { label: "Mejor puesto", value: (s) => s.best ? `${place(s.best.rank)} (${s.best.year})` : "—", best: (s) => s.best?.rank, dir: "min" },
-          { label: "Peor puesto", value: (s) => s.worst ? `${place(s.worst.rank)} (${s.worst.year})` : "—" },
+          { label: "Primera / última", value: (s) => (s.years.length ? `${s.years[0]}–${s.years[s.years.length - 1]}` : "—"), num: false },
+          { label: "Mejor puesto", value: (s) => (s.best ? `${place(s.best.rank)} (${s.best.year})` : "—"), best: (s) => s.best?.rank, dir: "min" },
           { label: kind === "t" ? "Percentil medio" : "Percentil medio por equipo", value: (s) => pctText(s.avgPct), best: (s) => s.avgPct, dir: "max" },
-          { label: "Percentil mediano", value: (s) => pctText(s.medianPct), best: (s) => s.medianPct, dir: "max" },
           { label: "Consistencia (σ)", value: (s) => (s.sd == null ? "—" : fmt(s.sd, 1)), best: (s) => s.sd, dir: "min" },
           { label: "Tendencia reciente", value: (s) => (s.trend == null ? "—" : `${signed(s.trend)} pp`), best: (s) => s.trend, dir: "max" },
-          { label: "Con veteranos", value: (s) => pctText(s.vets), best: (s) => s.vets, dir: "max" },
         ],
       },
       {
@@ -405,13 +446,10 @@ startPage({
         rows: [
           { label: "Solves totales", value: (s) => fmt(s.totalSolved), best: (s) => s.totalSolved, dir: "max" },
           { label: kind === "t" ? "Solves por final" : "Solves por participación", value: (s) => (s.avgSolved == null ? "—" : fmt(s.avgSolved, 1)), best: (s) => s.avgSolved, dir: "max" },
-          { label: "Máximo en una final", value: (s) => fmt(s.maxSolved), best: (s) => s.maxSolved, dir: "max" },
+          { label: "Nivel medio resuelto", value: (s) => s.meanLevel ?? "—", best: (s) => s.meanLevel, dir: "max" },
           { label: "Penalización por resuelto", value: (s) => (s.timePerSolve == null ? "—" : fmt(s.timePerSolve, 1)), best: (s) => s.timePerSolve, dir: "min" },
           { label: "Problemas distintos 2011–2025", value: (s) => fmt(s.distinctSolves), best: (s) => s.distinctSolves, dir: "max" },
-          { label: "Nivel medio resuelto", value: (s) => s.meanLevel ?? "—", best: (s) => s.meanLevel, dir: "max" },
           { label: "Intentos por solve", value: (s) => s.attemptsPerSolve ?? "—", best: (s) => s.attemptsPerSolve, dir: "min" },
-          { label: "Podios", value: (s) => s.podiums, best: (s) => s.podiums, dir: "max" },
-          { label: "Top 10", value: (s) => s.top10, best: (s) => s.top10, dir: "max" },
         ],
       },
       {
@@ -420,6 +458,7 @@ startPage({
           { label: "Oro", value: (s) => s.medals.gold, best: (s) => s.medals.gold, dir: "max" },
           { label: "Plata", value: (s) => s.medals.silver, best: (s) => s.medals.silver, dir: "max" },
           { label: "Bronce", value: (s) => s.medals.bronze, best: (s) => s.medals.bronze, dir: "max" },
+          { label: "Podios", value: (s) => s.podiums, best: (s) => s.podiums, dir: "max" },
           { label: "Títulos mundiales", value: (s) => s.world, best: (s) => s.world, dir: "max" },
           { label: "Títulos regionales", value: (s) => s.regional, best: (s) => s.regional, dir: "max" },
         ],
@@ -429,6 +468,8 @@ startPage({
         rows: [
           { label: kind === "c" ? "Universidades" : kind === "u" ? "Equipos" : "Equipo", value: (s) => (kind === "t" ? "1" : kind === "c" ? s.universities : s.teams), best: (s) => (kind === "t" ? null : kind === "c" ? s.universities : s.teams), dir: "max" },
           { label: "Personas", value: (s) => s.people.length, best: (s) => s.people.length, dir: "max" },
+          { label: "Con veteranos", value: (s) => pctText(s.vets), best: (s) => s.vets, dir: "max" },
+          { label: "Participaciones", value: (s) => s.participations, best: (s) => s.participations, dir: "max" },
           { label: "Área dominante", value: (s) => (s.profile ? categoryLabel(cx, "areas", topKey(s.profile.areas)) : "—"), num: false },
           { label: "Técnica dominante", value: (s) => (s.profile ? categoryLabel(cx, "techniques", topKey(s.profile.techniques)) : "—"), num: false },
         ],
@@ -436,77 +477,53 @@ startPage({
     ];
     card(a, {
       title: "Frente a frente", span: 12,
-      sub: "El mejor valor de cada fila se marca en color. La dificultad y los temas cubren 2011–2025.",
-      html: compareTable(stats, groups),
+      sub: "Cada tarjeta compara una métrica; la barra es relativa al máximo del grupo y el valor exacto está a la derecha. La dificultad y los temas cubren 2011–2025.",
+      html: metricBoard(stats, groups, tint),
     });
 
-    // Problems, overlap and walls.
-    const withProfile = stats.filter((s) => s.profile);
+    // Problems: overlap summary and exclusive-problem scatter.
     if (withProfile.length) {
       const canCompare = withProfile.length >= 2;
       const common = canCompare ? [...withProfile[0].solvedSet].filter((id) => withProfile.every((s) => s.solvedSet.has(id))) : [];
       const exclusive = canCompare ? withProfile.map((s) => [...s.solvedSet].filter((id) => !withProfile.some((other) => other !== s && other.solvedSet.has(id)))) : [];
       const exclusiveIds = [...new Set(exclusive.flat())];
-      const fieldSolved = new Set(cx.problems.filter((p) => p.solved > 0).map((p) => p.id));
-      const wallRows = withProfile.map((s) => {
-        const walls = [...s.attemptedSet].filter((id) => fieldSolved.has(id) && !s.solvedSet.has(id));
-        const untried = [...fieldSolved].filter((id) => !s.attemptedSet.has(id));
-        const byLevel = (ids) => {
-          const counts = [0, 0, 0, 0, 0, 0];
-          for (const id of ids) {
-            const problem = cx.problemById.get(id);
-            if (problem) counts[problem.level - 1] += 1;
-          }
-          return counts;
-        };
-        return { s, walls, untried, wallLevels: byLevel(walls), untriedLevels: byLevel(untried) };
-      });
-      const problemRows = (ids, limit) => ids
-        .map((id) => cx.problemById.get(id))
-        .filter(Boolean)
-        .sort((x, y) => x.year - y.year || x.letter.localeCompare(y.letter))
-        .slice(0, limit)
-        .map((problem) => [
-          problem.year, problem.letter, esc(problem.title), problem.level,
-          esc(categoryLabel(cx, "areas", problem.area)), esc(categoryLabel(cx, "techniques", problem.technique)),
-        ]);
-      const commonRows = problemRows(common, 20);
-      const exclusiveRows = exclusiveIds
-        .map((id) => cx.problemById.get(id))
-        .filter(Boolean)
-        .sort((x, y) => x.year - y.year || x.letter.localeCompare(y.letter))
-        .slice(0, 30)
-        .map((problem) => [
-          ...problemRows([problem.id], 1)[0],
-          withProfile.filter((s) => s.solvedSet.has(problem.id)).map((s) => esc(s.item.name)).join(", "),
-        ]);
-      card(a, {
-        title: "Problemas en común y exclusivos", span: 12,
-        sub: "Solo problemas de 2011–2025. Un problema cuenta como exclusivo si ninguna otra entidad seleccionada lo resolvió.",
-        html: `${canCompare ? `<div class="compare-overlap"><span><b>${common.length}</b> en común</span>${withProfile.map((s, index) => `<span><b>${exclusive[index].length}</b> solo ${esc(s.item.name)}</span>`).join("")}</div>
-          <h3 class="compare-subhead">Resueltos por todas (${common.length})</h3>
-          ${common.length ? table(
-            ["Año", "Letra", "Problema", { label: "Nivel", num: 1 }, "Área", "Técnica"],
-            commonRows,
-          ) : '<p class="sub">No hay problemas comunes en la ventana de complejidad.</p>'}
-          ${common.length > 20 ? `<p class="note">Se muestran 20 de ${common.length}.</p>` : ""}
-          <h3 class="compare-subhead">Exclusivos (${exclusiveIds.length})</h3>
-          ${exclusiveIds.length ? table(
-            ["Año", "Letra", "Problema", { label: "Nivel", num: 1 }, "Área", "Técnica", "Lo resolvió"],
-            exclusiveRows,
-          ) : '<p class="sub">No hay problemas exclusivos en la ventana de complejidad.</p>'}
-          <p class="note">Se muestran hasta 30 problemas exclusivos de ${exclusiveIds.length}. Los temas son el área y la técnica principal del catálogo.</p>` : '<p class="sub">Añade otra entidad de la misma clase para ver problemas comunes y exclusivos.</p>'}
-          <h3 class="compare-subhead">Muros y problemas no intentados</h3>
-          ${table(
-            ["Entidad", { label: "Muros", num: 1 }, { label: "N1–N2", num: 1 }, { label: "N3–N4", num: 1 }, { label: "N5–N6", num: 1 }, { label: "No intentados", num: 1 }],
-            wallRows.map(({ s, walls, untried, wallLevels, untriedLevels }) => [
-              `<a href="${s.item.url}">${esc(s.item.name)}</a>`, walls.length,
-              wallLevels[0] + wallLevels[1], wallLevels[2] + wallLevels[3], wallLevels[4] + wallLevels[5],
-              untried.length,
-            ]),
-          )}
-          <p class="note">Un muro es un problema que el campo resolvió, la entidad intentó y no resolvió. No intentado es un problema resuelto por el campo que la entidad ni siquiera intentó. Solo se cuentan problemas de 2011–2025.</p>`,
-      });
+      const overlap = `<div class="compare-overlap"><span><b>${common.length}</b> problemas en común</span>${withProfile.map((s, index) => `<span><b>${exclusive[index].length}</b> solo ${esc(s.item.name)}</span>`).join("")}</div>`;
+      if (canCompare && exclusiveIds.length) {
+        const body = card(a, {
+          title: "Problemas exclusivos", span: 12,
+          sub: "Cada punto es un problema que solo resolvió una de las entidades. El eje vertical es el nivel de dificultad.",
+          html: `${overlap}<div class="plot" id="exclusive-chart" style="height:330px"></div><p class="note">Pasa el cursor por un punto para ver año, título, área y técnica. Solo problemas de 2011–2025.</p>`,
+        });
+        const cxYears = Array.from({ length: 15 }, (_, index) => String(2011 + index));
+        plot(body.querySelector("#exclusive-chart"), {
+          tooltip: {
+            formatter: (point) => {
+              const value = point.value;
+              return `<b>${esc(value[3])}</b><br>${value[0]} · N${value[1]} · resuelto por ${value[2]}% del campo<br>${esc(value[4])} · ${esc(value[5])}<br><b>${esc(point.seriesName)}</b>`;
+            },
+          },
+          grid: { bottom: 62 },
+          xAxis: categoryAxis(cxYears, { boundaryGap: true }),
+          yAxis: valueAxis({ min: 1, max: 6, minInterval: 1, name: "Nivel", nameTextStyle: { color: c.dim } }),
+          series: withProfile.map((s) => ({
+            name: s.item.name, type: "scatter", symbolSize: (value) => 8 + value[2] / 9,
+            itemStyle: { color: tint[stats.indexOf(s)], opacity: 0.82 },
+            data: exclusiveIds.filter((id) => s.solvedSet.has(id)).map((id) => {
+              const problem = cx.problemById.get(id);
+              if (!problem) return null;
+              return {
+                name: problem.title,
+                value: [String(problem.year), problem.level, +(100 * problem.solveRate).toFixed(1), problem.title, categoryLabel(cx, "areas", problem.area), categoryLabel(cx, "techniques", problem.technique)],
+              };
+            }).filter(Boolean),
+          })),
+        });
+      } else {
+        card(a, {
+          title: "Problemas exclusivos", span: 12,
+          html: `${overlap}<p class="sub">${canCompare ? "No hay problemas exclusivos en la ventana 2011–2025." : "Añade otra entidad de la misma clase para ver problemas comunes y exclusivos."}</p>`,
+        });
+      }
     } else {
       card(a, {
         title: "Problemas en común y exclusivos", span: 12,
@@ -514,58 +531,142 @@ startPage({
       });
     }
 
-    // Areas and techniques heatmaps.
+    // Areas, techniques, specialization, tasks and burden.
     if (withProfile.length) {
       const areas = cx.areas;
+
+      const areaValues = withProfile.map((s) => areas.map((area) => {
+        const count = s.profile.areas[area.id] ?? 0;
+        return { count, share: s.totalAreas ? (100 * count) / s.totalAreas : 0 };
+      }));
+      const areaMax = Math.max(1, ...areaValues.flat().map((item) => item.share));
+      const areaBody = card(a, {
+        title: "Áreas", span: 12,
+        sub: "Porcentaje de solves de cada entidad en cada área principal, 2011–2025.",
+        html: `<p class="mobile-hint">Desliza para ver todas las áreas →</p><div class="plot-scroll"><div class="plot" id="area-heat" style="height:${Math.max(230, withProfile.length * 48 + 100)}px;min-width:760px"></div></div><p class="note">Más intenso = mayor cuota. Solo el área principal de cada problema.</p>`,
+      });
+      plot(areaBody.querySelector("#area-heat"), {
+        tooltip: {
+          formatter: (point) => {
+            const value = point.value;
+            return `<b>${esc(areas[value[0]].label)}</b><br>${esc(withProfile[value[1]].item.name)}: ${fmt(value[2], 1)}% (${value[3]} solves)`;
+          },
+        },
+        grid: { left: 8, right: 16, top: 12, bottom: 72, containLabel: true },
+        xAxis: categoryAxis(areas.map((area) => area.label), { axisLabel: { interval: 0, rotate: 30, fontSize: 10 } }),
+        yAxis: categoryAxis(withProfile.map((s) => axisName(s.item.name)), { inverse: true, axisLabel: { interval: 0, fontSize: 10 } }),
+        series: [{
+          type: "heatmap",
+          data: withProfile.flatMap((s, y) => areas.map((area, x) => {
+            const item = areaValues[y][x];
+            return { value: [x, y, item.share, item.count], itemStyle: { color: heatColor(item.share, areaMax) }, label: { color: heatInk(item.share, areaMax) } };
+          })),
+          label: { show: true, color: c.ink, fontSize: 10, formatter: (point) => (point.value[2] ? `${fmt(point.value[2], 1)}%` : "") },
+          itemStyle: { borderColor: c.panel, borderWidth: 2 },
+        }],
+      });
+
       const techniques = [...cx.techniques].sort((x, y) => {
         const bx = withProfile.reduce((total, s) => total + (s.profile.techniques[y.id] ?? 0), 0);
         const ax = withProfile.reduce((total, s) => total + (s.profile.techniques[x.id] ?? 0), 0);
         return bx - ax;
       }).slice(0, 12);
-      const areaBody = card(a, {
-        title: "Áreas", span: 12,
-        sub: "Porcentaje de solves de cada entidad en cada área principal, 2011–2025.",
-        html: heatTable(withProfile, areas.map((area) => ({ ...area })), (s, area) => s.profile.areas[area.id] ?? 0, (s) => s.totalAreas, "Entidad"),
-      });
-      areaBody.querySelector(".tablew")?.style.setProperty("--table-h", "420px");
+      const techValues = withProfile.map((s) => techniques.map((tech) => {
+        const count = s.profile.techniques[tech.id] ?? 0;
+        return { count, share: s.totalTechniques ? (100 * count) / s.totalTechniques : 0 };
+      }));
+      const techMax = Math.max(1, ...techValues.flat().map((item) => item.share));
       const techBody = card(a, {
         title: "Técnicas", span: 12,
-        sub: "Las 12 técnicas con más solves entre las entidades elegidas; porcentaje sobre sus solves.",
-        html: heatTable(withProfile, techniques.map((tech) => ({ ...tech })), (s, tech) => s.profile.techniques[tech.id] ?? 0, (s) => s.totalTechniques, "Entidad"),
+        sub: "Las 12 técnicas con más solves entre las entidades elegidas, 2011–2025.",
+        html: `<p class="mobile-hint">Desliza para ver todas las técnicas →</p><div class="plot-scroll"><div class="plot" id="tech-heat" style="height:${Math.max(250, withProfile.length * 48 + 110)}px;min-width:760px"></div></div><p class="note">Porcentaje sobre los solves de cada entidad. Solo la técnica principal de cada problema.</p>`,
       });
-      techBody.querySelector(".tablew")?.style.setProperty("--table-h", "420px");
+      plot(techBody.querySelector("#tech-heat"), {
+        tooltip: {
+          formatter: (point) => {
+            const value = point.value;
+            return `<b>${esc(techniques[value[0]].label)}</b><br>${esc(withProfile[value[1]].item.name)}: ${fmt(value[2], 1)}% (${value[3]} solves)`;
+          },
+        },
+        grid: { left: 8, right: 16, top: 12, bottom: 82, containLabel: true },
+        xAxis: categoryAxis(techniques.map((tech) => tech.label), { axisLabel: { interval: 0, rotate: 32, fontSize: 9 } }),
+        yAxis: categoryAxis(withProfile.map((s) => axisName(s.item.name)), { inverse: true, axisLabel: { interval: 0, fontSize: 10 } }),
+        series: [{
+          type: "heatmap",
+          data: withProfile.flatMap((s, y) => techniques.map((tech, x) => {
+            const item = techValues[y][x];
+            return { value: [x, y, item.share, item.count], itemStyle: { color: heatColor(item.share, techMax) }, label: { color: heatInk(item.share, techMax) } };
+          })),
+          label: { show: true, color: c.ink, fontSize: 9, formatter: (point) => (point.value[2] ? `${fmt(point.value[2], 1)}%` : "") },
+          itemStyle: { borderColor: c.panel, borderWidth: 2 },
+        }],
+      });
 
       const fieldAreas = cx.totals.solvedAreas ?? {};
       const fieldTotal = sum(Object.values(fieldAreas));
-      card(a, {
-        title: "Especialización por área", span: 12,
-        sub: "Diferencia entre la cuota de la entidad y la cuota del campo. Positivo: más presente de lo habitual.",
-        html: `<div class="compare-specialization">${withProfile.map((s) => {
-          const total = s.totalAreas;
-          const diffs = areas.map((area) => {
-            const own = total ? (100 * (s.profile.areas[area.id] ?? 0)) / total : 0;
-            const field = fieldTotal ? (100 * (fieldAreas[area.id] ?? 0)) / fieldTotal : 0;
-            return { label: area.label, value: own - field, count: s.profile.areas[area.id] ?? 0 };
-          }).filter((item) => item.count > 0).sort((x, y) => y.value - x.value);
-          const positive = diffs.filter((item) => item.value > 0).slice(0, 3);
-          const negative = diffs.filter((item) => item.value < 0).sort((x, y) => x.value - y.value).slice(0, 3);
-          return `<div class="compare-specialization-row"><b><a href="${s.item.url}">${esc(s.item.name)}</a></b>
-            <span><small>Destaca</small>${positive.map((item) => `${esc(item.label)} ${signed(item.value)} pp`).join(" · ") || "—"}</span>
-            <span><small>Menos presente</small>${negative.map((item) => `${esc(item.label)} ${signed(item.value)} pp`).join(" · ") || "—"}</span>
-            ${s.profile.solves < 10 ? '<small class="compare-small">Muestra pequeña: interpretar con cautela.</small>' : ""}</div>`;
-        }).join("")}</div>`,
+      const specPoints = [];
+      withProfile.forEach((s) => {
+        const total = s.totalAreas;
+        if (!total) return;
+        const diffs = areas.map((area) => {
+          const own = (100 * (s.profile.areas[area.id] ?? 0)) / total;
+          const field = fieldTotal ? (100 * (fieldAreas[area.id] ?? 0)) / fieldTotal : 0;
+          return { label: area.label, value: own - field, count: s.profile.areas[area.id] ?? 0 };
+        }).filter((item) => item.count > 0).sort((x, y) => y.value - x.value);
+        const selected = [...diffs.filter((item) => item.value > 0).slice(0, 2), ...diffs.filter((item) => item.value < 0).sort((x, y) => x.value - y.value).slice(0, 2)];
+        for (const item of selected) {
+          specPoints.push({ name: `${chartName(s.item.name)} · ${item.label}`, value: item.value, entity: s.item.name, area: item.label });
+        }
       });
+      if (specPoints.length) {
+        const specBody = card(a, {
+          title: "Especialización por área", span: 12,
+          sub: "Diferencia entre la cuota de la entidad y la cuota global. Azul: más presente; rojo: menos presente.",
+          html: '<div class="plot" id="spec-chart" style="height:340px"></div><p class="note">Se muestran hasta dos áreas por encima y dos por debajo de lo esperado para cada entidad.</p>',
+        });
+        plot(specBody.querySelector("#spec-chart"), {
+          tooltip: { formatter: (point) => `<b>${esc(point.data.entity)}</b><br>${esc(point.data.area)}: ${signed(point.value)} puntos porcentuales` },
+          grid: { left: 8, right: 42, top: 12, bottom: 18, containLabel: true },
+          xAxis: valueAxis({ name: "puntos porcentuales", nameLocation: "middle", nameGap: 26, nameTextStyle: { color: c.dim } }),
+          yAxis: categoryAxis(specPoints.map((point) => point.name), { inverse: true, axisLabel: { interval: 0, fontSize: 10 } }),
+          series: [{
+            type: "bar", barMaxWidth: 15,
+            data: specPoints.map((point) => ({ value: point.value, itemStyle: { color: point.value >= 0 ? c.blue : c.red }, entity: point.entity, area: point.area })),
+            label: { show: true, position: "right", color: c.dim, fontSize: 10, formatter: (point) => signed(point.value) },
+          }],
+        });
+      } else {
+        card(a, { title: "Especialización por área", span: 12, html: '<p class="sub">Sin solves suficientes para calcular la especialización.</p>' });
+      }
 
       const taskTotal = (s) => sum(Object.values(s.profile.tasks ?? {}));
       const burdenTotal = (s) => sum(Object.values(s.profile.burdens ?? {}));
-      card(a, {
-        title: "Tareas y carga de implementación", span: 12,
-        sub: "Porcentaje de solves de cada entidad en cada tipo de tarea y carga, 2011–2025.",
-        html: `<div class="compare-split">
-          <div><h3 class="compare-subhead">Tareas</h3>${heatTable(withProfile, cx.tasks, (s, task) => s.profile.tasks?.[task.id] ?? 0, taskTotal, "Entidad")}</div>
-          <div><h3 class="compare-subhead">Carga</h3>${heatTable(withProfile, cx.burdens, (s, burden) => s.profile.burdens?.[burden.id] ?? 0, burdenTotal, "Entidad")}</div>
-        </div>`,
-      });
+      if (withProfile.some((s) => taskTotal(s))) {
+        plot(chartCard(a, { title: "Tareas", sub: "Porcentaje de solves por tipo de tarea, 2011–2025", span: 6, height: 300 }), {
+          tooltip: { trigger: "axis", axisPointer: { type: "shadow" } },
+          grid: { left: 8, right: 18, top: 16, bottom: 54, containLabel: true },
+          xAxis: valueAxis({ min: 0, max: 100, axisLabel: { formatter: "{value}%" } }),
+          yAxis: categoryAxis(withProfile.map((s) => axisName(s.item.name)), { inverse: true, axisLabel: { interval: 0, fontSize: 10 } }),
+          series: cx.tasks.map((task, index) => ({
+            name: task.label, type: "bar", stack: "tasks", barMaxWidth: 30,
+            itemStyle: { color: ["#4984be", "#7fb3e4", "#fdb830", "#d97f45", "#4f9a8c", "#8e3b5c"][index % 6] },
+            data: withProfile.map((s) => (taskTotal(s) ? +((100 * (s.profile.tasks?.[task.id] ?? 0)) / taskTotal(s)).toFixed(1) : 0)),
+          })),
+        });
+      }
+      if (withProfile.some((s) => burdenTotal(s))) {
+        plot(chartCard(a, { title: "Carga de implementación", sub: "Porcentaje de solves según la carga del problema, 2011–2025", span: 6, height: 300 }), {
+          tooltip: { trigger: "axis", axisPointer: { type: "shadow" } },
+          grid: { left: 8, right: 18, top: 16, bottom: 50, containLabel: true },
+          xAxis: valueAxis({ min: 0, max: 100, axisLabel: { formatter: "{value}%" } }),
+          yAxis: categoryAxis(withProfile.map((s) => axisName(s.item.name)), { inverse: true, axisLabel: { interval: 0, fontSize: 10 } }),
+          series: cx.burdens.map((burden, index) => ({
+            name: burden.label, type: "bar", stack: "burden", barMaxWidth: 30,
+            itemStyle: { color: [c.blue, c.gold, c.red][index] },
+            data: withProfile.map((s) => (burdenTotal(s) ? +((100 * (s.profile.burdens?.[burden.id] ?? 0)) / burdenTotal(s)).toFixed(1) : 0)),
+          })),
+        });
+      }
     }
 
     // Common years and head-to-head record.
@@ -598,22 +699,40 @@ startPage({
         }
       }
     }
-    card(a, {
-      title: "Años en común", span: 12,
-      sub: "Finales en las que coinciden al menos dos de las entidades elegidas.",
-      html: stats.length < 2
-        ? '<p class="sub">Añade otra entidad para ver los años en común y el duelo directo.</p>'
-        : commonYears.length
-        ? `${table(
-          ["Año", ...stats.map((s) => s.item.name)],
-          commonYears.map((year) => [year, ...stats.map((s) => {
+    if (stats.length < 2) {
+      card(a, { title: "Años en común", span: 12, html: '<p class="sub">Añade otra entidad para ver los años en común y el duelo directo.</p>' });
+    } else if (!commonYears.length) {
+      card(a, { title: "Años en común", span: 12, html: '<p class="sub">No hay finales compartidas entre estas entidades.</p>' });
+    } else {
+      const duel = `<div class="compare-overlap">${stats.map((a, i) => stats.map((b, j) => (i < j ? `<span><b>${esc(a.item.name)}</b> ${wins[i][j]}–${wins[j][i]} <b>${esc(b.item.name)}</b></span>` : "")).join("")).join("")}</div>`;
+      const body = card(a, {
+        title: "Años en común", span: 12,
+        sub: "Finales compartidas. El número es el puesto del mejor equipo de cada entidad; el color, su percentil.",
+        html: `<p class="mobile-hint">Desliza para ver todos los años →</p><div class="plot-scroll"><div class="plot" id="common-years" style="height:${Math.max(210, stats.length * 54 + 54)}px;min-width:680px"></div></div>${duel}<p class="note">Cada celda muestra el puesto en esa final. Las celdas vacías indican que la entidad no participó. El duelo cuenta los años comunes en los que una quedó por delante de la otra.</p>`,
+      });
+      plot(body.querySelector("#common-years"), {
+        tooltip: {
+          formatter: (point) => {
+            const value = point.value;
+            return `<b>${esc(stats[value[1]].item.name)}</b><br>${commonYears[value[0]]}: puesto ${place(value[3])} · ${value[4] ?? "—"} resueltos · percentil ${fmt(value[2], 1)}`;
+          },
+        },
+        grid: { left: 8, right: 16, top: 12, bottom: commonYears.length > 12 ? 54 : 30, containLabel: true },
+        xAxis: categoryAxis(commonYears.map(String), { axisLabel: { interval: 0, rotate: commonYears.length > 12 ? 30 : 0, fontSize: 10 } }),
+        yAxis: categoryAxis(stats.map((s) => axisName(s.item.name)), { inverse: true, axisLabel: { interval: 0, fontSize: 10 } }),
+        series: [{
+          type: "heatmap",
+          data: stats.flatMap((s, y) => commonYears.map((year, x) => {
             const row = bestRow(s, year);
-            return row ? `${place(row.rank)} · ${row.solved ?? "—"} res.` : "—";
-          })]),
-        )}
-        ${stats.length > 1 ? `<h3 class="compare-subhead">Duelo directo</h3><div class="tablew compare-duel"><table data-nosort><thead><tr><th></th>${stats.map((s) => `<th>${esc(s.item.name)}</th>`).join("")}</tr></thead><tbody>${stats.map((a, i) => `<tr><th>${esc(a.item.name)}</th>${stats.map((b, j) => `<td>${i === j ? "—" : `${wins[i][j]}–${wins[j][i]}`}</td>`).join("")}</tr>`).join("")}</tbody></table></div><p class="note">Cada celda cuenta los años comunes en los que la entidad de la fila quedó por delante de la de la columna.</p>` : ""}`
-        : '<p class="sub">No hay finales compartidas entre estas entidades.</p>',
-    });
+            if (!row) return null;
+            const pct = row.pct ?? 0;
+            return { value: [x, y, pct, row.rank, row.solved], itemStyle: { color: heatColor(pct, 100) }, label: { color: heatInk(pct, 100) } };
+          }).filter(Boolean)),
+          label: { show: true, color: c.ink, fontSize: 10, formatter: (point) => (point.value[3] == null ? "" : place(point.value[3])) },
+          itemStyle: { borderColor: c.panel, borderWidth: 2 },
+        }],
+      });
+    }
 
     // Class-specific context.
     const panel = document.createElement("div");
@@ -621,16 +740,14 @@ startPage({
     for (const s of stats) {
       const section = document.createElement("section");
       section.className = "compare-panel";
+      section.style.setProperty("--compare-color", tint[stats.indexOf(s)]);
       if (kind === "t") {
         const people = s.people.slice().sort((x, y) => y.years.size - x.years.size || x.name.localeCompare(y.name, "es"));
         const finals = s.rows.slice().sort((x, y) => y.year - x.year);
         section.innerHTML = `<h3><a href="${s.item.url}">${esc(s.item.name)}</a></h3>
           <p class="sub">${esc(s.item.sub)} · ${s.finals} ${s.finals === 1 ? "final" : "finales"}</p>
           <div class="chips">${people.map((person) => `<a class="chip" href="${personUrl(person.id)}">${esc(person.name)}${person.years.size > 1 ? ` (${person.years.size})` : ""}</a>`).join("")}</div>
-          ${table(
-            ["Año", { label: "Puesto", num: 1 }, { label: "Res.", num: 1 }, { label: "Tiempo", num: 1 }],
-            finals.map((row) => [row.year, place(row.rank), row.solved ?? "—", row.time ?? "—"]),
-          )}`;
+          <div class="compare-finals">${finals.map((row) => `<div class="compare-final"><b>${row.year}</b><span>${place(row.rank)}</span><small>${row.solved ?? "—"} res. · ${row.time ?? "—"} min</small></div>`).join("")}</div>`;
       } else {
         const groups = new Map();
         for (const row of s.rows) {
@@ -651,12 +768,10 @@ startPage({
             solved: sum(group.rows.map((row) => row.solved ?? 0)),
           };
         }).sort((x, y) => (x.best ?? 1e9) - (y.best ?? 1e9) || y.finals - x.finals);
+        const maxSolved = Math.max(1, ...list.map((group) => group.solved));
         section.innerHTML = `<h3><a href="${s.item.url}">${esc(s.item.name)}</a></h3>
           <p class="sub">${esc(s.item.sub)} · ${kind === "c" ? `${list.length} universidades` : `${list.length} equipos`}</p>
-          ${table(
-            [kind === "c" ? "Universidad" : "Equipo", { label: "Finales", num: 1 }, { label: "Mejor", num: 1 }, { label: "Solves", num: 1 }, { label: "Medallas", num: 1 }],
-            list.slice(0, 8).map((group) => [`<a href="${group.url}">${esc(group.name)}</a>`, group.finals, group.best == null ? "—" : place(group.best), group.solved, group.medals]),
-          )}
+          <div class="compare-persons">${list.slice(0, 8).map((group) => `<a class="compare-person" href="${group.url}"><span class="compare-person-name">${esc(group.name)}</span><span class="compare-person-meta">${group.finals} finales · mejor ${group.best == null ? "—" : place(group.best)} · ${group.medals} medallas</span><span class="compare-person-bar"><i style="width:${Math.max(2, 100 * group.solved / maxSolved).toFixed(1)}%"></i></span><span class="compare-person-value">${group.solved}</span></a>`).join("")}</div>
           ${list.length > 8 ? `<p class="note">Y ${list.length - 8} más.</p>` : ""}`;
       }
       panel.append(section);
@@ -664,6 +779,7 @@ startPage({
     card(a, {
       title: kind === "c" ? "Universidades del país" : kind === "u" ? "Equipos de la universidad" : "Miembros y finales",
       span: 12,
+      sub: kind === "t" ? "Miembros y recorrido del equipo." : "Las barras comparan los solves acumulados; el texto resume finales, mejor puesto y medallas.",
       html: panel.outerHTML,
     });
 

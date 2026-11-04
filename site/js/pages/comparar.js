@@ -1,5 +1,5 @@
 import {
-  avg, compareUrl, countryName, countrySeries, countryUrl, crest, esc,
+  TITLE_NAMES, avg, compareUrl, countryName, countrySeries, countryUrl, crest, esc,
   medalCounts, params, personUrl, quantile, teamKey, teamSeries, teamUrl,
   uniSeries, uniUrl,
 } from "../core.js";
@@ -219,6 +219,8 @@ startPage({
       const titles = rows.flatMap((r) => r.titles);
       const world = titles.filter((title) => title === "World").length;
       const regional = titles.length - world;
+      const regionalTitles = rows.flatMap((row) => row.titles.filter((title) => title !== "World").map((title) => ({ title, year: row.year })));
+      const worldYears = rows.filter((row) => row.titles.includes("World")).map((row) => row.year);
       const people = new Map();
       for (const row of rows) {
         row.player_ids.forEach((id, index) => {
@@ -248,7 +250,7 @@ startPage({
       const solvedSet = new Set(profile?.solvedProblems ?? []);
       const attemptedSet = new Set(profile?.attemptedProblems ?? []);
       return {
-        item, rows, pcts, best, worst, years, medals, world, regional,
+        item, rows, pcts, best, worst, years, medals, world, regional, regionalTitles, worldYears,
         finals: years.length, participations: rows.length,
         people: [...people.values()], teams: teams.size, universities: universities.size,
         totalSolved, avgSolved: solvedValues.length ? avg(solvedValues) : null,
@@ -793,6 +795,27 @@ startPage({
     insights.push(`📅 <b>${esc(highest(stats, (s) => s.finals).item.name)}</b> acumula más finales (${highest(stats, (s) => s.finals).finals}).`);
     const rankedStats = stats.filter((s) => s.best);
     if (rankedStats.length) insights.push(`🏁 El mejor puesto es de <b>${esc(lowest(rankedStats, (s) => s.best.rank).item.name)}</b> (${place(lowest(rankedStats, (s) => s.best.rank).best.rank)} en ${lowest(rankedStats, (s) => s.best.rank).best.year}).`);
+    const regionalStats = stats.filter((s) => s.regional > 0).sort((a, b) => b.regional - a.regional);
+    if (regionalStats.length) {
+      const detail = regionalStats.map((s) => {
+        const regions = [...new Set(s.regionalTitles.map((item) => item.title))].map((title) => TITLE_NAMES[title] ?? title).join(", ");
+        const years = [...new Set(s.regionalTitles.map((item) => item.year))].sort((a, b) => a - b);
+        const span = years.length > 1 ? `${years[0]}–${years[years.length - 1]}` : String(years[0]);
+        return `<b>${esc(s.item.name)}</b> (${s.regional}): ${regions}, ${span}`;
+      }).join(" · ");
+      insights.push(`🏅 Títulos regionales: ${detail}.`);
+    } else {
+      insights.push("🏅 Ninguna de las entidades suma títulos regionales.");
+    }
+    const worldStats = stats.filter((s) => s.world > 0).sort((a, b) => b.world - a.world);
+    if (worldStats.length) {
+      const detail = worldStats.map((s) => {
+        const years = [...new Set(s.worldYears)].sort((a, b) => a - b);
+        const span = years.length > 1 ? `${years[0]}–${years[years.length - 1]}` : String(years[0]);
+        return `<b>${esc(s.item.name)}</b> (${s.world}): ${span}`;
+      }).join(" · ");
+      insights.push(`🌍 Títulos mundiales: ${detail}.`);
+    }
     if (withLevel.length) insights.push(`🧩 <b>${esc(highest(withLevel, (s) => s.meanLevel).item.name)}</b> resuelve la mezcla de mayor nivel medio (${highest(withLevel, (s) => s.meanLevel).meanLevel}); no implica mejor resultado, sino problemas más exigentes.`);
     if (withProfile.length) {
       const commonCount = [...withProfile[0].solvedSet].filter((id) => withProfile.every((s) => s.solvedSet.has(id))).length;

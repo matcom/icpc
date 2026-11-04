@@ -53,11 +53,13 @@ export async function startPage({ page, title, subtitle, render }) {
   watchSelects(document.body);
   const view = document.getElementById("view");
   watchTables(view);
-  const draw = () => {
+  let drawId = 0;
+  const draw = async () => {
+    const id = ++drawId;
     disposeAll();
     view.innerHTML = title ? `<div class="head"><h1>${esc(title)}</h1>${subtitle ? `<p>${esc(subtitle)}</p>` : ""}</div>` : "";
-    render(view, data, draw);
-    refreshTables(view);
+    await render(view, data, draw, () => id === drawId);
+    if (id === drawId) refreshTables(view);
   };
   wireTheme(draw);
   draw();

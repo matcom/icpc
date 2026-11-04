@@ -36,6 +36,17 @@ def fold(text: str) -> str:
     return " ".join(re.findall(r"[a-z0-9]+", text))
 
 
+def team_fold(text: str) -> str:
+    """Same team-name key as the browser: case and accent insensitive, spaces collapsed."""
+    text = unicodedata.normalize("NFD", text)
+    text = "".join(c for c in text if not unicodedata.combining(c)).lower()
+    return " ".join(text.split())
+
+
+def team_key(uni_id: str, team: str) -> str:
+    return f"{uni_id}|{team_fold(team)}"
+
+
 def slugify(text: str) -> str:
     return fold(text).replace(" ", "-")
 
@@ -1272,6 +1283,7 @@ def build_complexity(universities: list[dict], countries: dict, region_names: di
         }
     field_size = Counter(int(r["year"]) for r in team_rows)
     uni_by_name = {u["name"]: u for u in universities}
+    uni_by_fold = {fold(u["name"]): u for u in universities}
 
     quartiles = {
         "top10": {"id": "top10", "label": "Top 10%", "teams": 0, "solves": 0,
@@ -1304,12 +1316,16 @@ def build_complexity(universities: list[dict], countries: dict, region_names: di
     def empty_profile() -> dict:
         return {
             "editions": 0, "solves": 0, "levels": [0] * 6,
-            "areas": Counter(), "techniques": Counter(), "burdens": Counter(),
+            "attempts": 0, "attemptsByLevel": [0] * 6,
+            "areas": Counter(), "techniques": Counter(), "tasks": Counter(),
+            "burdens": Counter(), "formats": Counter(),
+            "solvedProblems": set(), "attemptedProblems": set(),
         }
 
     uni_profiles = defaultdict(empty_profile)
     country_profiles = defaultdict(empty_profile)
     region_profiles = defaultdict(empty_profile)
+    team_profiles = defaultdict(empty_profile)
     seen_editions = {"uni": defaultdict(set), "country": defaultdict(set), "region": defaultdict(set)}
 
     for row in matrix:
@@ -1323,6 +1339,10 @@ def build_complexity(universities: list[dict], countries: dict, region_names: di
         uni = row["university"]
         country = row["country"]
         region = countries.get(country, {}).get("region", "other")
+        uni_meta = uni_by_name.get(uni) or uni_by_fold.get(fold(uni))
+        if not uni_meta:
+            continue
+        tkey = team_key(uni_meta["id"], row["team"])
         q = quartile_of(year, uni, row["team"])
         if q:
             quartiles[q]["attemptsByLevel"][level - 1] += attempts
@@ -1333,22 +1353,41 @@ def build_complexity(universities: list[dict], countries: dict, region_names: di
                 quartiles[q]["areas"][topic["primary_area"]] += 1
                 quartiles[q]["techniques"][topic["primary_technique"]] += 1
                 quartiles[q]["burdens"][topic["implementation_burden"]] += 1
-        if solved:
-            for profile, key in ((uni_profiles, uni), (country_profiles, country), (region_profiles, region)):
+        for profile, key in ((uni_profiles, uni), (country_profiles, country), (region_profiles, region), (team_profiles, tkey)):
+            profile[key]["attempts"] += attempts
+            profile[key]["attemptsByLevel"][level - 1] += attempts
+            if attempts:
+                profile[key]["attemptedProblems"].add(problem["id"])
+            if solved:
                 profile[key]["solves"] += 1
                 profile[key]["levels"][level - 1] += 1
                 profile[key]["areas"][topic["primary_area"]] += 1
                 profile[key]["techniques"][topic["primary_technique"]] += 1
+                profile[key]["tasks"][topic["primary_task"]] += 1
                 profile[key]["burdens"][topic["implementation_burden"]] += 1
+                profile[key]["formats"][topic["format"]] += 1
+                profile[key]["solvedProblems"].add(problem["id"])
 
     for row in team_rows:
         year = int(row["year"])
         uni = row["university"]
         country = row["country"]
         region = countries.get(country, {}).get("region", "other")
+        uni_meta = uni_by_name.get(uni) or uni_by_fold.get(fold(uni))
+        if not uni_meta:
+            continue
+        tkey = team_key(uni_meta["id"], row["team"])
         uni_profiles[uni]["editions"] += 1
         country_profiles[country]["editions"] += 1
         region_profiles[region]["editions"] += 1
+        team_profiles[tkey]["editions"] += 1
+        team_profiles[tkey]["name"] = row["team"]
+        team_profiles[tkey]["uni"] = uni_meta["id"]
+        team_profiles[tkey]["uniName"] = uni_meta["name"]
+        team_profiles[tkey]["country"] = uni_meta["country"]
+        team_profiles[tkey]["countryLabel"] = countries.get(uni_meta["country"], {}).get("es", uni_meta["country"])
+        team_profiles[tkey]["region"] = countries.get(uni_meta["country"], {}).get("region", "other")
+        team_profiles[tkey]["regionLabel"] = region_names.get(team_profiles[tkey]["region"], "")
         q = quartile_of(year, uni, row["team"])
         if q:
             quartiles[q]["teams"] += 1
@@ -1356,14 +1395,26 @@ def build_complexity(universities: list[dict], countries: dict, region_names: di
     def finish_profile(profile: dict) -> dict:
         solves = profile["solves"]
         levels = profile["levels"]
+        attempts_by_level = profile["attemptsByLevel"]
+        attempts = profile["attempts"]
+        solved_problems = sorted(profile["solvedProblems"])
         return {
             "editions": profile["editions"],
             "solves": solves,
+            "distinctSolves": len(solved_problems),
             "levels": levels,
             "meanLevel": round(sum((i + 1) * n for i, n in enumerate(levels)) / solves, 2) if solves else None,
+            "attempts": attempts,
+            "attemptsByLevel": attempts_by_level,
+            "attemptsPerSolve": round(attempts / solves, 2) if solves else None,
+            "failureRate": [round((a - s) / a, 4) if a else None for a, s in zip(attempts_by_level, levels)],
             "areas": dict(profile["areas"]),
             "techniques": dict(profile["techniques"]),
+            "tasks": dict(profile["tasks"]),
             "burdens": dict(profile["burdens"]),
+            "formats": dict(profile["formats"]),
+            "solvedProblems": solved_problems,
+            "attemptedProblems": sorted(profile["attemptedProblems"]),
         }
 
     universities_payload = []
@@ -1397,6 +1448,22 @@ def build_complexity(universities: list[dict], countries: dict, region_names: di
         item = finish_profile(profile)
         item.update({"id": code, "label": code})
         regions_payload.append(item)
+
+    teams_payload = []
+    for key, profile in team_profiles.items():
+        item = finish_profile(profile)
+        item.update({
+            "key": key,
+            "name": profile.get("name", ""),
+            "uni": profile.get("uni"),
+            "uniName": profile.get("uniName", ""),
+            "country": profile.get("country", ""),
+            "countryLabel": profile.get("countryLabel", ""),
+            "region": profile.get("region", "other"),
+            "regionLabel": profile.get("regionLabel", ""),
+        })
+        teams_payload.append(item)
+    teams_payload.sort(key=lambda x: (-x["solves"], x["name"]))
 
     quartile_payload = []
     for q in ("top10", "10-25", "25-50", "50-100"):
@@ -1468,6 +1535,7 @@ def build_complexity(universities: list[dict], countries: dict, region_names: di
         "rankQuartiles": quartile_payload,
         "universities": universities_payload,
         "countries": countries_payload,
+        "teams": teams_payload,
         "regions": regions_payload,
         "techniqueArea": technique_area,
         "totals": {
@@ -1937,7 +2005,7 @@ PAGES = [
     ("competidores", "Competidores", "People with the most finals and the most medals."),
     ("predicciones", "Predicciones", "Probability of each place in the next final from a Bayesian model over past finals and Codeforces team ratings, with a backtest."),
     ("sedes", "Sedes", "Every World Finals host city, its host country, its champion and the local performance."),
-    ("comparar", "Comparar", "Head-to-head comparison of universities or countries."),
+    ("comparar", "Comparar", "Head-to-head comparison of universities, countries or teams, including solved problems, difficulty levels and topics."),
     ("pais", "País", "Profile of one country: history, similar countries, projection and teams."),
     ("universidad", "Universidad", "Profile of one university: history, similar teams, projection and members."),
     ("cuba", "Cuba", "The Cuban slice: 16 finals, 26 teams, field gaps, Latin-American podiums, people, gender aggregates, records and the 2026 projection."),
@@ -2060,7 +2128,7 @@ def write_markdown_twins(universities: list[dict], countries: dict, predictions:
         "predicciones": table(["University", "Team", "Champion %", "Gold %", "Any medal %", "Likely place", "Data"], [
             [t["name"], t["team"] or "", round(100 * t["chances"][0], 1), round(100 * t["chances"][places.index(4)], 1), round(100 * t["chances"][places.index(12)], 1),
              f'{t["rank"]} ({t["rank_best"]}–{t["rank_worst"]})', t["kind"]] for t in predictions["teams"][:30]]),
-        "comparar": "The comparison page reads `data/core.json`; its URL takes `?u=<id>,<id>` or `?c=<name>,<name>`.",
+        "comparar": "The comparison page reads `data/core.json` and `data/complexity.json`; its URL takes repeated `?u=<id>`, `?c=<name>` or `?t=<university>|<team>` parameters. Complexity and topics cover 2011–2025.",
         "pais": "The page takes `?c=<country name in English>`; `data/core.json` holds the same results.",
         "universidad": "The page takes `?u=<university id>`; ids and results are in `data/core.json`.",
         "equipo": "The page takes `?u=<university id>&t=<team name>`; results are in `data/core.json`.",
@@ -2195,7 +2263,7 @@ def write_markdown_twins(universities: list[dict], countries: dict, predictions:
         f"- [sedes.json]({SITE_URL}/data/sedes.json): every World Finals venue, host country and local performance.\n"
         f"- [sedes.csv]({SITE_URL}/data/sedes.csv): one row per World Finals venue.\n"
         f"- [cuba.json]({SITE_URL}/data/cuba.json): the Cuban slice: teams, field gaps, Latin-American podiums, people, gender aggregates, records and projection.\n"
-        f"- [complexity.json]({SITE_URL}/data/complexity.json): problem-level difficulty, multi-label topics, editions and university/country profiles, 2011–2025.\n"
+        f"- [complexity.json]({SITE_URL}/data/complexity.json): problem-level difficulty, multi-label topics, editions and university/country/team profiles, 2011–2025.\n"
         f"- [problem-statements.json]({SITE_URL}/data/problem-statements.json): extracted statements for the 2011–2025 problems.\n"
         f"- [cuba-complexity.json]({SITE_URL}/data/cuba-complexity.json): Cuba's 2011–2025 difficulty, attempts, walls, universities and practice gaps.\n"
         f"- [cuba.csv]({SITE_URL}/data/cuba.csv): one row per Cuban team and final.\n"

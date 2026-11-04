@@ -3,7 +3,7 @@ import { fuzzyFilter } from "../fuzzy.js";
 import { categoryAxis, colors, plot, valueAxis } from "../charts.js";
 import { card, grid, isDark, kpis, startPage } from "../shell.js";
 
-const complexity = await fetch("data/complexity.json")
+const complexity = await fetch("data/complexity.json", { cache: "no-cache" })
   .then((response) => (response.ok ? response.json() : null))
   .catch(() => null);
 

@@ -22,7 +22,7 @@ const plural = (n, one, many) => `${n} ${n === 1 ? one : many}`;
 
 export const placeText = (r, field) => `puesto ${Math.round(r.rank)} de ${field[r.year]} en ${r.year}${r.solved != null ? `, con ${plural(r.solved, "problema resuelto", "problemas resueltos")}` : ""}`;
 
-const bestResult = (rows) => {
+export const bestResult = (rows) => {
   const ranked = rows.filter((row) => row.rank != null);
   if (!ranked.length) return undefined;
   return ranked.reduce((best, row) => {

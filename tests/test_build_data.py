@@ -511,3 +511,26 @@ def test_itmo_best_result_is_the_final_where_it_solved_everything(built):
     uni = next(u for u in built["core"]["universities"] if u["name"] == "St. Petersburg ITMO University")
     best = build_data.best_result(uni["results"])
     assert (best["year"], best["rank"], best["solved"]) == (2015, 1, 13)
+
+
+def test_complexity_team_profiles_and_problem_sets(built):
+    complexity = built["complexity"]
+    teams = complexity["teams"]
+    assert len(teams) > 1000
+    uni_ids = {u["id"] for u in built["core"]["universities"]}
+    for team in teams:
+        assert "|" in team["key"], team["key"]
+        assert team["uni"] in uni_ids, team["key"]
+        assert len(team["levels"]) == 6
+        assert len(team["attemptsByLevel"]) == 6
+        assert len(team["failureRate"]) == 6
+        assert team["solves"] == len(team["solvedProblems"]), team["key"]
+        assert set(team["solvedProblems"]) <= set(team["attemptedProblems"]), team["key"]
+    keys = {team["key"] for team in teams}
+    itmo = next(team for team in teams if team["key"] == "st-petersburg-itmo-university|spb itmo university 1")
+    assert len([problem for problem in itmo["solvedProblems"] if problem.startswith("wf-2015-")]) == 13
+
+    uni = next(item for item in complexity["universities"] if item["id"] == "st-petersburg-itmo-university")
+    assert uni["distinctSolves"] <= uni["solves"]
+    assert set(uni["solvedProblems"]) <= set(uni["attemptedProblems"])
+    assert len(uni["attemptsByLevel"]) == 6

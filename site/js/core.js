@@ -77,6 +77,14 @@ function index(core, predictions, world) {
     c.unis.add(r.uni);
     countries.set(r.country, c);
   }
+  const teams = new Map();
+  for (const r of rows) {
+    const key = teamKey(r.uni, r.team);
+    const t = teams.get(key) ?? { key, uni: r.uni, name: r.team, rows: [] };
+    t.name = r.team;
+    t.rows.push(r);
+    teams.set(key, t);
+  }
   const people = new Map();
   for (const r of rows) {
     r.player_ids.forEach((id, i) => {
@@ -86,7 +94,7 @@ function index(core, predictions, world) {
     });
   }
   const forecasts = new Map(predictions.teams.map((t) => [t.id, t]));
-  return { ...core, unis, byId, rows, countriesIndex: countries, people, predictions, forecasts, world };
+  return { ...core, unis, byId, rows, countriesIndex: countries, teams, people, predictions, forecasts, world };
 }
 
 export const countryName = (data, name) => data.countries[name]?.es ?? name;
@@ -97,7 +105,10 @@ export const personUrl = (key) => `competidores.html?p=${encodeURIComponent(key)
 
 export const teamUrl = (uni, team) => `equipo.html?u=${encodeURIComponent(uni)}&t=${encodeURIComponent(team)}`;
 
-export const compareUrl = (kind, keys) => `comparar.html?${kind}=${keys.map(encodeURIComponent).join(",")}`;
+export const compareUrl = (kind, keys) => (keys.length ? `comparar.html?${keys.map((key) => `${kind}=${encodeURIComponent(key)}`).join("&")}` : `comparar.html?${kind}=`);
+
+export const teamFold = (team) => fold(team).trim().replace(/\s+/g, " ").toLowerCase();
+export const teamKey = (uni, team) => `${uni}|${teamFold(team)}`;
 
 // Per-year best percentile of a country.
 export function countrySeries(country) {
@@ -108,7 +119,14 @@ export function countrySeries(country) {
   return [...best].sort((a, b) => a[0] - b[0]);
 }
 
-export const uniSeries = (uni) => uni.results.filter((r) => r.pct != null).map((r) => [r.year, r.pct]);
+export const uniSeries = (uni) => {
+  const best = new Map();
+  for (const row of uni.results) {
+    if (row.pct != null) best.set(row.year, Math.max(best.get(row.year) ?? 0, row.pct));
+  }
+  return [...best].sort((a, b) => a[0] - b[0]);
+};
+export const teamSeries = (team) => team.rows.filter((r) => r.pct != null).map((r) => [r.year, r.pct]);
 
 export const medalCounts = (rows) => ({
   gold: rows.filter((r) => r.medal === "gold").length,

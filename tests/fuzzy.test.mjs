@@ -91,3 +91,24 @@ test("the profile text states the titles and the finals of a competitor", async 
   assert.match(text, /puesto 44 de 133 en 2017/);
   assert.match(text, /Luis.* \(2 finales\)/);
 });
+
+test("team keys normalize case and accents, and team search keeps the university", async () => {
+  const { teamKey } = await import("../site/js/core.js");
+  assert.equal(teamKey("uni", "SPb ITMO University 1"), teamKey("uni", "spb itmo university 1"));
+  assert.notEqual(teamKey("a", "Equipo"), teamKey("b", "Equipo"));
+
+  const { searchEntries } = await import("../site/js/search.js");
+  const data = {
+    countries: {}, countriesIndex: new Map(), unis: [],
+    byId: new Map([["uni", { name: "Universidad de Prueba" }]]),
+    people: new Map(),
+    teams: new Map([["uni|equipo", {
+      key: "uni|equipo", uni: "uni", name: "Equipo",
+      rows: [{ year: 2024 }, { year: 2025 }],
+    }]]),
+  };
+  const team = searchEntries(data).find((entry) => entry.kind === "Equipo");
+  assert.equal(team.label, "Equipo");
+  assert.equal(team.sub, "Universidad de Prueba · 2 finales");
+  assert.equal(team.url, "equipo.html?u=uni&t=Equipo");
+});

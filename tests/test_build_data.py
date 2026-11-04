@@ -534,3 +534,17 @@ def test_complexity_team_profiles_and_problem_sets(built):
     assert uni["distinctSolves"] <= uni["solves"]
     assert set(uni["solvedProblems"]) <= set(uni["attemptedProblems"])
     assert len(uni["attemptsByLevel"]) == 6
+
+
+def test_complexity_search_index_is_compact_and_joined(built):
+    index = json.loads((build_data.OUT / "complexity-search.json").read_text())
+    assert len(index) > 2000
+    for key in ("u:universidad-de-la-habana", "c:Cuba", "r:la", "t:universidad-de-la-habana|uh++"):
+        profile = index[key]
+        assert len(profile["levels"]) == 6
+        assert profile["solves"] >= 0
+        assert len(profile["topAreas"]) <= 2
+    habana = index["u:universidad-de-la-habana"]
+    assert habana["meanLevel"] == 1.49
+    assert habana["topAreas"][0]["label"] == "Geometría"
+    assert habana["topTechnique"]["label"] == "Modelado de grafos"

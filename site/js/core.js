@@ -101,6 +101,7 @@ export const countryName = (data, name) => data.countries[name]?.es ?? name;
 
 export const uniUrl = (id) => `universidad.html?u=${encodeURIComponent(id)}`;
 export const countryUrl = (name) => `pais.html?c=${encodeURIComponent(name)}`;
+export const regionUrl = (code) => `regiones.html?podio=${encodeURIComponent(code)}`;
 export const personUrl = (key) => `competidores.html?p=${encodeURIComponent(key)}`;
 
 export const teamUrl = (uni, team) => `equipo.html?u=${encodeURIComponent(uni)}&t=${encodeURIComponent(team)}`;

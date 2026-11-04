@@ -78,18 +78,70 @@ function wireTheme(draw) {
   });
 }
 
+const SEARCH_LEVEL_COLORS = ["#d9c9a3", "#c9a86a", "#d97f45", "#af3227", "#8e3b5c", "#4a1520"];
+
 function wireSearch(data) {
   const input = document.getElementById("q");
   const box = document.getElementById("res");
   const entries = searchEntries(data);
-  input.oninput = () => {
+  let complexity = {};
+  let complexityLoaded = false;
+  let complexityLoading = null;
+
+  const ensureComplexity = () => {
+    if (!complexityLoading) {
+      complexityLoading = fetch("data/complexity-search.json", { cache: "no-cache" })
+        .then((response) => (response.ok ? response.json() : {}))
+        .catch(() => ({}));
+    }
+    return complexityLoading;
+  };
+  const adoptComplexity = (index) => {
+    if (complexityLoaded) return;
+    complexity = index ?? {};
+    complexityLoaded = true;
+  };
+  const complexityMarkup = (hit) => {
+    if (!hit.complexityKey) return "";
+    if (!complexityLoaded) return '<span class="search-complexity empty">Cargando complejidad…</span>';
+    const profile = complexity[hit.complexityKey];
+    if (!profile) return '<span class="search-complexity empty">Sin perfil de complejidad 2011–2025</span>';
+    const total = profile.levels.reduce((sum, value) => sum + value, 0);
+    if (!total) return '<span class="search-complexity empty">Sin solves de complejidad 2011–2025</span>';
+    const bar = profile.levels.map((value, index) => (value
+      ? `<i style="width:${(100 * value / total).toFixed(1)}%;background:${SEARCH_LEVEL_COLORS[index]}" title="N${index + 1}: ${value}"></i>`
+      : "")).join("");
+    const topics = [
+      ...(profile.topAreas ?? []).map((area) => `${esc(area.label)}${area.share == null ? "" : ` ${Math.round(area.share)}%`}`),
+      ...(profile.topTechnique ? [esc(profile.topTechnique.label)] : []),
+    ].join(" · ");
+    return `<span class="search-complexity"><span class="search-levels" title="Distribución N1–N6">${bar}</span><span class="search-cx-text">Nivel ${profile.meanLevel ?? "—"} · ${profile.solves ?? 0} solves</span><span class="search-topics">${topics}</span></span>`;
+  };
+  const paint = () => {
     const needle = input.value.trim();
     if (needle.length < 2) { box.hidden = true; return; }
     const hits = fuzzyFilter(needle, entries, (e) => e.key).slice(0, 12);
     box.hidden = false;
     box.innerHTML = hits.length
-      ? hits.map((h) => `<a href="${esc(h.url)}">${crest(h.mark, 26)}<span>${esc(h.label)}<small>${esc(h.sub)}</small></span><em>${h.kind}</em></a>`).join("")
+      ? hits.map((h) => `<a href="${esc(h.url)}">${crest(h.mark, 26)}<span class="search-main">${esc(h.label)}<small>${esc(h.sub)}</small>${complexityMarkup(h)}</span><em>${h.kind}</em></a>`).join("")
       : '<p class="none">Sin resultados</p>';
+  };
+  input.oninput = () => {
+    paint();
+    if (!complexityLoaded) {
+      ensureComplexity().then((index) => {
+        adoptComplexity(index);
+        if (!box.hidden && input.value.trim().length >= 2) paint();
+      });
+    }
+  };
+  input.onfocus = () => {
+    if (!complexityLoaded) {
+      ensureComplexity().then((index) => {
+        adoptComplexity(index);
+        if (!box.hidden && input.value.trim().length >= 2) paint();
+      });
+    }
   };
   input.onkeydown = (event) => {
     if (event.key === "Enter") box.querySelector("a")?.click();
@@ -97,7 +149,6 @@ function wireSearch(data) {
   };
   document.addEventListener("click", (event) => { if (!event.target.closest(".search")) box.hidden = true; });
 }
-
 // ------------------------------------------------------------ building blocks
 
 export function grid(parent) {

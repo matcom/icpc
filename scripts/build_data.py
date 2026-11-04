@@ -1663,6 +1663,52 @@ def statement_blocks(path: Path, title: str) -> list[dict]:
     return blocks
 
 
+def build_complexity_search(complexity: dict) -> dict:
+    """Compact complexity fingerprints for the global search cards."""
+    area_label = {area["id"]: area["label"] for area in complexity["areas"]}
+    tech_label = {tech["id"]: tech["label"] for tech in complexity["techniques"]}
+
+    def compact(profile: dict) -> dict:
+        areas = profile.get("areas", {})
+        techniques = profile.get("techniques", {})
+        area_total = sum(areas.values())
+        tech_total = sum(techniques.values())
+        top_areas = [
+            {
+                "label": area_label.get(area, area),
+                "count": count,
+                "share": round(100 * count / area_total, 1) if area_total else None,
+            }
+            for area, count in sorted(areas.items(), key=lambda item: (-item[1], area_label.get(item[0], item[0])))[:2]
+        ]
+        top_technique = None
+        if techniques:
+            tech, count = sorted(techniques.items(), key=lambda item: (-item[1], tech_label.get(item[0], item[0])))[0]
+            top_technique = {
+                "label": tech_label.get(tech, tech),
+                "count": count,
+                "share": round(100 * count / tech_total, 1) if tech_total else None,
+            }
+        return {
+            "meanLevel": profile.get("meanLevel"),
+            "levels": profile.get("levels", [0] * 6),
+            "solves": profile.get("solves", 0),
+            "topAreas": top_areas,
+            "topTechnique": top_technique,
+        }
+
+    index = {}
+    for university in complexity.get("universities", []):
+        index[f"u:{university['id']}"] = compact(university)
+    for country in complexity.get("countries", []):
+        index[f"c:{country['name']}"] = compact(country)
+    for team in complexity.get("teams", []):
+        index[f"t:{team['key']}"] = compact(team)
+    for region in complexity.get("regions", []):
+        index[f"r:{region['id']}"] = compact(region)
+    return index
+
+
 def build_problem_statements(complexity: dict) -> dict:
     """Attach the official statement to every problem in the 2011-2025 window."""
     statements = {}
@@ -2264,6 +2310,7 @@ def write_markdown_twins(universities: list[dict], countries: dict, predictions:
         f"- [sedes.csv]({SITE_URL}/data/sedes.csv): one row per World Finals venue.\n"
         f"- [cuba.json]({SITE_URL}/data/cuba.json): the Cuban slice: teams, field gaps, Latin-American podiums, people, gender aggregates, records and projection.\n"
         f"- [complexity.json]({SITE_URL}/data/complexity.json): problem-level difficulty, multi-label topics, editions and university/country/team profiles, 2011–2025.\n"
+        f"- [complexity-search.json]({SITE_URL}/data/complexity-search.json): compact complexity fingerprints used by the global search.\n"
         f"- [problem-statements.json]({SITE_URL}/data/problem-statements.json): extracted statements for the 2011–2025 problems.\n"
         f"- [cuba-complexity.json]({SITE_URL}/data/cuba-complexity.json): Cuba's 2011–2025 difficulty, attempts, walls, universities and practice gaps.\n"
         f"- [cuba.csv]({SITE_URL}/data/cuba.csv): one row per Cuban team and final.\n"
@@ -2307,6 +2354,7 @@ def build() -> dict:
     try:
         complexity = build_complexity(universities, countries, region_names)
         write_json("complexity.json", complexity)
+        write_json("complexity-search.json", build_complexity_search(complexity))
         try:
             write_json("problem-statements.json", build_problem_statements(complexity))
         except Exception as exc:
@@ -2319,6 +2367,7 @@ def build() -> dict:
             cuba_complexity = None
     except Exception as exc:
         print(f"complexity skipped: {exc}")
+        (OUT / "complexity-search.json").unlink(missing_ok=True)
         complexity = None
         cuba_complexity = None
     write_markdown_twins(universities, countries, predictions, years, cuba, sedes, complexity, cuba_complexity)

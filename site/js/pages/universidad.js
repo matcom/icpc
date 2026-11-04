@@ -1,6 +1,6 @@
-import { avg, compareUrl, countryName, countryUrl, crest, esc, medalCounts, params, personUrl, uniSeries, uniUrl } from "../core.js";
+import { avg, compareUrl, countryName, countryUrl, crest, esc, loadComplexitySearch, medalCounts, params, personUrl, uniSeries, uniUrl } from "../core.js";
 import { categoryAxis, colors, historyChart, plot, valueAxis } from "../charts.js";
-import { chipLinks, ficha, forecastCallout, medalDonut, teamLink, universityFacts } from "../profile.js";
+import { chipLinks, complexityPanel, ficha, forecastCallout, medalDonut, teamLink, universityFacts } from "../profile.js";
 import { card, chartCard, grid, kpis, sequenceSvg, startPage, table } from "../shell.js";
 
 startPage({
@@ -32,6 +32,10 @@ startPage({
     const c = colors();
     const a = grid(view);
     card(a, { title: "Ficha", span: 12, html: ficha(universityFacts(data, uni)) });
+    const cxBody = card(a, { title: "Complejidad y temas", span: 12, sub: "Problemas resueltos por la universidad, 2011–2025", html: '<p class="sub">Cargando perfil de complejidad…</p>' });
+    loadComplexitySearch().then((index) => {
+      if (cxBody.isConnected) cxBody.innerHTML = complexityPanel(index[`u:${uni.id}`]);
+    });
     const similarIds = data.predictions.similar[uni.id] ?? [];
     const similar = similarIds.map((id) => ({ name: data.byId.get(id).name, series: uniSeries(data.byId.get(id)), id }));
     const body = card(a, {

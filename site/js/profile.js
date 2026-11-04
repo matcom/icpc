@@ -15,6 +15,27 @@ export function medalDonut(el, counts) {
 
 export const chipLinks = (items) => `<div class="chips">${items.map((i) => `<a class="chip" href="${esc(i.url)}">${i.mark ?? ""}${esc(i.label)}</a>`).join("")}</div>`;
 
+const LEVEL_COLORS = ["#d9c9a3", "#c9a86a", "#d97f45", "#af3227", "#8e3b5c", "#4a1520"];
+
+export function complexityPanel(profile) {
+  if (!profile) return '<p class="sub">Sin perfil de complejidad para 2011–2025.</p>';
+  const total = (profile.levels ?? []).reduce((sum, value) => sum + value, 0);
+  if (!total) return '<p class="sub">Sin solves de complejidad para 2011–2025.</p>';
+  const levels = profile.levels.map((value, index) => (value
+    ? `<i style="width:${(100 * value / total).toFixed(1)}%;background:${LEVEL_COLORS[index]}" title="N${index + 1}: ${value}"></i>`
+    : "")).join("");
+  const areas = (profile.topAreas ?? []).map((area) => `${esc(area.label)}${area.share == null ? "" : ` ${Math.round(area.share)}%`}`).join(" · ");
+  const technique = profile.topTechnique ? `${esc(profile.topTechnique.label)}${profile.topTechnique.share == null ? "" : ` ${Math.round(profile.topTechnique.share)}%`}` : "—";
+  return `<div class="cx-panel">
+    <div class="cx-levels" title="Distribución N1–N6">${levels}</div>
+    <div class="cx-stats"><span><b>${profile.meanLevel ?? "—"}</b><small>nivel medio</small></span><span><b>${profile.solves ?? 0}</b><small>solves 2011–2025</small></span></div>
+    <div class="cx-topics"><span><small>Áreas</small>${areas || "—"}</span><span><small>Técnica</small>${technique}</span></div>
+    <p class="note">La barra reparte los solves entre N1 y N6; más a la derecha, más dificultad. Solo tema principal.</p>
+  </div>`;
+}
+
+
+
 // "2015, 2016 y 2017"
 export const listEs = (items) => (items.length < 2 ? items.join("") : `${items.slice(0, -1).join(", ")} y ${items[items.length - 1]}`);
 

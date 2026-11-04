@@ -49,6 +49,17 @@ export const TITLE_NAMES = {
 let cache = null;
 const logoByName = new Map();
 
+let complexitySearchPromise = null;
+
+export function loadComplexitySearch() {
+  if (!complexitySearchPromise) {
+    complexitySearchPromise = fetch("data/complexity-search.json", { cache: "no-cache" })
+      .then((response) => (response.ok ? response.json() : {}))
+      .catch(() => ({}));
+  }
+  return complexitySearchPromise;
+}
+
 export async function loadData() {
   if (cache) return cache;
   const [core, predictions, world] = await Promise.all(

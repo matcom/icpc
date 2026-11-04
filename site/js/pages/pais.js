@@ -1,6 +1,6 @@
-import { REGION_COLORS, avg, compareUrl, countryName, countrySeries, countryUrl, crest, esc, medalCounts, params, personUrl, uniUrl } from "../core.js";
+import { REGION_COLORS, avg, compareUrl, countryName, countrySeries, countryUrl, crest, esc, loadComplexitySearch, medalCounts, params, personUrl, uniUrl } from "../core.js";
 import { categoryAxis, colors, donut, historyChart, plot, valueAxis } from "../charts.js";
-import { chipLinks, forecastCallout, medalDonut, teamLink } from "../profile.js";
+import { chipLinks, complexityPanel, forecastCallout, medalDonut, teamLink } from "../profile.js";
 import { card, chartCard, grid, kpis, startPage, table } from "../shell.js";
 
 startPage({
@@ -35,6 +35,10 @@ startPage({
     ]);
     const c = colors();
     const a = grid(view);
+    const cxBody = card(a, { title: "Complejidad y temas", span: 12, sub: "Problemas resueltos por el país, 2011–2025", html: '<p class="sub">Cargando perfil de complejidad…</p>' });
+    loadComplexitySearch().then((index) => {
+      if (cxBody.isConnected) cxBody.innerHTML = complexityPanel(index[`c:${name}`]);
+    });
     const similar = (predict?.similar ?? []).map((n) => ({ name: countryName(data, n), series: countrySeries(data.countriesIndex.get(n)), key: n }));
     const historyBody = card(a, {
       title: "Historial frente a sus parecidos", sub: "Mejor percentil de cada final (100 es el campeón), con los países de trayectoria más parecida", span: 8,

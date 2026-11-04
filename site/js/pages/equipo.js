@@ -1,6 +1,6 @@
-import { countryName, countryUrl, crest, esc, fold, medalCounts, params, personUrl, teamUrl, uniUrl } from "../core.js";
+import { countryName, countryUrl, crest, esc, fold, loadComplexitySearch, medalCounts, params, personUrl, teamKey, teamUrl, uniUrl } from "../core.js";
 import { categoryAxis, colors, plot, valueAxis } from "../charts.js";
-import { ficha, medalDonut, teamFacts } from "../profile.js";
+import { complexityPanel, ficha, medalDonut, teamFacts } from "../profile.js";
 import { card, chartCard, grid, kpis, startPage, table } from "../shell.js";
 
 startPage({
@@ -32,6 +32,10 @@ startPage({
     const a = grid(view);
     card(a, { title: "Ficha", sub: "Mismo nombre y misma universidad cuentan como el mismo equipo.", span: 8, html: ficha(teamFacts(data, uni, rows)) });
     medalDonut(chartCard(a, { title: "Medallero", span: 4, height: 200 }), medals);
+    const cxBody = card(a, { title: "Complejidad y temas", span: 12, sub: "Problemas resueltos por el equipo, 2011–2025", html: '<p class="sub">Cargando perfil de complejidad…</p>' });
+    loadComplexitySearch().then((index) => {
+      if (cxBody.isConnected) cxBody.innerHTML = complexityPanel(index[`t:${teamKey(uni.id, name)}`]);
+    });
     const c = colors();
     plot(chartCard(a, { title: "Su trayectoria", sub: "Percentil en cada final (100 es el campeón)", span: 6, height: 300 }), {
       legend: false,

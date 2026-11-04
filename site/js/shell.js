@@ -1,5 +1,5 @@
 // Page frame: navigation, search, theme, cards, KPIs and shared filters.
-import { crest, esc, loadData } from "./core.js";
+import { crest, esc, loadComplexitySearch, loadData } from "./core.js";
 import { disposeAll } from "./charts.js";
 import { watchSelects } from "./combobox.js";
 import { fuzzyFilter } from "./fuzzy.js";
@@ -89,11 +89,7 @@ function wireSearch(data) {
   let complexityLoading = null;
 
   const ensureComplexity = () => {
-    if (!complexityLoading) {
-      complexityLoading = fetch("data/complexity-search.json", { cache: "no-cache" })
-        .then((response) => (response.ok ? response.json() : {}))
-        .catch(() => ({}));
-    }
+    if (!complexityLoading) complexityLoading = loadComplexitySearch();
     return complexityLoading;
   };
   const adoptComplexity = (index) => {

@@ -555,6 +555,17 @@ startPage({
             ${s.profile.solves < 10 ? '<small class="compare-small">Muestra pequeña: interpretar con cautela.</small>' : ""}</div>`;
         }).join("")}</div>`,
       });
+
+      const taskTotal = (s) => sum(Object.values(s.profile.tasks ?? {}));
+      const burdenTotal = (s) => sum(Object.values(s.profile.burdens ?? {}));
+      card(a, {
+        title: "Tareas y carga de implementación", span: 12,
+        sub: "Porcentaje de solves de cada entidad en cada tipo de tarea y carga, 2011–2025.",
+        html: `<div class="compare-split">
+          <div><h3 class="compare-subhead">Tareas</h3>${heatTable(withProfile, cx.tasks, (s, task) => s.profile.tasks?.[task.id] ?? 0, taskTotal, "Entidad")}</div>
+          <div><h3 class="compare-subhead">Carga</h3>${heatTable(withProfile, cx.burdens, (s, burden) => s.profile.burdens?.[burden.id] ?? 0, burdenTotal, "Entidad")}</div>
+        </div>`,
+      });
     }
 
     // Common years and head-to-head record.

@@ -420,3 +420,52 @@ def test_only_one_team_has_solved_every_problem(built):
         if r["solved"] is not None and r["solved"] == core["problems"][str(r["year"])]
     ]
     assert perfect == [(2015, "St. Petersburg ITMO University", "SPb ITMO University 1", 13, 1)]
+
+
+def test_complexity_window_levels_and_average(built):
+    complexity = built["complexity"]
+    assert complexity["scope"] == {"from": 2011, "to": 2025, "problems": 179, "teams": 1893, "editions": 15, "firstSolveCoverage": 159}
+    assert sum(complexity["totals"]["levels"]) == 179
+    assert sum(complexity["totals"]["solvedLevels"]) == complexity["totals"]["solves"]
+    assert complexity["averageEdition"]["problems"] == 179
+    assert all(2011 <= problem["year"] <= 2025 for problem in complexity["problems"])
+    assert not any(problem["year"] == 2008 for problem in complexity["problems"])
+
+
+def test_complexity_problem_rows_match_the_scoreboard(built):
+    complexity = built["complexity"]
+    with (build_data.CURATED / "problem-difficulty.csv").open() as handle:
+        rows = {(int(row["year"]), row["letter"]): row for row in csv.DictReader(handle)}
+    for problem in complexity["problems"]:
+        row = rows[(problem["year"], problem["letter"])]
+        assert problem["teams"] == int(row["teams"])
+        assert problem["solved"] == int(row["solved"])
+        assert problem["attempts"] == int(row["attempts"])
+        assert problem["level"] == build_data.complexity_level(float(row["solve_rate"]))
+        if problem["solved"]:
+            assert problem["attemptsPerSolve"] == round(problem["attempts"] / problem["solved"], 2)
+        if problem["firstSolveMin"] is not None:
+            assert problem["firstSolveOrder"] is not None
+
+
+def test_statements_cover_the_complexity_window(built):
+    statements = json.loads((build_data.OUT / "problem-statements.json").read_text())
+    assert len(statements) == 179
+    sensor = statements["wf-2014-i"]["blocks"]
+    text = " ".join(block["x"] for block in sensor)
+    assert "wireless sensor network" in text.lower()
+    assert "Input" in [block["x"] for block in sensor if block["t"] == "h"]
+    assert "solution" not in text.lower()
+
+
+def test_order_and_retries_are_published(built):
+    complexity = built["complexity"]
+    assert sum(q["count"] for q in complexity["orderQuartiles"]) == complexity["scope"]["firstSolveCoverage"]
+    assert complexity["orderQuartiles"][0]["meanSolveRate"] > complexity["orderQuartiles"][-1]["meanSolveRate"]
+    assert complexity["orderQuartiles"][0]["meanLevel"] < complexity["orderQuartiles"][-1]["meanLevel"]
+    edition = next(item for item in complexity["editions"] if item["year"] == 2011)
+    assert edition["firstBlood"]["letter"] == "K"
+    assert edition["lastBlood"]["letter"] == "I"
+    problem = next(item for item in complexity["problems"] if item["id"] == "wf-2014-i")
+    assert problem["firstSolveOrder"] == 4
+    assert problem["attemptsPerSolve"] == 22.7

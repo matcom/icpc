@@ -1,0 +1,213 @@
+year,letter,title,teams,solved,solve_rate,attempts,first_solve_min,median_solve_min,source,status
+2008,A,Air Conditioning Machinery,97,29,0.299,84,63,239.0,icpcgate,final
+2008,B,Always an Integer,97,59,0.608,273,33,168.0,icpcgate,final
+2008,C,Conveyor Belt,97,0,0.000,0,,,icpcgate,final
+2008,D,The Hare and the Hounds,97,1,0.010,10,275,275.0,icpcgate,final
+2008,E,Huffman Codes,97,5,0.052,8,217,276.0,icpcgate,final
+2008,F,Glenbow Museum,97,86,0.887,168,31,124.5,icpcgate,final
+2008,G,Net Loss,97,16,0.165,30,151,262.0,icpcgate,final
+2008,H,Painter,97,0,0.000,3,,,icpcgate,final
+2008,I,Password Suspects,97,23,0.237,73,42,252.0,icpcgate,final
+2008,J,The Sky is the Limit,97,55,0.567,183,32,169.0,icpcgate,final
+2008,K,Steam Roller,97,65,0.670,236,32,144.0,icpcgate,final
+2009,A,A Careful Approach,100,75,0.750,148,10,43.0,icpcgate,partial
+2009,B,My Bad,100,67,0.670,122,44,137.0,icpcgate,partial
+2009,C,The Return of Carl,100,2,0.020,10,82,136.5,icpcgate,partial
+2009,D,Conduit Packing,100,12,0.120,32,84,187.5,icpcgate,partial
+2009,E,Fare and Balanced,100,9,0.090,60,100,159.0,icpcgate,partial
+2009,F,Deer-Proof Fence,100,58,0.580,136,48,116.0,icpcgate,partial
+2009,G,House of Cards,100,0,0.000,0,,,icpcgate,partial
+2009,H,The Ministers’ Major Mess,100,22,0.220,44,60,176.5,icpcgate,partial
+2009,I,Struts and Springs,100,13,0.130,38,91,224.0,icpcgate,partial
+2009,J,Subway Timing,100,0,0.000,0,,,icpcgate,partial
+2009,K,Suffix-Replacement Grammars,100,3,0.030,30,123,178.0,icpcgate,partial
+2010,A,APL Lives!,103,1,0.010,26,294,294.0,icpcgate,partial
+2010,B,Barcodes,103,31,0.301,375,76,196.0,icpcgate,partial
+2010,C,Tracking Bio-bots,103,64,0.621,228,48,149.5,icpcgate,partial
+2010,D,Castles,103,68,0.660,178,30,137.5,icpcgate,partial
+2010,E,Channel,103,1,0.010,13,183,183.0,icpcgate,partial
+2010,F,Contour Mapping,103,7,0.068,61,153,264.0,icpcgate,partial
+2010,G,The Islands,103,75,0.728,204,27,101.0,icpcgate,partial
+2010,H,Rain,103,1,0.010,3,266,266.0,icpcgate,partial
+2010,I,Robots on Ice,103,5,0.049,43,201,252.0,icpcgate,partial
+2010,J,Sharing Chocolate,103,70,0.680,271,25,116.5,icpcgate,partial
+2010,K,Paperweight,103,4,0.039,25,181,246.0,icpcgate,partial
+2011,A,To Add or to Multiply,104,35,0.337,99,58,216.0,zibada,final
+2011,B,Affine Mess,104,7,0.067,19,181,272.0,zibada,final
+2011,C,Ancient Messages,104,98,0.942,187,27,111.0,zibada,final
+2011,D,Chips Challenge,104,0,0.000,0,,,zibada,final
+2011,E,Coffee Central,104,63,0.606,163,32,163.0,zibada,final
+2011,F,Machine Works,104,2,0.019,4,218,239.5,zibada,final
+2011,G,Magic Sticks,104,7,0.067,23,185,273.0,zibada,final
+2011,H,Mining Your Own Business,104,39,0.375,118,75,198.0,zibada,final
+2011,I,Mummy Madness,104,2,0.019,6,279,283.5,zibada,final
+2011,J,Pyramids,104,60,0.577,213,43,143.0,zibada,final
+2011,K,Trash Removal,104,94,0.904,227,11,46.5,zibada,final
+2012,A,Asteroid Rangers,112,2,0.018,51,226,258.5,kattis,final
+2012,B,Curvy Little Bottles,112,110,0.982,202,15,61.5,kattis,final
+2012,C,Bus Tour,112,76,0.679,251,56,159.0,kattis,final
+2012,D,Fibonacci Words,112,96,0.857,278,18,111.5,kattis,final
+2012,E,Infiltration,112,31,0.277,300,73,232.0,kattis,final
+2012,F,Keys,112,2,0.018,29,142,154.5,kattis,final
+2012,G,Minimum Cost Flow,112,8,0.071,45,82,247.5,kattis,final
+2012,H,Room Service,112,0,0.000,12,,,kattis,final
+2012,I,A Safe Bet,112,11,0.098,113,88,220.0,kattis,final
+2012,J,Shortest Flight Path,112,0,0.000,0,,,kattis,final
+2012,K,Stacking Plates,112,67,0.598,289,27,170.0,kattis,final
+2012,L,Takeover Wars,112,16,0.143,90,37,222.0,kattis,final
+2013,A,Self-Assembly,119,76,0.639,219,25,157.0,kattis,final
+2013,B,"Hey, Better Bettor",119,2,0.017,34,191,238.0,kattis,final
+2013,C,Surely You Congest,119,51,0.429,169,37,172.0,kattis,final
+2013,D,Factors,119,62,0.521,380,17,151.0,kattis,final
+2013,E,Harvard,119,5,0.042,50,131,255.0,kattis,final
+2013,F,Low Power,119,107,0.899,273,10,47.0,kattis,final
+2013,G,Map Tiles,119,0,0.000,35,,,kattis,final
+2013,H,Matryoshka,119,66,0.555,160,49,184.5,kattis,final
+2013,I,Pirate Chest,119,12,0.101,37,157,234.5,kattis,final
+2013,J,Pollution Solution,119,46,0.387,273,27,160.0,kattis,final
+2013,K,Up a Tree,119,3,0.025,9,190,207.0,kattis,final
+2014,A,Baggage,121,0,0.000,20,,,kattis,final
+2014,B,Buffed Buffet,121,11,0.091,128,101,246.0,kattis,final
+2014,C,Crane Balancing,121,55,0.455,403,35,195.0,kattis,final
+2014,D,Game Strategy,121,96,0.793,349,28,111.0,kattis,final
+2014,E,Maze Reduction,121,16,0.132,102,106,241.5,kattis,final
+2014,F,Messenger,121,1,0.008,26,290,290.0,kattis,final
+2014,G,Metal Processing Plant,121,3,0.025,97,189,245.0,kattis,final
+2014,H,Pachinko,121,0,0.000,11,,,kattis,final
+2014,I,Sensor Network,121,10,0.083,227,68,244.5,kattis,final
+2014,J,Skiing,121,0,0.000,1,,,kattis,final
+2014,K,Surveillance,121,66,0.545,418,17,134.0,kattis,final
+2014,L,Wire Crossing,121,0,0.000,8,,,kattis,final
+2015,A,Amalgamated Artichokes,128,128,1.000,140,5,14.0,kattis,final
+2015,B,Asteroids,128,6,0.047,20,175,280.0,kattis,final
+2015,C,Catering,128,77,0.602,150,29,111.0,kattis,final
+2015,D,Cutting Cheese,128,116,0.906,185,30,111.0,kattis,final
+2015,E,Evolution in Parallel,128,20,0.156,62,115,250.0,kattis,final
+2015,F,Keyboarding,128,93,0.727,324,28,115.0,kattis,final
+2015,G,Pipe Stream,128,1,0.008,16,249,249.0,kattis,final
+2015,H,Qanat,128,20,0.156,28,118,222.0,kattis,final
+2015,I,Ship Traffic,128,92,0.719,237,53,197.5,kattis,final
+2015,J,Tile Cutting,128,59,0.461,110,47,191.0,kattis,final
+2015,K,Tours,128,2,0.016,11,248,266.5,kattis,final
+2015,L,Weather Report,128,68,0.531,81,39,174.0,kattis,final
+2015,M,Window Manager,128,15,0.117,108,144,265.0,kattis,final
+2016,A,Balanced Diet,128,36,0.281,123,71,202.5,kattis,final
+2016,B,Branch Assignment,128,50,0.391,192,42,185.5,kattis,final
+2016,C,Ceiling Function,128,128,1.000,160,11,34.0,kattis,final
+2016,D,Clock Breaking,128,51,0.398,87,79,225.0,kattis,final
+2016,E,Forever Young,128,92,0.719,357,15,97.0,kattis,final
+2016,F,Longest Rivers,128,12,0.094,32,208,264.0,kattis,final
+2016,G,Oil,128,96,0.750,416,37,157.5,kattis,final
+2016,H,Polygonal Puzzle,128,0,0.000,1,,,kattis,final
+2016,I,Road Times,128,1,0.008,22,264,264.0,kattis,final
+2016,J,Spin Doctor,128,2,0.016,43,223,239.0,kattis,final
+2016,K,String Theory,128,66,0.516,203,44,168.0,kattis,final
+2016,L,Swap Space,128,108,0.844,402,18,98.5,kattis,final
+2016,M,What Really Happened on Mars?,128,8,0.062,26,225,272.5,kattis,final
+2017,A,Airport Construction,127,35,0.276,710,58,204.0,kattis,final
+2017,B,Get a Clue!,127,8,0.063,37,204,227.5,kattis,final
+2017,C,Mission Improbable,127,105,0.827,255,54,148.0,kattis,final
+2017,D,Money for Nothing,127,31,0.244,311,29,207.0,kattis,final
+2017,E,Need for Speed,127,127,1.000,191,5,20.0,kattis,final
+2017,F,Posterize,127,123,0.969,174,14,58.0,kattis,final
+2017,G,Replicate Replicate Rfplicbte,127,18,0.142,33,77,233.5,kattis,final
+2017,H,Scenery,127,0,0.000,18,,,kattis,final
+2017,I,Secret Chamber at Mount Rushmore,127,127,1.000,134,6,24.0,kattis,final
+2017,J,Son of Pipe Stream,127,1,0.008,14,296,296.0,kattis,final
+2017,K,Tarot Sham Boast,127,15,0.118,99,82,207.0,kattis,final
+2017,L,Visual Python++,127,27,0.213,150,86,239.0,kattis,final
+2018,A,Catch the Plane,140,100,0.714,252,25,160.0,zibada,final
+2018,B,Comma Sprinkler,140,135,0.964,236,16,77.0,zibada,final
+2018,C,Conquer The World,140,0,0.000,4,,,zibada,final
+2018,D,Gem Island,140,5,0.036,15,203,258.0,zibada,final
+2018,E,Getting a Jump on Crime,140,10,0.071,88,229,267.5,zibada,final
+2018,F,Go with the Flow,140,125,0.893,460,13,113.0,zibada,final
+2018,G,Panda Preserve,140,5,0.036,67,140,275.0,zibada,final
+2018,H,Single Cut of Failure,140,46,0.329,269,41,224.0,zibada,final
+2018,I,Triangles,140,44,0.314,203,64,222.5,zibada,final
+2018,J,Uncrossed Knight’s Tour,140,0,0.000,1,,,zibada,final
+2018,K,Wireless is the New Fiber,140,124,0.886,253,16,98.0,zibada,final
+2019,A,Azulejos,135,128,0.948,255,21,86.5,zibada,final
+2019,B,Beautiful Bridges,135,41,0.304,211,44,223.0,zibada,final
+2019,C,Checks Post Facto,135,0,0.000,18,,,zibada,final
+2019,D,Circular DNA,135,127,0.941,209,27,142.0,zibada,final
+2019,E,Dead-End Detector,135,109,0.807,341,14,120.0,zibada,final
+2019,F,Directing Rainfall,135,3,0.022,32,168,230.0,zibada,final
+2019,G,First of Her Name,135,54,0.400,206,55,204.0,zibada,final
+2019,H,Hobson’s Trains,135,81,0.600,187,28,178.0,zibada,final
+2019,I,Karel the Robot,135,5,0.037,21,245,263.0,zibada,final
+2019,J,Miniature Golf,135,33,0.244,190,72,225.0,zibada,final
+2019,K,Traffic Blights,135,4,0.030,25,243,270.5,zibada,final
+2020,A,Cardiology,117,38,0.325,106,27,199.0,zibada,final
+2020,B,The Cost of Speed Limits,117,11,0.094,53,123,215.0,zibada,final
+2020,C,Domes,117,57,0.487,340,12,158.0,zibada,final
+2020,D,Gene Folding,117,94,0.803,254,13,90.5,zibada,final
+2020,E,Landscape Generator,117,114,0.974,159,14,54.0,zibada,final
+2020,F,Ley Lines,117,21,0.179,87,31,214.0,zibada,final
+2020,G,Opportunity Cost,117,69,0.590,263,18,134.0,zibada,final
+2020,H,QC QC,117,1,0.009,46,287,287.0,zibada,final
+2020,I,Quests,117,10,0.085,39,187,253.0,zibada,final
+2020,J,’S No Problem,117,50,0.427,163,26,195.0,zibada,final
+2020,K,Space Walls,117,0,0.000,1,,,zibada,final
+2020,L,Sweep Stakes,117,0,0.000,47,,,zibada,final
+2020,M,Trailing Digits,117,27,0.231,104,29,207.0,zibada,final
+2020,N,"What’s Our Vector, Victor?",117,1,0.009,25,296,296.0,zibada,final
+2020,O,Which Planet is This?!,117,80,0.684,526,17,137.0,zibada,final
+2021,A,Crystal Crosswind,132,63,0.477,110,50,198.0,zibada,final
+2021,B,Dungeon Crawler,132,21,0.159,196,76,233.0,zibada,final
+2021,C,Fair Division,132,72,0.545,374,25,139.5,zibada,final
+2021,D,Guardians of the Gallery,132,0,0.000,38,,,zibada,final
+2021,E,Hand of the Free Marked,132,4,0.030,10,196,248.0,zibada,final
+2021,F,Islands from the Sky,132,43,0.326,74,54,212.0,zibada,final
+2021,G,Mosaic Browsing,132,24,0.182,119,85,203.5,zibada,final
+2021,H,Prehistoric Programs,132,120,0.909,485,11,70.5,zibada,final
+2021,I,Spider Walk,132,10,0.076,57,61,229.5,zibada,final
+2021,J,Splitstream,132,102,0.773,275,37,156.5,zibada,final
+2021,K,Take On Meme,132,2,0.015,13,210,229.0,zibada,final
+2021,L,Where Am I?,132,78,0.591,246,30,203.0,zibada,final
+2022,P,Turning Red,124,115,0.927,283,19,93.0,zibada,final
+2022,Q,Doing the Container Shuffle,124,72,0.581,161,32,148.0,zibada,final
+2022,R,Zoo Management,124,15,0.121,91,76,236.0,zibada,final
+2022,S,Bridging the Gap,124,1,0.008,87,276,276.0,zibada,final
+2022,T,Carl’s Vacation,124,79,0.637,307,33,154.0,zibada,final
+2022,U,Toy Train Tracks,124,92,0.742,391,31,186.5,zibada,final
+2022,V,Three Kinds of Dice,124,24,0.194,97,76,214.0,zibada,final
+2022,W,Riddle of the Sphinx,124,116,0.935,192,8,75.5,zibada,final
+2022,X,Quartets,124,8,0.065,43,179,272.5,zibada,final
+2022,Y,Compression,124,124,1.000,140,6,16.5,zibada,final
+2022,Z,Archaeological Recovery,124,0,0.000,15,,,zibada,final
+2023,A,Riddle of the Sphinx,130,120,0.923,214,10,59.0,zibada,final
+2023,B,Schedule,130,7,0.054,47,153,227.0,zibada,final
+2023,C,Three Kinds of Dice,130,30,0.231,98,82,240.0,zibada,final
+2023,D,Carl’s Vacation,130,86,0.662,293,21,156.5,zibada,final
+2023,E,A Recurring Problem,130,0,0.000,4,,,zibada,final
+2023,F,Tilting Tiles,130,26,0.200,203,90,254.5,zibada,final
+2023,G,Turning Red,130,117,0.900,270,21,101.0,zibada,final
+2023,H,Jet Lag,130,96,0.738,263,33,175.5,zibada,final
+2023,I,Waterworld,130,110,0.846,127,16,72.0,zibada,final
+2023,J,Bridging the Gap,130,1,0.008,48,292,292.0,zibada,final
+2023,K,Alea Iacta Est,130,11,0.085,26,113,230.0,zibada,final
+2024,A,Billboards,141,53,0.376,542,81,213.0,zibada,final
+2024,B,Bingo for the Win!,141,140,0.993,258,7,31.0,zibada,final
+2024,C,Citizenship,141,128,0.908,471,13,102.5,zibada,final
+2024,D,Doubles Horseback Wrestling,141,84,0.596,241,22,156.0,zibada,final
+2024,E,Flipping Container,141,2,0.014,53,194,197.0,zibada,final
+2024,F,Friendly Rivalry,141,135,0.957,368,15,80.0,zibada,final
+2024,G,Kindergarten,141,0,0.000,12,,,zibada,final
+2024,H,Maxwell’s Demon,141,4,0.028,74,172,249.0,zibada,final
+2024,I,Steppe on It,141,100,0.709,358,16,131.5,zibada,final
+2024,J,The Silk Road . . . with Robots!,141,19,0.135,41,99,240.0,zibada,final
+2024,K,Tower of noiHa,141,3,0.021,45,184,195.0,zibada,final
+2024,L,Where Am I Now?,141,16,0.113,167,139,232.5,zibada,final
+2025,A,Skew-ed Reasoning,139,45,0.324,130,73,224.0,zibada,final
+2025,B,Blackboard Game,139,8,0.058,72,53,254.0,zibada,final
+2025,C,Bride of Pipe Stream,139,0,0.000,4,,,zibada,final
+2025,D,Buggy Rover,139,138,0.993,170,14,51.5,zibada,final
+2025,E,Delivery Service,139,20,0.144,74,113,240.0,zibada,final
+2025,F,Herding Cats,139,135,0.971,273,17,66.0,zibada,final
+2025,G,Lava Moat,139,2,0.014,31,270,284.0,zibada,final
+2025,H,Score Values,139,66,0.475,278,71,199.5,zibada,final
+2025,I,Slot Machine,139,135,0.971,211,23,100.0,zibada,final
+2025,J,Stacking Cups,139,128,0.921,287,35,140.5,zibada,final
+2025,K,Treasure Map,139,72,0.518,154,69,195.0,zibada,final
+2025,L,Walking on Sunshine,139,138,0.993,193,6,24.0,zibada,final

@@ -99,8 +99,8 @@ function upgrade(select) {
 
 const upgradeWithin = (root) => {
   if (root.nodeType !== 1) return;
-  if (root.matches("select:not([data-combo])")) upgrade(root);
-  root.querySelectorAll("select:not([data-combo])").forEach(upgrade);
+  if (root.matches("select:not([data-combo]):not([data-plain])")) upgrade(root);
+  root.querySelectorAll("select:not([data-combo]):not([data-plain])").forEach(upgrade);
 };
 
 export function watchSelects(root) {

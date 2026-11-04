@@ -58,13 +58,16 @@ export function plot(el, option, { onClick } = {}) {
   return chart;
 }
 
+export function dispose(chart) {
+  if (!chart) return;
+  observers.get(chart)?.disconnect();
+  observers.delete(chart);
+  live.delete(chart);
+  chart.dispose();
+}
+
 export function disposeAll() {
-  for (const chart of live) {
-    observers.get(chart)?.disconnect();
-    chart.dispose();
-  }
-  live.clear();
-  observers.clear();
+  for (const chart of [...live]) dispose(chart);
 }
 
 export const categoryAxis = (data, extra = {}) => {

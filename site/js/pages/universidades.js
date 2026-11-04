@@ -100,8 +100,8 @@ startPage({
       card(a, {
         title: `Todas (${list.length})`, span: 12,
         html: table(
-          ["Universidad", "País", { label: "Finales", num: 1 }, { label: "Mejor", num: 1 }, { label: "Perc. medio", num: 1 }, { label: "Resueltos", num: 1 }, { label: "Oro", num: 1 }, { label: "Plata", num: 1 }, { label: "Bronce", num: 1 }],
-          ordered.map((e) => [`<a href="${uniUrl(e.id)}">${esc(e.name)}</a>`, esc(countryName(data, e.country)), e.rows.length, e.best === 1e9 ? "—" : Math.round(e.best), Math.round(e.avg), e.solved, e.medals.gold, e.medals.silver, e.medals.bronze]),
+          ["Universidad", "País", { label: "Finales", num: 1 }, { label: "Mejor", num: 1 }, { label: "Perc. medio", num: 1 }, { label: "Resueltos", num: 1 }, { label: "Oro", num: 1 }, { label: "Plata", num: 1 }, { label: "Bronce", num: 1 }, { label: "Total", num: 1 }],
+          ordered.map((e) => [`<a href="${uniUrl(e.id)}">${esc(e.name)}</a>`, esc(countryName(data, e.country)), e.rows.length, e.best === 1e9 ? "—" : Math.round(e.best), Math.round(e.avg), e.solved, e.medals.gold, e.medals.silver, e.medals.bronze, e.medals.gold + e.medals.silver + e.medals.bronze]),
         ),
       });
     };

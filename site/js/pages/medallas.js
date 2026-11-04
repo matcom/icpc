@@ -84,8 +84,8 @@ startPage({
       card(a, {
         title: "Medallero", span: 12,
         html: table(
-          [{ label: "#", num: 1 }, state.scope === "uni" ? "Universidad" : "País", { label: "Oro", num: 1 }, { label: "Plata", num: 1 }, { label: "Bronce", num: 1 }, { label: "Total", num: 1 }, { label: "Finales", num: 1 }, ...Array.from({ length: 12 }, (_, i) => ({ label: `${i + 1}º`, num: 1 }))],
-          shown.map((e, i) => [i + 1, `<a href="${link(e.key)}">${esc(label(e.key))}</a>`, `<b>${e.gold}</b>`, e.silver, e.bronze, e.gold + e.silver + e.bronze, e.years.size, ...e.places.map((v) => v || "")]),
+          [state.scope === "uni" ? "Universidad" : "País", { label: "Oro", num: 1 }, { label: "Plata", num: 1 }, { label: "Bronce", num: 1 }, { label: "Total", num: 1 }, { label: "Finales", num: 1 }, ...Array.from({ length: 12 }, (_, i) => ({ label: `${i + 1}º`, num: 1 }))],
+          shown.map((e) => [`<a href="${link(e.key)}">${esc(label(e.key))}</a>`, `<b>${e.gold}</b>`, e.silver, e.bronze, e.gold + e.silver + e.bronze, e.years.size, ...e.places.map((v) => v || "")]),
         ) + '<p class="note">Son las medallas realmente entregadas, según cphof, cuyo número varía de una edición a otra. Con una región elegida se reparten por posición dentro de esa región: puestos 1–4 oro, 5–8 plata y 9–12 bronce.</p>',
       });
     };

@@ -1052,6 +1052,521 @@ def build_cuba(universities: list[dict], countries: dict, predictions: dict, pro
     }
 
 
+
+# ------------------------------------------------------------------ complexity
+
+COMPLEXITY_LEVELS = [
+    ("n1", 1, "Abierto", 0.80, 1.00, "Casi todos los equipos lo resuelven."),
+    ("n2", 2, "Accesible", 0.60, 0.80, "La mayoría lo resuelve."),
+    ("n3", 3, "Intermedio", 0.40, 0.60, "Lo resuelve cerca de la mitad."),
+    ("n4", 4, "Exigente", 0.20, 0.40, "Solo una minoría."),
+    ("n5", 5, "Duro", 0.10, 0.20, "Muy pocos."),
+    ("n6", 6, "Excepcional", 0.00, 0.10, "Casi nadie; no implica imposible."),
+]
+
+
+def complexity_level(rate: float) -> int:
+    for _, level, _, low, _, _ in COMPLEXITY_LEVELS:
+        if rate >= low:
+            return level
+    return 6
+
+
+def read_curated_csv(name: str) -> list[dict]:
+    with (CURATED / name).open(encoding="utf-8") as handle:
+        return list(csv.DictReader(handle))
+
+
+def build_complexity(universities: list[dict], countries: dict, region_names: dict) -> dict:
+    """Cross the 2011-2025 scoreboard matrix with the v1 multi-label taxonomy."""
+    difficulty = [r for r in read_curated_csv("problem-difficulty.csv") if 2011 <= int(r["year"]) <= 2025]
+    matrix = [r for r in read_curated_csv("scoreboard-matrix.csv") if 2011 <= int(r["year"]) <= 2025]
+    team_rows = [r for r in read_curated_csv("team-results.csv") if 2011 <= int(r["year"]) <= 2025]
+    topics = {r["problem_id"]: r for r in read_curated_csv("problem-topics.csv")}
+    taxonomy = json.loads((CURATED / "taxonomy.json").read_text(encoding="utf-8"))
+    area_label = {x["id"]: x["label"] for x in taxonomy["dimensions"]["areas"]}
+    tech_label = {x["id"]: x["label"] for x in taxonomy["dimensions"]["techniques"]}
+    tech_family = {x["id"]: x["family"] for x in taxonomy["dimensions"]["techniques"]}
+    task_label = {x["id"]: x["label"] for x in taxonomy["dimensions"]["tasks"]}
+    burden_label = {x["id"]: x["label"] for x in taxonomy["dimensions"]["burdens"]}
+    format_label = {x["id"]: x["label"] for x in taxonomy["dimensions"]["formats"]}
+
+    def split(value: str) -> list[str]:
+        return [x for x in (value or "").split(";") if x]
+
+    problems = []
+    for row in difficulty:
+        pid = f'wf-{row["year"]}-{row["letter"].lower()}'
+        topic = topics[pid]
+        rate = float(row["solve_rate"])
+        level = complexity_level(rate)
+        teams = int(row["teams"])
+        solved = int(row["solved"])
+        attempts = int(row["attempts"])
+        first_solve = row.get("first_solve_min", "").strip()
+        median_solve = row.get("median_solve_min", "").strip()
+        problems.append({
+            "id": pid,
+            "year": int(row["year"]),
+            "letter": row["letter"],
+            "title": row["title"],
+            "area": topic["primary_area"],
+            "areas": [topic["primary_area"]] + split(topic["secondary_areas"]),
+            "technique": topic["primary_technique"],
+            "techniques": [topic["primary_technique"]] + split(topic["secondary_techniques"]),
+            "task": topic["primary_task"],
+            "tasks": [topic["primary_task"]] + split(topic["secondary_tasks"]),
+            "burden": topic["implementation_burden"],
+            "level": level,
+            "levelId": COMPLEXITY_LEVELS[level - 1][0],
+            "levelLabel": COMPLEXITY_LEVELS[level - 1][2],
+            "teams": teams,
+            "solved": solved,
+            "solveRate": round(rate, 4),
+            "attempts": attempts,
+            "failedPerTeam": round((attempts - solved) / teams, 3) if teams else None,
+            "attemptsPerSolve": round(attempts / solved, 2) if solved else None,
+            "firstSolveMin": float(first_solve) if first_solve else None,
+            "medianSolveMin": float(median_solve) if median_solve else None,
+            "firstSolveOrder": None,
+            "format": topic["format"],
+            "confidence": float(topic["confidence"]),
+            "sourceQuality": topic["source_quality"],
+            "evidence": topic["evidence"],
+        })
+
+    problem_by_key = {(p['year'], p['letter']): p for p in problems}
+
+    for year in range(2011, 2026):
+        ordered = sorted(
+            (problem for problem in problems if problem["year"] == year and problem["firstSolveMin"] is not None),
+            key=lambda problem: problem["firstSolveMin"],
+        )
+        for position, problem in enumerate(ordered, 1):
+            problem["firstSolveOrder"] = position
+
+    def level_counts(items: list[dict]) -> list[int]:
+        counts = [0] * 6
+        for item in items:
+            counts[item["level"] - 1] += 1
+        return counts
+
+    area_counts = Counter(p["area"] for p in problems)
+    tech_counts = Counter(p["technique"] for p in problems)
+    task_counts = Counter(p["task"] for p in problems)
+    burden_counts = Counter(p["burden"] for p in problems)
+    area_levels = {a: [0] * 6 for a in area_label}
+    tech_levels = {t: [0] * 6 for t in tech_label}
+    for p in problems:
+        area_levels[p["area"]][p["level"] - 1] += 1
+        tech_levels[p["technique"]][p["level"] - 1] += 1
+
+    editions = []
+    for year in range(2011, 2026):
+        rows = [p for p in problems if p["year"] == year]
+        if not rows:
+            continue
+        ordered = [problem for problem in rows if problem["firstSolveMin"] is not None]
+        first_blood = min(ordered, key=lambda problem: problem["firstSolveMin"]) if ordered else None
+        last_blood = max(ordered, key=lambda problem: problem["firstSolveMin"]) if ordered else None
+
+        def blood(problem: dict | None) -> dict | None:
+            if problem is None:
+                return None
+            return {
+                "id": problem["id"], "letter": problem["letter"], "title": problem["title"],
+                "level": problem["level"], "solveRate": problem["solveRate"],
+                "firstSolveMin": problem["firstSolveMin"],
+            }
+
+        editions.append({
+            "year": year,
+            "problems": len(rows),
+            "teams": sum(1 for r in team_rows if int(r["year"]) == year),
+            "levels": level_counts(rows),
+            "meanLevel": round(sum(p["level"] for p in rows) / len(rows), 2),
+            "areas": dict(Counter(p["area"] for p in rows)),
+            "techniques": dict(Counter(p["technique"] for p in rows)),
+            "tasks": dict(Counter(p["task"] for p in rows)),
+            "burdens": dict(Counter(p["burden"] for p in rows)),
+            "firstBlood": blood(first_blood),
+            "lastBlood": blood(last_blood),
+        })
+
+    edition_by_year = {edition["year"]: edition for edition in editions}
+    order_quartiles = []
+    for quartile in range(4):
+        rows = []
+        for problem in problems:
+            if problem["firstSolveOrder"] is None:
+                continue
+            edition = edition_by_year[problem["year"]]
+            position = (problem["firstSolveOrder"] - 1) / max(edition["problems"] - 1, 1)
+            if min(3, int(position * 4)) == quartile:
+                rows.append(problem)
+        order_quartiles.append({
+            "id": f"q{quartile + 1}",
+            "label": ["Q1 · primeros", "Q2", "Q3", "Q4 · últimos"][quartile],
+            "count": len(rows),
+            "meanSolveRate": round(sum(problem["solveRate"] for problem in rows) / len(rows), 4) if rows else None,
+            "meanLevel": round(sum(problem["level"] for problem in rows) / len(rows), 2) if rows else None,
+            "meanAttemptsPerSolve": round(
+                sum(problem["attemptsPerSolve"] for problem in rows if problem["attemptsPerSolve"] is not None)
+                / max(1, sum(1 for problem in rows if problem["attemptsPerSolve"] is not None)), 2
+            ) if rows else None,
+            "meanFailedPerTeam": round(sum(problem["failedPerTeam"] or 0 for problem in rows) / len(rows), 2) if rows else None,
+        })
+
+    # Rank quartiles and entity profiles use solved cells, not problem counts.
+    team_meta = {}
+    for row in team_rows:
+        rank = row["rank"].strip()
+        team_meta[(int(row["year"]), row["university"], row["team"])] = {
+            "rank": float(rank) if rank else None,
+            "country": row["country"],
+            "region": countries.get(row["country"], {}).get("region", "other"),
+        }
+    field_size = Counter(int(r["year"]) for r in team_rows)
+    uni_by_name = {u["name"]: u for u in universities}
+
+    quartiles = {
+        "top10": {"id": "top10", "label": "Top 10%", "teams": 0, "solves": 0,
+                  "levels": [0] * 6, "attemptsByLevel": [0] * 6, "solvesByLevel": [0] * 6,
+                  "areas": Counter(), "techniques": Counter(), "burdens": Counter()},
+        "10-25": {"id": "10-25", "label": "10–25%", "teams": 0, "solves": 0,
+                  "levels": [0] * 6, "attemptsByLevel": [0] * 6, "solvesByLevel": [0] * 6,
+                  "areas": Counter(), "techniques": Counter(), "burdens": Counter()},
+        "25-50": {"id": "25-50", "label": "25–50%", "teams": 0, "solves": 0,
+                  "levels": [0] * 6, "attemptsByLevel": [0] * 6, "solvesByLevel": [0] * 6,
+                  "areas": Counter(), "techniques": Counter(), "burdens": Counter()},
+        "50-100": {"id": "50-100", "label": "50–100%", "teams": 0, "solves": 0,
+                   "levels": [0] * 6, "attemptsByLevel": [0] * 6, "solvesByLevel": [0] * 6,
+                   "areas": Counter(), "techniques": Counter(), "burdens": Counter()},
+    }
+
+    def quartile_of(year: int, university: str, team: str) -> str | None:
+        meta = team_meta.get((year, university, team))
+        if not meta or not meta["rank"] or not field_size[year]:
+            return None
+        pct = meta["rank"] / field_size[year]
+        if pct <= 0.10:
+            return "top10"
+        if pct <= 0.25:
+            return "10-25"
+        if pct <= 0.50:
+            return "25-50"
+        return "50-100"
+
+    def empty_profile() -> dict:
+        return {
+            "editions": 0, "solves": 0, "levels": [0] * 6,
+            "areas": Counter(), "techniques": Counter(), "burdens": Counter(),
+        }
+
+    uni_profiles = defaultdict(empty_profile)
+    country_profiles = defaultdict(empty_profile)
+    region_profiles = defaultdict(empty_profile)
+    seen_editions = {"uni": defaultdict(set), "country": defaultdict(set), "region": defaultdict(set)}
+
+    for row in matrix:
+        year = int(row["year"])
+        letter = row["letter"]
+        topic = topics[f'wf-{year}-{letter.lower()}']
+        problem = problem_by_key[(year, letter)]
+        level = problem["level"]
+        solved = int(row["solved"])
+        attempts = int(row["attempts"])
+        uni = row["university"]
+        country = row["country"]
+        region = countries.get(country, {}).get("region", "other")
+        q = quartile_of(year, uni, row["team"])
+        if q:
+            quartiles[q]["attemptsByLevel"][level - 1] += attempts
+            quartiles[q]["solvesByLevel"][level - 1] += solved
+            if solved:
+                quartiles[q]["solves"] += 1
+                quartiles[q]["levels"][level - 1] += 1
+                quartiles[q]["areas"][topic["primary_area"]] += 1
+                quartiles[q]["techniques"][topic["primary_technique"]] += 1
+                quartiles[q]["burdens"][topic["implementation_burden"]] += 1
+        if solved:
+            for profile, key in ((uni_profiles, uni), (country_profiles, country), (region_profiles, region)):
+                profile[key]["solves"] += 1
+                profile[key]["levels"][level - 1] += 1
+                profile[key]["areas"][topic["primary_area"]] += 1
+                profile[key]["techniques"][topic["primary_technique"]] += 1
+                profile[key]["burdens"][topic["implementation_burden"]] += 1
+
+    for row in team_rows:
+        year = int(row["year"])
+        uni = row["university"]
+        country = row["country"]
+        region = countries.get(country, {}).get("region", "other")
+        uni_profiles[uni]["editions"] += 1
+        country_profiles[country]["editions"] += 1
+        region_profiles[region]["editions"] += 1
+        q = quartile_of(year, uni, row["team"])
+        if q:
+            quartiles[q]["teams"] += 1
+
+    def finish_profile(profile: dict) -> dict:
+        solves = profile["solves"]
+        levels = profile["levels"]
+        return {
+            "editions": profile["editions"],
+            "solves": solves,
+            "levels": levels,
+            "meanLevel": round(sum((i + 1) * n for i, n in enumerate(levels)) / solves, 2) if solves else None,
+            "areas": dict(profile["areas"]),
+            "techniques": dict(profile["techniques"]),
+            "burdens": dict(profile["burdens"]),
+        }
+
+    universities_payload = []
+    for name, profile in uni_profiles.items():
+        meta = uni_by_name.get(name)
+        if not meta:
+            continue
+        item = finish_profile(profile)
+        item.update({
+            "id": meta["id"], "name": name, "country": meta["country"],
+            "countryLabel": countries.get(meta["country"], {}).get("es", meta["country"]),
+            "region": countries.get(meta["country"], {}).get("region", "other"),
+            "regionLabel": region_names.get(countries.get(meta["country"], {}).get("region", "other"), ""),
+        })
+        universities_payload.append(item)
+    universities_payload.sort(key=lambda x: (-x["solves"], x["name"]))
+
+    countries_payload = []
+    for name, profile in country_profiles.items():
+        item = finish_profile(profile)
+        item.update({
+            "name": name, "label": countries.get(name, {}).get("es", name),
+            "region": countries.get(name, {}).get("region", "other"),
+            "regionLabel": region_names.get(countries.get(name, {}).get("region", "other"), ""),
+        })
+        countries_payload.append(item)
+    countries_payload.sort(key=lambda x: (-x["solves"], x["name"]))
+
+    regions_payload = []
+    for code, profile in region_profiles.items():
+        item = finish_profile(profile)
+        item.update({"id": code, "label": code})
+        regions_payload.append(item)
+
+    quartile_payload = []
+    for q in ("top10", "10-25", "25-50", "50-100"):
+        item = quartiles[q]
+        attempts = item["attemptsByLevel"]
+        solves = item["solvesByLevel"]
+        quartile_payload.append({
+            "id": item["id"], "label": item["label"], "teams": item["teams"], "solves": item["solves"],
+            "solvesPerTeam": round(item["solves"] / item["teams"], 2) if item["teams"] else None,
+            "levels": item["levels"],
+            "meanLevel": round(sum((i + 1) * n for i, n in enumerate(item["levels"])) / item["solves"], 2) if item["solves"] else None,
+            "attemptsByLevel": attempts,
+            "solvesByLevel": solves,
+            "failureRate": [round((a - s) / a, 4) if a else None for a, s in zip(attempts, solves)],
+            "areas": dict(item["areas"]), "techniques": dict(item["techniques"]), "burdens": dict(item["burdens"]),
+        })
+
+    technique_area = [
+        {"technique": t, "area": a, "count": n}
+        for (t, a), n in Counter((p["technique"], p["area"]) for p in problems).items()
+    ]
+
+    solved_areas = Counter()
+    solved_techniques = Counter()
+    solved_burdens = Counter()
+    solved_levels = [0] * 6
+    for problem in problems:
+        solved = problem["solved"]
+        solved_areas[problem["area"]] += solved
+        solved_techniques[problem["technique"]] += solved
+        solved_burdens[problem["burden"]] += solved
+        solved_levels[problem["level"] - 1] += solved
+
+    average_edition = {
+        "year": "avg",
+        "label": "Promedio 2011–2025",
+        "problems": len(problems),
+        "teams": len(team_rows),
+        "levels": level_counts(problems),
+        "meanLevel": round(sum(p["level"] for p in problems) / len(problems), 2),
+        "areas": dict(area_counts),
+        "techniques": dict(tech_counts),
+        "tasks": dict(task_counts),
+        "burdens": dict(burden_counts),
+    }
+
+    return {
+        "scope": {"from": 2011, "to": 2025, "problems": len(problems),
+                  "teams": len(team_rows), "editions": len(editions),
+                  "firstSolveCoverage": sum(1 for problem in problems if problem["firstSolveOrder"] is not None)},
+        "levels": [
+            {"id": i, "level": l, "label": label, "min": low, "max": high, "definition": definition}
+            for i, l, label, low, high, definition in COMPLEXITY_LEVELS
+        ],
+        "areas": [{"id": a, "label": area_label[a], "count": area_counts[a], "levels": area_levels[a]}
+                  for a in sorted(area_label, key=lambda x: (-area_counts[x], area_label[x]))],
+        "techniques": [{"id": t, "label": tech_label[t], "family": tech_family[t],
+                        "count": tech_counts[t], "levels": tech_levels[t]}
+                       for t in sorted(tech_label, key=lambda x: (-tech_counts[x], tech_label[x]))],
+        "tasks": [{"id": t, "label": task_label[t], "count": task_counts[t]}
+                  for t in sorted(task_label, key=lambda x: (-task_counts[x], task_label[x]))],
+        "burdens": [{"id": b, "label": burden_label[b], "count": burden_counts[b]}
+                    for b in ("low", "medium", "high")],
+        "formats": [{"id": f, "label": format_label[f]} for f in format_label],
+        "problems": sorted(problems, key=lambda p: (p["year"], p["letter"])),
+        "editions": editions,
+        "averageEdition": average_edition,
+        "orderQuartiles": order_quartiles,
+        "rankQuartiles": quartile_payload,
+        "universities": universities_payload,
+        "countries": countries_payload,
+        "regions": regions_payload,
+        "techniqueArea": technique_area,
+        "totals": {
+            "levels": level_counts(problems),
+            "areas": dict(area_counts), "techniques": dict(tech_counts),
+            "tasks": dict(task_counts), "burdens": dict(burden_counts),
+            "solves": sum(p["solved"] for p in problems),
+            "attempts": sum(p["attempts"] for p in problems),
+            "solvedAreas": dict(solved_areas),
+            "solvedTechniques": dict(solved_techniques),
+            "solvedBurdens": dict(solved_burdens),
+            "solvedLevels": solved_levels,
+        },
+    }
+
+
+
+# --------------------------------------------------------------- statements
+
+def statement_heading(line: str) -> str | None:
+    """A section heading, tolerating the extra spacing of the PDF extractor."""
+    compact = re.sub(r"\s+", " ", line).strip()
+    if re.fullmatch(r"(?i)(input|output|note|notes|examples?|scoring|interaction|constraints)", compact):
+        return compact
+    if re.fullmatch(r"(?i)explanation(?: of sample \d+)?", compact):
+        return compact
+    if re.match(r"(?i)^explanation of sample \d+", compact):
+        return compact.split(":", 1)[0].strip()
+    if re.fullmatch(r"(?i)sample input(?: \d+)?(?: sample output(?: \d+)?)?", compact):
+        return compact
+    if re.fullmatch(r"(?i)sample output(?: \d+)?", compact):
+        return compact
+    if re.fullmatch(r"(?i)sample input.*sample input", compact):
+        return compact
+    if re.fullmatch(r"(?i)output for the sample input", compact):
+        return compact
+    return None
+STATEMENT_NOISE = re.compile(r"(ICPC Foundation|Problem ID:|Picture from|World Finals \| ICPC|Annual hosted by ICPC World Championship)", re.IGNORECASE)
+STATEMENT_HEADER = re.compile(
+    r"^(ACM-ICPC World Finals|ICPC(?: \d{4})? World Finals|\d{4} World Finals|"
+    r"ICPC World Championship|\d+(?:st|nd|rd|th) ICPC World Championship|\d+(?:st|nd|rd|th) Annual hosted by|"
+    r"Problem [A-Z]:|Picture from|Figure [A-Z]\.\d+|St\. Petersburg|Rapid City|Championship AASTMT|ICPC World$)",
+    re.IGNORECASE,
+)
+def statement_blocks(path: Path, title: str) -> list[dict]:
+    """Turn an extracted PDF statement into small prose/preformatted blocks."""
+    text = path.read_text(encoding="utf-8")
+    if text.startswith("---"):
+        parts = text.split("---", 2)
+        text = parts[2] if len(parts) > 2 else text
+    lines = [line.replace("\u00a0", " ").rstrip() for line in text.splitlines()]
+    blocks: list[dict] = []
+    paragraph: list[str] = []
+    preformatted: list[str] = []
+    mode = "prose"
+
+    def flush_paragraph() -> None:
+        nonlocal paragraph
+        if not paragraph:
+            return
+        joined = " ".join(paragraph)
+        joined = re.sub(r"(\w)-\s+(\w)", r"\1\2", joined)
+        joined = re.sub(r"\s+", " ", joined).strip()
+        if joined:
+            blocks.append({"t": "p", "x": joined})
+        paragraph = []
+
+    def flush_preformatted() -> None:
+        nonlocal preformatted
+        if not preformatted:
+            return
+        joined = "\n".join(preformatted).strip("\n")
+        if joined:
+            blocks.append({"t": "pre", "x": joined})
+        preformatted = []
+
+    for raw in lines:
+        compact = re.sub(r"\s+", " ", raw).strip()
+        if not compact:
+            if mode == "pre":
+                preformatted.append("")
+            else:
+                flush_paragraph()
+            continue
+        # Page headers, footers, figure captions and repeated problem labels.
+        if STATEMENT_NOISE.search(compact) or STATEMENT_HEADER.match(compact):
+            continue
+        if compact.startswith("# ") or re.fullmatch(r"Problem [A-Z]", compact):
+            continue
+        if re.match(r"^Time Limit:", compact, re.IGNORECASE):
+            continue
+        if title and compact.strip('"') == title:
+            continue
+        heading = statement_heading(compact)
+        if heading:
+            if mode == "pre":
+                flush_preformatted()
+            else:
+                flush_paragraph()
+            head, _, rest = compact.partition(":")
+            head = re.sub(r"\s+", " ", head).strip()
+            blocks.append({"t": "h", "x": head})
+            if rest.strip():
+                paragraph.append(rest.strip())
+            is_sample = re.match(r"(?i)^(sample input|sample output|output for the sample input)", head)
+            mode = "pre" if is_sample else "prose"
+            continue
+        if mode == "pre":
+            preformatted.append(raw)
+            continue
+        if "•" in compact and len(compact) < 40 and len(re.findall(r"[a-z]{3}", compact)) <= 1:
+            continue
+        if len(compact) <= 22 and compact.islower() and not re.search(r"[.!?:;\d]", compact):
+            continue
+        # Short figure-axis fragments left by the PDF extractor.
+        if len(compact) < 44 and not re.search(r"[a-z]{3}", compact):
+            continue
+        if len(re.findall(r"\d+", compact)) >= 4 and len(re.findall(r"[A-Za-z]{4,}", compact)) <= 2 and not re.search(r"[.!?:;]$", compact) and len(compact) < 110:
+            continue
+        paragraph.append(compact)
+    if mode == "pre":
+        flush_preformatted()
+    else:
+        flush_paragraph()
+    return blocks
+
+
+def build_problem_statements(complexity: dict) -> dict:
+    """Attach the official statement to every problem in the 2011-2025 window."""
+    statements = {}
+    for problem in complexity["problems"]:
+        path = SOURCES / "problems" / str(problem["year"]) / f"{problem['letter']}.md"
+        if not path.exists():
+            continue
+        blocks = statement_blocks(path, problem["title"])
+        if blocks:
+            statements[problem["id"]] = {
+                "blocks": blocks,
+                "chars": sum(len(block["x"]) for block in blocks),
+            }
+    return statements
+
+
 def write_cuba_csv(cuba: dict) -> None:
     with (OUT / "cuba.csv").open("w", newline="") as handle:
         writer = csv.writer(handle)
@@ -1109,6 +1624,7 @@ PAGES = [
     ("equipo", "Equipo", "Profile of one team: the same name at the same university counts as one team."),
     ("renovacion", "Renovación", "How teams renew: returning members, careers and their link with results."),
     ("problemas", "Problemas", "Problems solved per final: distributions, totals and percentages."),
+    ("complejidad", "Complejidad", "Difficulty, topics, problem statements and university/country specialization in the World Finals, 2011–2025."),
     ("medallas", "Medallas", "Medal tables by university and country, with the medals actually awarded."),
     ("competidores", "Competidores", "People with the most finals and the most medals."),
     ("predicciones", "Predicciones", "Probability of each place in the next final from a Bayesian model over past finals and Codeforces team ratings, with a backtest."),
@@ -1121,8 +1637,39 @@ PAGES = [
 ]
 
 
-def write_markdown_twins(universities: list[dict], countries: dict, predictions: dict, years: list[int], cuba: dict, sedes: dict) -> None:
+def _best_area(profile: dict, area_label: dict, solved_areas: dict, global_total: int) -> str:
+    total = profile.get("solves") or 1
+    scored = []
+    for area, count in (profile.get("areas") or {}).items():
+        expected = (solved_areas.get(area) or 0) / (global_total or 1)
+        scored.append((count / total - expected, area))
+    if not scored:
+        return "—"
+    diff, area = max(scored)
+    return f"{area_label.get(area, area)} ({diff * 100:+.1f} pp)"
+
+
+def write_markdown_twins(universities: list[dict], countries: dict, predictions: dict, years: list[int], cuba: dict, sedes: dict, complexity: dict) -> None:
     """One Markdown twin per page plus llms.txt, regenerated on every build."""
+    area_label = {a["id"]: a["label"] for a in (complexity or {}).get("areas", [])}
+    tech_label = {t["id"]: t["label"] for t in (complexity or {}).get("techniques", [])}
+    task_label = {t["id"]: t["label"] for t in (complexity or {}).get("tasks", [])}
+    solved_areas = (complexity or {}).get("totals", {}).get("solvedAreas", {})
+    global_solves = (complexity or {}).get("totals", {}).get("solves", 1)
+
+    def best_area(profile: dict) -> str:
+        return _best_area(profile, area_label, solved_areas, global_solves)
+
+    friction_traps, friction_walls = [], []
+    if complexity:
+        rates = [problem["solveRate"] * 100 for problem in complexity["problems"]]
+        failed = [problem["failedPerTeam"] or 0 for problem in complexity["problems"]]
+        rate_median = statistics.median(rates)
+        failed_median = statistics.median(failed)
+        ranked = sorted(complexity["problems"], key=lambda problem: problem["failedPerTeam"] or 0, reverse=True)
+        friction_traps = [problem for problem in ranked if problem["solveRate"] * 100 >= rate_median and (problem["failedPerTeam"] or 0) >= failed_median][:5]
+        friction_walls = [problem for problem in ranked if problem["solveRate"] * 100 < rate_median and (problem["failedPerTeam"] or 0) >= failed_median][:5]
+
     teams_by_country = Counter(u["country"] for u in universities for _ in u["results"])
     finals = sorted(universities, key=lambda u: -len(u["results"]))
     medal_rows = []
@@ -1205,6 +1752,83 @@ def write_markdown_twins(universities: list[dict], countries: dict, predictions:
             f'({cuba["projection"]["country"].get("rank_best")}–{cuba["projection"]["country"].get("rank_worst")}) '
             f'of {cuba["projection"]["field"]}, percentile {cuba["projection"]["country"].get("pct")}.',
         ]),
+        "complejidad": "Datos de complejidad no disponibles. Ejecuta `make data` con los archivos de `data/curated/`." if complexity is None else "\n\n".join([
+            "Esta página cubre solo las finales de **2011 a 2025**: 15 ediciones, 179 problemas y 1.893 equipos-edición. "
+            "Quedan fuera 2008–2010. La versión HTML incluye buscador de problemas, universidades y países, "
+            "fichas con el enunciado y un comparador de ediciones.",
+            "## Categorías N1–N6",
+            "Se calculan con la tasa de resolución de cada problema en su final: equipos que lo resolvieron / equipos que participaron. "
+            "Los nombres son la lectura principal; el número es una etiqueta.",
+            table(["Nivel", "Nombre", "Rango", "Definición", "Problemas"], [
+                [f"N{l['level']}", l["label"], f"{round(100*l['min'])}–{round(100*l['max'])}%", l["definition"], c]
+                for l, c in zip(complexity["levels"], complexity["totals"]["levels"])]),
+            "## Áreas y técnicas",
+            "Un problema puede tener varias etiquetas; los gráficos y estas tablas usan la primaria. "
+            "El área es el objeto del problema; la técnica es la herramienta. Las estructuras de datos son técnicas, no áreas.",
+            table(["Área", "Problemas", "% N5–N6"], [
+                [a["label"], a["count"], round(100 * (a["levels"][4] + a["levels"][5]) / a["count"]) if a["count"] else 0]
+                for a in complexity["areas"][:12]]),
+            table(["Técnica", "Problemas", "% N5–N6"], [
+                [t["label"], t["count"], round(100 * (t["levels"][4] + t["levels"][5]) / t["count"]) if t["count"] else 0]
+                for t in complexity["techniques"][:15]]),
+            "## Ediciones",
+            table(["Edición", "Problemas", "Nivel medio", "N1", "N2", "N3", "N4", "N5", "N6"], [
+                [e["year"], e["problems"], e["meanLevel"], *e["levels"]] for e in complexity["editions"]]),
+            "## Fricción",
+            "Trampa: tasa por encima de la mediana pero muchos intentos fallidos. Muro: tasa por debajo de la mediana y muchos fallos.",
+            table(["Tipo", "Problema", "Edición", "Nivel", "Tasa", "Fallidos/equipo", "Int./res."], [
+                *[["Trampa", p["title"], f'{p["year"]} {p["letter"]}', f'N{p["level"]}', f'{round(100*p["solveRate"])}%', p["failedPerTeam"], p["attemptsPerSolve"]] for p in friction_traps],
+                *[["Muro", p["title"], f'{p["year"]} {p["letter"]}', f'N{p["level"]}', f'{round(100*p["solveRate"])}%', p["failedPerTeam"], p["attemptsPerSolve"]] for p in friction_walls],
+            ]),
+            "## Cuartiles",
+            table(["Cuartil", "Equipos-edición", "Resueltos/equipo", "Nivel medio"], [
+                [q["label"], q["teams"], q["solvesPerTeam"], q["meanLevel"]] for q in complexity["rankQuartiles"]]),
+            "## Orden de ataque",
+            "Q1 = problemas que se resolvieron primero; Q4 = últimos primeros-solves. El orden usa el minuto del primer solve de cada problema; no se muestran curvas por minuto.",
+            table(["Cuartil", "Problemas", "Tasa media", "Nivel medio", "Int./res."], [
+                [q["label"], q["count"], f'{round(100*q["meanSolveRate"])}%', q["meanLevel"], q["meanAttemptsPerSolve"]]
+                for q in complexity["orderQuartiles"]]),
+            table(["Edición", "Primero en resolverse", "Último en resolverse"], [
+                [e["year"],
+                 f'{e["firstBlood"]["letter"]} · {e["firstBlood"]["title"]} (N{e["firstBlood"]["level"]}, {round(100*e["firstBlood"]["solveRate"])}%)' if e["firstBlood"] else "—",
+                 f'{e["lastBlood"]["letter"]} · {e["lastBlood"]["title"]} (N{e["lastBlood"]["level"]}, {round(100*e["lastBlood"]["solveRate"])}%)' if e["lastBlood"] else "—"]
+                for e in complexity["editions"]]),
+            "## Técnica × área",
+            table(["Técnica", "Área", "Problemas"], [
+                [tech_label[pair["technique"]], area_label[pair["area"]], pair["count"]]
+                for pair in sorted(complexity["techniqueArea"], key=lambda pair: pair["count"], reverse=True)[:10]]),
+            "## Universidades y países",
+            "Especialización relativa: diferencia entre el porcentaje observado de problemas resueltos y el esperado por el perfil global, "
+            "en puntos porcentuales. La tabla muestra la mayor fortaleza de cada entidad.",
+            table(["Universidad", "País", "Equipos-edición", "Resueltos", "Nivel medio", "Mayor fortaleza"], [
+                [u["name"], u["countryLabel"], u["editions"], u["solves"], u["meanLevel"], best_area(u)]
+                for u in complexity["universities"][:10]]),
+            table(["País", "Equipos-edición", "Resueltos", "Nivel medio", "Mayor fortaleza"], [
+                [c["label"], c["editions"], c["solves"], c["meanLevel"], best_area(c)]
+                for c in complexity["countries"][:10]]),
+            "## Problemas",
+            table(["Problema", "Edición", "Nivel", "Área", "Técnica", "Tarea", "Tasa"], [
+                [p["title"], f'{p["year"]} {p["letter"]}', f'N{p["level"]}', area_label[p["area"]],
+                 tech_label[p["technique"]], task_label[p["task"]], f'{round(100*p["solveRate"])}%']
+                for p in complexity["problems"]]),
+            "## Metodología",
+            "**Categorías.** N1 Abierto (80–100%), N2 Accesible (60–80%), N3 Intermedio (40–60%), "
+            "N4 Exigente (20–40%), N5 Duro (10–20%), N6 Excepcional (0–10%). N6 no significa imposible: "
+            "mide que menos del 10% de los equipos lo resolvió.",
+            "**Taxonomía.** Área (objeto), técnica (herramienta), tarea (optimizar, contar, decidir, construir, calcular, simular), "
+            "carga de implementación (baja, media, alta; revisión manual) y formato. Es multi-etiqueta: una primaria y cero o más secundarias.",
+            "**Índices.** Tasa de resolución = resueltos / equipos. Fallidos por equipo = (intentos − resueltos) / equipos. "
+            "Intentos por resuelto = intentos / resueltos. Orden de primera solución = posición según el minuto del primer solve dentro de su final; "
+            "se usa solo para ordenar y no se muestran curvas por minuto. "
+            "Nivel medio = promedio de N1–N6 de los problemas resueltos (o de la final). "
+            "Especialización = % observado − % esperado global, en puntos porcentuales. "
+            "Cuartiles = puesto / tamaño del campo: top 10%, 10–25%, 25–50%, 50–100%.",
+            "**Fuentes y límites.** Scoreboard matrix 2011–2025 (zibada y Kattis, verificado contra core.json), "
+            "taxonomía v1 revisada, dificultad por problema y enunciados extraídos de los PDF oficiales. "
+            "El scoreboard es por equipo, no por miembro; la carga es manual; cada final tiene 11–15 problemas. "
+            "No se usan curvas por minuto; el minuto del primer solve solo ordena los problemas. "
+            "20 de 179 problemas no tienen primera solución registrada.",
+        ]),
         "datos": "Results and medals come from cphof.org, checked against icpc.global where it publishes them. "
                  "Regions, Spanish names and the catalogue of analyses come from `yudivian/icpc` (Apache-2.0).",
     }
@@ -1222,6 +1846,8 @@ def write_markdown_twins(universities: list[dict], countries: dict, predictions:
         f"- [sedes.json]({SITE_URL}/data/sedes.json): every World Finals venue, host country and local performance.\n"
         f"- [sedes.csv]({SITE_URL}/data/sedes.csv): one row per World Finals venue.\n"
         f"- [cuba.json]({SITE_URL}/data/cuba.json): the Cuban slice: teams, field gaps, Latin-American podiums, people, gender aggregates, records and projection.\n"
+        f"- [complexity.json]({SITE_URL}/data/complexity.json): problem-level difficulty, multi-label topics, editions and university/country profiles, 2011–2025.\n"
+        f"- [problem-statements.json]({SITE_URL}/data/problem-statements.json): extracted statements for the 2011–2025 problems.\n"
         f"- [cuba.csv]({SITE_URL}/data/cuba.csv): one row per Cuban team and final.\n"
         f"- [cuba-map.json]({SITE_URL}/data/cuba-map.json): province boundaries used by the Cuba map (cuba-geojsons, MIT).\n"
         f"- [world.json]({SITE_URL}/data/world.json): GeoJSON used by the world map.\n"
@@ -1260,8 +1886,18 @@ def build() -> dict:
     write_csv(universities, countries)
     write_cuba_csv(cuba)
     write_sedes_csv(sedes)
-    write_markdown_twins(universities, countries, predictions, years, cuba, sedes)
-    return {"core": core, "predictions": predictions, "cuba": cuba, "sedes": sedes}
+    try:
+        complexity = build_complexity(universities, countries, region_names)
+        write_json("complexity.json", complexity)
+        try:
+            write_json("problem-statements.json", build_problem_statements(complexity))
+        except Exception as exc:
+            print(f"statements skipped: {exc}")
+    except Exception as exc:
+        print(f"complexity skipped: {exc}")
+        complexity = None
+    write_markdown_twins(universities, countries, predictions, years, cuba, sedes, complexity)
+    return {"core": core, "predictions": predictions, "cuba": cuba, "sedes": sedes, "complexity": complexity}
 
 
 if __name__ == "__main__":

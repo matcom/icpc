@@ -1,0 +1,1051 @@
+{
+  "generated_at": "2026-11-03",
+  "scope": {
+    "from": 2008,
+    "to": 2025,
+    "problems": 212,
+    "team_problem_rows": 25512
+  },
+  "sources": {
+    "2008": {
+      "source": "icpcgate",
+      "url": "https://icpcgate.org/contest/scores.php?cid=2",
+      "status": "final"
+    },
+    "2009": {
+      "source": "icpcgate",
+      "url": "https://icpcgate.org/contest/scores.php?cid=3",
+      "status": "partial"
+    },
+    "2010": {
+      "source": "icpcgate",
+      "url": "https://icpcgate.org/contest/scores.php?cid=4",
+      "status": "partial"
+    },
+    "2011": {
+      "source": "zibada",
+      "url": "https://zibada.guru/finals/2011/",
+      "status": "final"
+    },
+    "2012": {
+      "source": "kattis",
+      "url": "https://static.kattis.com/icpc/wf2012/",
+      "status": "final"
+    },
+    "2013": {
+      "source": "kattis",
+      "url": "https://static.kattis.com/icpc/wf2013/",
+      "status": "final"
+    },
+    "2014": {
+      "source": "kattis",
+      "url": "https://static.kattis.com/icpc/wf2014/",
+      "status": "final"
+    },
+    "2015": {
+      "source": "kattis",
+      "url": "https://static.kattis.com/icpc/wf2015/",
+      "status": "final"
+    },
+    "2016": {
+      "source": "kattis",
+      "url": "https://static.kattis.com/icpc/wf2016/",
+      "status": "final"
+    },
+    "2017": {
+      "source": "kattis",
+      "url": "https://static.kattis.com/icpc/wf2017/",
+      "status": "final"
+    },
+    "2018": {
+      "source": "zibada",
+      "url": "https://zibada.guru/finals/2018/",
+      "status": "final"
+    },
+    "2019": {
+      "source": "zibada",
+      "url": "https://zibada.guru/finals/2019/",
+      "status": "final"
+    },
+    "2020": {
+      "source": "zibada",
+      "url": "https://zibada.guru/finals/2020/",
+      "status": "final"
+    },
+    "2021": {
+      "source": "zibada",
+      "url": "https://zibada.guru/finals/2021/",
+      "status": "final"
+    },
+    "2022": {
+      "source": "zibada",
+      "url": "https://zibada.guru/finals/2022/",
+      "status": "final"
+    },
+    "2023": {
+      "source": "zibada",
+      "url": "https://zibada.guru/finals/2023/",
+      "status": "final"
+    },
+    "2024": {
+      "source": "zibada",
+      "url": "https://zibada.guru/finals/2024/",
+      "status": "final"
+    },
+    "2025": {
+      "source": "zibada",
+      "url": "https://zibada.guru/finals/2025/",
+      "status": "final"
+    }
+  },
+  "years": [
+    {
+      "year": 2008,
+      "source": "icpcgate",
+      "source_url": "https://icpcgate.org/contest/scores.php?cid=2",
+      "status": "final",
+      "problems": 11,
+      "scoreboard_teams": 104,
+      "core_teams": 97,
+      "matched": 89,
+      "verified_solved": 89,
+      "mismatch_solved": 0,
+      "verified_penalty": 89,
+      "mismatch_penalty": 0,
+      "core_null": 0,
+      "diff_hist": {},
+      "score_only": [
+        "Yujie An",
+        "Mark Gordon",
+        "MIT1 (Gu & Hristov & Ngyuen)",
+        "orz_szupo 1",
+        "MIT TWO 1",
+        "UWBlack 1",
+        "[UMICH] Victors",
+        "[HCMUS] Accepters",
+        "Rumen Hristov",
+        "MIT TWO 3",
+        "orz_szupo 4",
+        "Bovinia State University 2: Libertee & Chikin 4 All",
+        "MIT TWO 2",
+        "orz_szupo 2",
+        "orz_szupo 3"
+      ],
+      "core_only": [
+        "Georgia Institute of Technology (Georgia Tech Yellow Jackets, 0)",
+        "Illinois State University (Illinois SU Rocky Theme Song, 0)",
+        "Instituto Tecnológico de Culiacán (ITC Turing Machines, 0)",
+        "Universidad de Guanajuato (U de Guanajuato Hausdorff, 0)",
+        "University of Calgary (U Calgary Dinos, 0)",
+        "University of Delaware (UD Blue, 0)",
+        "University of Saskatchewan (U Saskatchewan B, 0)",
+        "Vietnam National University - Hanoi (VNU Hanoi DragonCoders, 0)"
+      ]
+    },
+    {
+      "year": 2009,
+      "source": "icpcgate",
+      "source_url": "https://icpcgate.org/contest/scores.php?cid=3",
+      "status": "partial",
+      "problems": 11,
+      "scoreboard_teams": 88,
+      "core_teams": 100,
+      "matched": 75,
+      "verified_solved": 14,
+      "mismatch_solved": 51,
+      "verified_penalty": 0,
+      "mismatch_penalty": 13,
+      "core_null": 10,
+      "diff_hist": {
+        "-3": 3,
+        "-2": 12,
+        "-1": 36
+      },
+      "score_only": [
+        "Mark Gordon",
+        "Yujie An",
+        "(2013-14)Taiwan National University",
+        "orz_szupo 1",
+        "MIT TWO 1",
+        "[UMICH] Victors",
+        "[HCMUS] Accepters",
+        "UWBlack 1",
+        "UTOrange 1",
+        "desert97 2",
+        "Bovinia State University: Libertee & Fowl 4 all 1",
+        "desert97 1",
+        "Alikhan 1"
+      ],
+      "core_only": [
+        "Bina Nusantara University (Pandemonium, None)",
+        "Duke University (DukeA, None)",
+        "EAFIT University (Factor Comun, None)",
+        "Indian Institute of Information Technology & Management, Gwalior (Brute Force, None)",
+        "ITESM Campus Monterrey (MTY03, None)",
+        "McGill University (McGill 1, None)",
+        "North South University (NSU ARCTURUS, None)",
+        "Northwestern College (Northwestern Red Raiders, None)",
+        "Saitama University (Maximum-Coffee-X, None)",
+        "SUNY Stony Brook (Seacubs, None)",
+        "Universidad Nacional de La Plata (La JiRaFa, None)",
+        "Universidad Tecnológica de la Mixteca (grajam, None)",
+        "Universidade de São Paulo - Escola Politécnica (Guerreiros da Poli, None)",
+        "Universidade Estadual do Ceará (Posso ajudar?, None)",
+        "Universidade Federal de Santa Catarina (Time Limit Exceeded, None)",
+        "Universidade Federal do Espirito Santo (NULL, None)",
+        "University of Alberta (University of Alberta, None)",
+        "University of California San Diego (UCSD Berg, None)",
+        "University of Chicago (Works in Theory, None)",
+        "University of Hong Kong (Far, None)",
+        "University of Illinois at Urbana-Champaign (UIUC, 3)",
+        "University of Nebraska - Lincoln (Incendiary Pigs, None)",
+        "University of Tasmania (Mehffort Musketeers, 3)",
+        "University of Virginia (Fum, None)",
+        "Washington University in St. Louis (WUSTL 1, None)"
+      ]
+    },
+    {
+      "year": 2010,
+      "source": "icpcgate",
+      "source_url": "https://icpcgate.org/contest/scores.php?cid=4",
+      "status": "partial",
+      "problems": 11,
+      "scoreboard_teams": 117,
+      "core_teams": 103,
+      "matched": 103,
+      "verified_solved": 75,
+      "mismatch_solved": 28,
+      "verified_penalty": 75,
+      "mismatch_penalty": 28,
+      "core_null": 0,
+      "diff_hist": {
+        "-2": 7,
+        "-1": 21
+      },
+      "score_only": [
+        "Mark Gordon",
+        "orz_szupo",
+        "[UMICH] Victors",
+        "desert97 1",
+        "Yujie An",
+        "UWBlack 1",
+        "alex dai 1",
+        "bbbert 1",
+        "alex dai 4",
+        "alex dai 3",
+        "alex dai 6",
+        "Richard Peng",
+        "alex dai 2",
+        "alex dai 5"
+      ],
+      "core_only": []
+    },
+    {
+      "year": 2011,
+      "source": "zibada",
+      "source_url": "https://zibada.guru/finals/2011/",
+      "status": "final",
+      "problems": 11,
+      "scoreboard_teams": 101,
+      "core_teams": 104,
+      "matched": 100,
+      "verified_solved": 100,
+      "mismatch_solved": 0,
+      "verified_penalty": 100,
+      "mismatch_penalty": 0,
+      "core_null": 0,
+      "diff_hist": {},
+      "score_only": [
+        "Amirkabir University of Technology"
+      ],
+      "core_only": [
+        "DJ Sanghvi College of Engineering (phoenix, 0)",
+        "Indian Institute of Technology - Kanpur (Deep Thought, 0)",
+        "King Abdullah University of Science and Technology (Unique, 0)",
+        "Sichuan University (APTX4869, 0)"
+      ]
+    },
+    {
+      "year": 2012,
+      "source": "kattis",
+      "source_url": "https://static.kattis.com/icpc/wf2012/",
+      "status": "final",
+      "problems": 12,
+      "scoreboard_teams": 112,
+      "core_teams": 112,
+      "matched": 112,
+      "verified_solved": 112,
+      "mismatch_solved": 0,
+      "verified_penalty": 112,
+      "mismatch_penalty": 0,
+      "core_null": 0,
+      "diff_hist": {},
+      "score_only": [],
+      "core_only": []
+    },
+    {
+      "year": 2013,
+      "source": "kattis",
+      "source_url": "https://static.kattis.com/icpc/wf2013/",
+      "status": "final",
+      "problems": 11,
+      "scoreboard_teams": 119,
+      "core_teams": 119,
+      "matched": 119,
+      "verified_solved": 119,
+      "mismatch_solved": 0,
+      "verified_penalty": 119,
+      "mismatch_penalty": 0,
+      "core_null": 0,
+      "diff_hist": {},
+      "score_only": [],
+      "core_only": []
+    },
+    {
+      "year": 2014,
+      "source": "kattis",
+      "source_url": "https://static.kattis.com/icpc/wf2014/",
+      "status": "final",
+      "problems": 12,
+      "scoreboard_teams": 122,
+      "core_teams": 121,
+      "matched": 121,
+      "verified_solved": 121,
+      "mismatch_solved": 0,
+      "verified_penalty": 121,
+      "mismatch_penalty": 0,
+      "core_null": 0,
+      "diff_hist": {},
+      "score_only": [
+        "Universidad Tecnologica de Pereira"
+      ],
+      "core_only": []
+    },
+    {
+      "year": 2015,
+      "source": "kattis",
+      "source_url": "https://static.kattis.com/icpc/wf2015/",
+      "status": "final",
+      "problems": 13,
+      "scoreboard_teams": 128,
+      "core_teams": 128,
+      "matched": 128,
+      "verified_solved": 128,
+      "mismatch_solved": 0,
+      "verified_penalty": 128,
+      "mismatch_penalty": 0,
+      "core_null": 0,
+      "diff_hist": {},
+      "score_only": [],
+      "core_only": []
+    },
+    {
+      "year": 2016,
+      "source": "kattis",
+      "source_url": "https://static.kattis.com/icpc/wf2016/",
+      "status": "final",
+      "problems": 13,
+      "scoreboard_teams": 128,
+      "core_teams": 128,
+      "matched": 128,
+      "verified_solved": 128,
+      "mismatch_solved": 0,
+      "verified_penalty": 128,
+      "mismatch_penalty": 0,
+      "core_null": 0,
+      "diff_hist": {},
+      "score_only": [],
+      "core_only": []
+    },
+    {
+      "year": 2017,
+      "source": "kattis",
+      "source_url": "https://static.kattis.com/icpc/wf2017/",
+      "status": "final",
+      "problems": 12,
+      "scoreboard_teams": 128,
+      "core_teams": 127,
+      "matched": 127,
+      "verified_solved": 127,
+      "mismatch_solved": 0,
+      "verified_penalty": 127,
+      "mismatch_penalty": 0,
+      "core_null": 0,
+      "diff_hist": {},
+      "score_only": [
+        "University of Management and Technology"
+      ],
+      "core_only": []
+    },
+    {
+      "year": 2018,
+      "source": "zibada",
+      "source_url": "https://zibada.guru/finals/2018/",
+      "status": "final",
+      "problems": 11,
+      "scoreboard_teams": 140,
+      "core_teams": 140,
+      "matched": 140,
+      "verified_solved": 140,
+      "mismatch_solved": 0,
+      "verified_penalty": 140,
+      "mismatch_penalty": 0,
+      "core_null": 0,
+      "diff_hist": {},
+      "score_only": [],
+      "core_only": []
+    },
+    {
+      "year": 2019,
+      "source": "zibada",
+      "source_url": "https://zibada.guru/finals/2019/",
+      "status": "final",
+      "problems": 11,
+      "scoreboard_teams": 135,
+      "core_teams": 135,
+      "matched": 135,
+      "verified_solved": 135,
+      "mismatch_solved": 0,
+      "verified_penalty": 135,
+      "mismatch_penalty": 0,
+      "core_null": 0,
+      "diff_hist": {},
+      "score_only": [],
+      "core_only": []
+    },
+    {
+      "year": 2020,
+      "source": "zibada",
+      "source_url": "https://zibada.guru/finals/2020/",
+      "status": "final",
+      "problems": 15,
+      "scoreboard_teams": 117,
+      "core_teams": 117,
+      "matched": 117,
+      "verified_solved": 117,
+      "mismatch_solved": 0,
+      "verified_penalty": 117,
+      "mismatch_penalty": 0,
+      "core_null": 0,
+      "diff_hist": {},
+      "score_only": [],
+      "core_only": []
+    },
+    {
+      "year": 2021,
+      "source": "zibada",
+      "source_url": "https://zibada.guru/finals/2021/",
+      "status": "final",
+      "problems": 12,
+      "scoreboard_teams": 132,
+      "core_teams": 132,
+      "matched": 132,
+      "verified_solved": 132,
+      "mismatch_solved": 0,
+      "verified_penalty": 132,
+      "mismatch_penalty": 0,
+      "core_null": 0,
+      "diff_hist": {},
+      "score_only": [],
+      "core_only": []
+    },
+    {
+      "year": 2022,
+      "source": "zibada",
+      "source_url": "https://zibada.guru/finals/2022/",
+      "status": "final",
+      "problems": 11,
+      "scoreboard_teams": 124,
+      "core_teams": 124,
+      "matched": 124,
+      "verified_solved": 124,
+      "mismatch_solved": 0,
+      "verified_penalty": 124,
+      "mismatch_penalty": 0,
+      "core_null": 0,
+      "diff_hist": {},
+      "score_only": [],
+      "core_only": []
+    },
+    {
+      "year": 2023,
+      "source": "zibada",
+      "source_url": "https://zibada.guru/finals/2023/",
+      "status": "final",
+      "problems": 11,
+      "scoreboard_teams": 130,
+      "core_teams": 130,
+      "matched": 130,
+      "verified_solved": 130,
+      "mismatch_solved": 0,
+      "verified_penalty": 130,
+      "mismatch_penalty": 0,
+      "core_null": 0,
+      "diff_hist": {},
+      "score_only": [],
+      "core_only": []
+    },
+    {
+      "year": 2024,
+      "source": "zibada",
+      "source_url": "https://zibada.guru/finals/2024/",
+      "status": "final",
+      "problems": 12,
+      "scoreboard_teams": 141,
+      "core_teams": 141,
+      "matched": 141,
+      "verified_solved": 141,
+      "mismatch_solved": 0,
+      "verified_penalty": 141,
+      "mismatch_penalty": 0,
+      "core_null": 0,
+      "diff_hist": {},
+      "score_only": [],
+      "core_only": []
+    },
+    {
+      "year": 2025,
+      "source": "zibada",
+      "source_url": "https://zibada.guru/finals/2025/",
+      "status": "final",
+      "problems": 12,
+      "scoreboard_teams": 139,
+      "core_teams": 139,
+      "matched": 139,
+      "verified_solved": 139,
+      "mismatch_solved": 0,
+      "verified_penalty": 139,
+      "mismatch_penalty": 0,
+      "core_null": 0,
+      "diff_hist": {},
+      "score_only": [],
+      "core_only": []
+    }
+  ],
+  "totals": {
+    "matched": 2160,
+    "verified_solved": 2071,
+    "mismatch_solved": 79,
+    "verified_penalty": 2057,
+    "mismatch_penalty": 41,
+    "core_null": 10
+  },
+  "final_years": {
+    "years": [
+      2008,
+      2011,
+      2012,
+      2013,
+      2014,
+      2015,
+      2016,
+      2017,
+      2018,
+      2019,
+      2020,
+      2021,
+      2022,
+      2023,
+      2024,
+      2025
+    ],
+    "matched": 1982,
+    "verified_solved": 1982,
+    "mismatch_solved": 0,
+    "verified_penalty": 1982,
+    "mismatch_penalty": 0
+  },
+  "partial_years": {
+    "years": [
+      2009,
+      2010
+    ],
+    "reason": "The only per-problem source found is a frozen/mid-contest snapshot: it misses late solves and, in 2009, several teams entirely.",
+    "details": [
+      {
+        "year": 2009,
+        "mismatch_solved": 51,
+        "diff_hist": {
+          "-3": 3,
+          "-2": 12,
+          "-1": 36
+        },
+        "core_null": 10
+      },
+      {
+        "year": 2010,
+        "mismatch_solved": 28,
+        "diff_hist": {
+          "-2": 7,
+          "-1": 21
+        },
+        "core_null": 0
+      }
+    ]
+  },
+  "coverage_notes": [
+    {
+      "year": 2008,
+      "core_teams": 97,
+      "matched": 89,
+      "note": "Faltan 8 equipos del core en la fuente; todos tienen 0 resueltos, así que el conteo de resueltos es completo, pero sus intentos no están representados."
+    },
+    {
+      "year": 2011,
+      "core_teams": 104,
+      "matched": 100,
+      "note": "Faltan 4 equipos del core en la fuente; todos tienen 0 resueltos, así que el conteo de resueltos es completo, pero sus intentos no están representados."
+    },
+    {
+      "year": 2014,
+      "core_teams": 121,
+      "matched": 121,
+      "note": "La fuente tiene 1 equipo extra con 0 resueltos que no está en core.json."
+    },
+    {
+      "year": 2017,
+      "core_teams": 127,
+      "matched": 127,
+      "note": "La fuente tiene 1 equipo extra con 0 resueltos que no está en core.json."
+    },
+    {
+      "year": 2009,
+      "core_teams": 100,
+      "matched": 75,
+      "note": "Faltan 25 equipos del core (2 de ellos con resueltos > 0); los conteos de resueltos e intentos están incompletos."
+    },
+    {
+      "year": 2010,
+      "core_teams": 103,
+      "matched": 103,
+      "note": "Están todos los equipos, pero 28 tienen menos problemas resueltos que core.json porque la fuente se congeló antes del final."
+    }
+  ],
+  "official_problem_counts": [
+    {
+      "year": 2019,
+      "letter": "A",
+      "official_solved": 128,
+      "matrix_solved": 128,
+      "match": true
+    },
+    {
+      "year": 2019,
+      "letter": "B",
+      "official_solved": 41,
+      "matrix_solved": 41,
+      "match": true
+    },
+    {
+      "year": 2019,
+      "letter": "C",
+      "official_solved": 0,
+      "matrix_solved": 0,
+      "match": true
+    },
+    {
+      "year": 2019,
+      "letter": "D",
+      "official_solved": 127,
+      "matrix_solved": 127,
+      "match": true
+    },
+    {
+      "year": 2019,
+      "letter": "E",
+      "official_solved": 109,
+      "matrix_solved": 109,
+      "match": true
+    },
+    {
+      "year": 2019,
+      "letter": "F",
+      "official_solved": 3,
+      "matrix_solved": 3,
+      "match": true
+    },
+    {
+      "year": 2019,
+      "letter": "G",
+      "official_solved": 54,
+      "matrix_solved": 54,
+      "match": true
+    },
+    {
+      "year": 2019,
+      "letter": "H",
+      "official_solved": 81,
+      "matrix_solved": 81,
+      "match": true
+    },
+    {
+      "year": 2019,
+      "letter": "I",
+      "official_solved": 5,
+      "matrix_solved": 5,
+      "match": true
+    },
+    {
+      "year": 2019,
+      "letter": "J",
+      "official_solved": 33,
+      "matrix_solved": 33,
+      "match": true
+    },
+    {
+      "year": 2019,
+      "letter": "K",
+      "official_solved": 4,
+      "matrix_solved": 4,
+      "match": true
+    },
+    {
+      "year": 2022,
+      "letter": "P",
+      "official_solved": 115,
+      "matrix_solved": 115,
+      "match": true
+    },
+    {
+      "year": 2022,
+      "letter": "Q",
+      "official_solved": 72,
+      "matrix_solved": 72,
+      "match": true
+    },
+    {
+      "year": 2022,
+      "letter": "R",
+      "official_solved": 15,
+      "matrix_solved": 15,
+      "match": true
+    },
+    {
+      "year": 2022,
+      "letter": "S",
+      "official_solved": 1,
+      "matrix_solved": 1,
+      "match": true
+    },
+    {
+      "year": 2022,
+      "letter": "T",
+      "official_solved": 79,
+      "matrix_solved": 79,
+      "match": true
+    },
+    {
+      "year": 2022,
+      "letter": "U",
+      "official_solved": 92,
+      "matrix_solved": 92,
+      "match": true
+    },
+    {
+      "year": 2022,
+      "letter": "V",
+      "official_solved": 24,
+      "matrix_solved": 24,
+      "match": true
+    },
+    {
+      "year": 2022,
+      "letter": "W",
+      "official_solved": 116,
+      "matrix_solved": 116,
+      "match": true
+    },
+    {
+      "year": 2022,
+      "letter": "X",
+      "official_solved": 8,
+      "matrix_solved": 8,
+      "match": true
+    },
+    {
+      "year": 2022,
+      "letter": "Y",
+      "official_solved": 124,
+      "matrix_solved": 124,
+      "match": true
+    },
+    {
+      "year": 2022,
+      "letter": "Z",
+      "official_solved": 0,
+      "matrix_solved": 0,
+      "match": true
+    },
+    {
+      "year": 2023,
+      "letter": "A",
+      "official_solved": 120,
+      "matrix_solved": 120,
+      "match": true
+    },
+    {
+      "year": 2023,
+      "letter": "B",
+      "official_solved": 7,
+      "matrix_solved": 7,
+      "match": true
+    },
+    {
+      "year": 2023,
+      "letter": "C",
+      "official_solved": 30,
+      "matrix_solved": 30,
+      "match": true
+    },
+    {
+      "year": 2023,
+      "letter": "D",
+      "official_solved": 86,
+      "matrix_solved": 86,
+      "match": true
+    },
+    {
+      "year": 2023,
+      "letter": "E",
+      "official_solved": 0,
+      "matrix_solved": 0,
+      "match": true
+    },
+    {
+      "year": 2023,
+      "letter": "F",
+      "official_solved": 26,
+      "matrix_solved": 26,
+      "match": true
+    },
+    {
+      "year": 2023,
+      "letter": "G",
+      "official_solved": 117,
+      "matrix_solved": 117,
+      "match": true
+    },
+    {
+      "year": 2023,
+      "letter": "H",
+      "official_solved": 96,
+      "matrix_solved": 96,
+      "match": true
+    },
+    {
+      "year": 2023,
+      "letter": "I",
+      "official_solved": 110,
+      "matrix_solved": 110,
+      "match": true
+    },
+    {
+      "year": 2023,
+      "letter": "J",
+      "official_solved": 1,
+      "matrix_solved": 1,
+      "match": true
+    },
+    {
+      "year": 2023,
+      "letter": "K",
+      "official_solved": 11,
+      "matrix_solved": 11,
+      "match": true
+    },
+    {
+      "year": 2025,
+      "letter": "A",
+      "official_solved": 45,
+      "matrix_solved": 45,
+      "match": true
+    },
+    {
+      "year": 2025,
+      "letter": "B",
+      "official_solved": 8,
+      "matrix_solved": 8,
+      "match": true
+    },
+    {
+      "year": 2025,
+      "letter": "C",
+      "official_solved": 0,
+      "matrix_solved": 0,
+      "match": true
+    },
+    {
+      "year": 2025,
+      "letter": "D",
+      "official_solved": 138,
+      "matrix_solved": 138,
+      "match": true
+    },
+    {
+      "year": 2025,
+      "letter": "E",
+      "official_solved": 20,
+      "matrix_solved": 20,
+      "match": true
+    },
+    {
+      "year": 2025,
+      "letter": "F",
+      "official_solved": 135,
+      "matrix_solved": 135,
+      "match": true
+    },
+    {
+      "year": 2025,
+      "letter": "G",
+      "official_solved": 2,
+      "matrix_solved": 2,
+      "match": true
+    },
+    {
+      "year": 2025,
+      "letter": "H",
+      "official_solved": 66,
+      "matrix_solved": 66,
+      "match": true
+    },
+    {
+      "year": 2025,
+      "letter": "I",
+      "official_solved": 135,
+      "matrix_solved": 135,
+      "match": true
+    },
+    {
+      "year": 2025,
+      "letter": "J",
+      "official_solved": 128,
+      "matrix_solved": 128,
+      "match": true
+    },
+    {
+      "year": 2025,
+      "letter": "K",
+      "official_solved": 72,
+      "matrix_solved": 72,
+      "match": true
+    },
+    {
+      "year": 2025,
+      "letter": "L",
+      "official_solved": 138,
+      "matrix_solved": 138,
+      "match": true
+    }
+  ],
+  "cross_source": [
+    {
+      "year": 2012,
+      "source_a": "kattis",
+      "source_b": "zibada",
+      "common_teams": 112,
+      "different_solved_sets": 0
+    },
+    {
+      "year": 2013,
+      "source_a": "kattis",
+      "source_b": "icpcgate",
+      "common_teams": 109,
+      "different_solved_sets": 0
+    },
+    {
+      "year": 2016,
+      "source_a": "kattis",
+      "source_b": "zibada",
+      "common_teams": 128,
+      "different_solved_sets": 0
+    },
+    {
+      "year": 2017,
+      "source_a": "kattis",
+      "source_b": "zibada",
+      "common_teams": 127,
+      "different_solved_sets": 0
+    }
+  ],
+  "known_cases": {
+    "2022_Y": {
+      "year": 2022,
+      "letter": "Y",
+      "title": "Compression",
+      "teams": 124,
+      "solved": 124,
+      "solve_rate": "1.000",
+      "attempts": 140,
+      "first_solve_min": 6,
+      "median_solve_min": 16.5,
+      "source": "zibada",
+      "status": "final"
+    },
+    "2022_Z": {
+      "year": 2022,
+      "letter": "Z",
+      "title": "Archaeological Recovery",
+      "teams": 124,
+      "solved": 0,
+      "solve_rate": "0.000",
+      "attempts": 15,
+      "first_solve_min": "",
+      "median_solve_min": "",
+      "source": "zibada",
+      "status": "final"
+    },
+    "2023_G": {
+      "year": 2023,
+      "letter": "G",
+      "title": "Turning Red",
+      "teams": 130,
+      "solved": 117,
+      "solve_rate": "0.900",
+      "attempts": 270,
+      "first_solve_min": 21,
+      "median_solve_min": 101.0,
+      "source": "zibada",
+      "status": "final"
+    },
+    "2023_E": {
+      "year": 2023,
+      "letter": "E",
+      "title": "A Recurring Problem",
+      "teams": 130,
+      "solved": 0,
+      "solve_rate": "0.000",
+      "attempts": 4,
+      "first_solve_min": "",
+      "median_solve_min": "",
+      "source": "zibada",
+      "status": "final"
+    },
+    "2023_J": {
+      "year": 2023,
+      "letter": "J",
+      "title": "Bridging the Gap",
+      "teams": 130,
+      "solved": 1,
+      "solve_rate": "0.008",
+      "attempts": 48,
+      "first_solve_min": 292,
+      "median_solve_min": 292.0,
+      "source": "zibada",
+      "status": "final"
+    },
+    "2025_C": {
+      "year": 2025,
+      "letter": "C",
+      "title": "Bride of Pipe Stream",
+      "teams": 139,
+      "solved": 0,
+      "solve_rate": "0.000",
+      "attempts": 4,
+      "first_solve_min": "",
+      "median_solve_min": "",
+      "source": "zibada",
+      "status": "final"
+    }
+  }
+}

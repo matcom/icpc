@@ -1,0 +1,213 @@
+problem_id,year,letter,title,primary_area,secondary_areas,primary_technique,secondary_techniques,primary_task,secondary_tasks,implementation_burden,format,confidence,source_quality,annotator,taxonomy_version,review,evidence
+wf-2008-a,2008,A,Air Conditioning Machinery,geometry,,brute_force,geometric_reasoning,optimize,,medium,standard,0.90,B,deepseek-v4.1-flash,v1,reviewed,El sketch resuelve el problema probando todas las secuencias de codos.
+wf-2008-b,2008,B,Always an Integer,number_theory,algebra,number_theory,math_reasoning;algebra,decide,,low,standard,0.95,B,deepseek-v4.1-flash,v1,reviewed,El sketch usa divisibilidad de polinomios y diferencias finitas.
+wf-2008-c,2008,C,Conveyor Belt,geometry,,geometric_reasoning,brute_force,optimize,,medium,standard,0.90,B,deepseek-v4.1-flash,v1,reviewed,El sketch combina geometría de segmentos con búsqueda de caminos.
+wf-2008-d,2008,D,The Hare and the Hounds,graphs,,simulation,graph_reasoning,simulate,,medium,standard,0.85,B,deepseek-v4.1-flash,v1,reviewed,El sketch simula las reglas de circulación del sabueso.
+wf-2008-e,2008,E,Huffman Codes,combinatorics,,backtracking,brute_force;combinatorics,count,,medium,standard,0.90,B,deepseek-v4.1-flash,v1,reviewed,El sketch reconstruye el árbol de Huffman probando distribuciones de frecuencia.
+wf-2008-f,2008,F,Glenbow Museum,combinatorics,,dynamic_programming,math_reasoning;combinatorics,count,,medium,standard,0.95,B,deepseek-v4.1-flash,v1,reviewed,El sketch reduce el problema a contar cadenas con DP.
+wf-2008-g,2008,G,Net Loss,geometry,algebra,ternary_search,algebra;geometric_reasoning,optimize,,medium,standard,0.85,B,deepseek-v4.1-flash,v1,reviewed,El sketch optimiza numéricamente la posición de corte usando geometría.
+wf-2008-h,2008,H,Painter,geometry,,sweep_line,geometric_reasoning,decide,,medium,standard,0.95,B,deepseek-v4.1-flash,v1,reviewed,El sketch usa sweep line para detectar intersecciones y errores.
+wf-2008-i,2008,I,Password Suspects,strings,,string_matching,dynamic_programming,count,,medium,standard,0.90,B,deepseek-v4.1-flash,v1,reviewed,"El sketch usa DP sobre posición, subconjunto de patrones y prefijo coincidente."
+wf-2008-j,2008,J,The Sky is the Limit,geometry,,sweep_line,geometric_reasoning,compute,,medium,standard,0.90,B,deepseek-v4.1-flash,v1,reviewed,El sketch calcula intervalos de skyline con sweep line.
+wf-2008-k,2008,K,Steam Roller,graphs,,shortest_path,graph_reasoning,optimize,,medium,standard,0.95,B,deepseek-v4.1-flash,v1,reviewed,El sketch modela el estado y aplica Dijkstra.
+wf-2009-a,2009,A,A Careful Approach,optimization,,brute_force,binary_search,optimize,,medium,standard,0.95,B,deepseek-v4.1-flash,v1,reviewed,El sketch prueba todas las permutaciones y usa búsqueda binaria.
+wf-2009-b,2009,B,My Bad,logic,,brute_force,parsing;simulation,decide,simulate,low,standard,0.90,B,deepseek-v4.1-flash,v1,reviewed,El sketch evalúa circuitos y prueba errores posibles.
+wf-2009-c,2009,C,The Return of Carl,geometry,,geometric_reasoning,brute_force,optimize,,medium,standard,0.90,B,deepseek-v4.1-flash,v1,reviewed,El sketch despliega triángulos en el espacio y prueba secuencias de caras.
+wf-2009-d,2009,D,Conduit Packing,geometry,,binary_search,geometric_reasoning,optimize,,medium,standard,0.95,B,deepseek-v4.1-flash,v1,reviewed,El sketch usa búsqueda binaria sobre el radio y geometría de círculos.
+wf-2009-e,2009,E,Fare and Balanced,optimization,,shortest_path,graph_reasoning;dynamic_programming,construct,,medium,standard,0.85,B,deepseek-v4.1-flash,v1,reviewed,El sketch usa caminos únicos y DP sobre el grafo.
+wf-2009-f,2009,F,Deer-Proof Fence,geometry,,convex_hull,geometric_reasoning;dynamic_programming,optimize,,high,standard,0.95,B,deepseek-v4.1-flash,v1,reviewed,El sketch usa convex hull y DP para particionar árboles.
+wf-2009-g,2009,G,House of Cards,games,,minimax,simulation,optimize,decide;simulate,medium,standard,0.95,B,deepseek-v4.1-flash,v1,reviewed,El sketch usa minimax con poda alfa-beta.
+wf-2009-h,2009,H,The Ministers’ Major Mess,logic,,sat,math_reasoning,decide,,medium,standard,0.95,B,deepseek-v4.1-flash,v1,reviewed,El sketch formula el problema como 2-SAT.
+wf-2009-i,2009,I,Struts and Springs,geometry,,simulation,data_structure_design;graph_reasoning,simulate,,high,standard,0.85,B,deepseek-v4.1-flash,v1,reviewed,El sketch simula la jerarquía de ventanas y los resize.
+wf-2009-j,2009,J,Subway Timing,optimization,,scheduling,binary_search;dynamic_programming,optimize,,medium,standard,0.90,B,deepseek-v4.1-flash,v1,reviewed,El sketch usa búsqueda binaria y DP para chequear factibilidad.
+wf-2009-k,2009,K,Suffix-Replacement Grammars,strings,,automata,shortest_path;string_matching,optimize,,medium,standard,0.90,B,deepseek-v4.1-flash,v1,reviewed,El sketch reduce las reglas a un grafo de strings y busca el camino más corto.
+wf-2010-a,2010,A,APL Lives!,strings,,parsing,simulation,simulate,,medium,standard,0.95,B,deepseek-v4.1-flash,v1,reviewed,El sketch implementa un parser del lenguaje APL.
+wf-2010-b,2010,B,Barcodes,strings,,parsing,simulation,decide,simulate,medium,standard,0.90,B,deepseek-v4.1-flash,v1,reviewed,El sketch clasifica regiones y simula el código de barras.
+wf-2010-c,2010,C,Tracking Bio-bots,graphs,,graph_reasoning,coordinate_compression;data_structure_design,decide,,medium,standard,0.90,B,deepseek-v4.1-flash,v1,reviewed,El sketch comprime coordenadas y busca componentes alcanzables.
+wf-2010-d,2010,D,Castles,graphs,,greedy,sorting;graph_reasoning,optimize,,medium,standard,0.95,B,deepseek-v4.1-flash,v1,reviewed,El sketch usa greedy y ordenamiento sobre el árbol de castillos.
+wf-2010-e,2010,E,Channel,graphs,,dynamic_programming,,count,,medium,standard,0.95,B,deepseek-v4.1-flash,v1,reviewed,El sketch usa DP sobre filas y conectividad de la fila.
+wf-2010-f,2010,F,Contour Mapping,geometry,,geometric_reasoning,,compute,,medium,standard,0.90,B,deepseek-v4.1-flash,v1,reviewed,El sketch calcula intersecciones y longitudes de contorno con geometría.
+wf-2010-g,2010,G,The Islands,geometry,,dynamic_programming,geometric_reasoning,optimize,,medium,standard,0.90,B,deepseek-v4.1-flash,v1,reviewed,El sketch usa DP para dos caminos simultáneos.
+wf-2010-h,2010,H,Rain,geometry,,shortest_path,graph_reasoning;geometric_reasoning,optimize,,medium,standard,0.90,B,deepseek-v4.1-flash,v1,reviewed,El sketch construye un grafo de regiones y aplica Dijkstra.
+wf-2010-i,2010,I,Robots on Ice,graphs,,backtracking,brute_force,count,,medium,standard,0.95,B,deepseek-v4.1-flash,v1,reviewed,El sketch genera todos los caminos con poda.
+wf-2010-j,2010,J,Sharing Chocolate,combinatorics,,dynamic_programming,bitmask;combinatorics,decide,,medium,standard,0.95,B,deepseek-v4.1-flash,v1,reviewed,El sketch usa DP con subconjuntos y bitmask.
+wf-2010-k,2010,K,Paperweight,geometry,,geometric_reasoning,,compute,,high,standard,0.95,B,deepseek-v4.1-flash,v1,reviewed,El sketch prueba bases de planos y calcula distancias en 3D.
+wf-2011-a,2011,A,To Add or to Multiply,number_theory,,brute_force,number_theory,optimize,,low,standard,0.90,B,deepseek-v4.1-flash,v1,reviewed,El sketch prueba el número de multiplicaciones y construye la secuencia.
+wf-2011-b,2011,B,Affine Mess,geometry,,brute_force,geometric_reasoning,decide,,medium,standard,0.90,B,deepseek-v4.1-flash,v1,reviewed,"El sketch prueba correspondencias, rotaciones y transformaciones."
+wf-2011-c,2011,C,Ancient Messages,strings,,graph_reasoning,,count,,medium,standard,0.95,B,deepseek-v4.1-flash,v1,reviewed,El sketch cuenta regiones conectadas y huecos.
+wf-2011-d,2011,D,Chips Challenge,graphs,,flow,graph_reasoning,optimize,,high,standard,0.95,B,deepseek-v4.1-flash,v1,reviewed,El sketch modela el tablero como flujo máximo.
+wf-2011-e,2011,E,Coffee Central,sequences,geometry,prefix_sums,geometric_reasoning,optimize,,medium,standard,0.95,B,deepseek-v4.1-flash,v1,reviewed,El sketch usa sumas prefijas tras rotar la ciudad.
+wf-2011-f,2011,F,Machine Works,optimization,,dynamic_programming,data_structure_design,optimize,,medium,standard,0.90,B,deepseek-v4.1-flash,v1,reviewed,El sketch usa DP con convex hull trick.
+wf-2011-g,2011,G,Magic Sticks,geometry,,binary_search,geometric_reasoning,optimize,,medium,standard,0.90,B,deepseek-v4.1-flash,v1,reviewed,El sketch usa búsqueda binaria sobre el radio y geometría.
+wf-2011-h,2011,H,Mining Your Own Business,graphs,,graph_reasoning,,count,,medium,standard,0.95,B,deepseek-v4.1-flash,v1,reviewed,El sketch descompone el grafo en componentes biconexas.
+wf-2011-i,2011,I,Mummy Madness,geometry,,binary_search,geometric_reasoning,decide,,medium,standard,0.90,B,deepseek-v4.1-flash,v1,reviewed,El sketch usa búsqueda binaria sobre el tiempo y geometría.
+wf-2011-j,2011,J,Pyramids,combinatorics,,dynamic_programming,combinatorics,construct,,medium,standard,0.95,B,deepseek-v4.1-flash,v1,reviewed,El sketch usa mochila/DP para construir pirámides.
+wf-2011-k,2011,K,Trash Removal,geometry,,geometric_reasoning,,optimize,,medium,standard,0.95,B,deepseek-v4.1-flash,v1,reviewed,El sketch prueba pares de vértices y calcula el ancho mínimo.
+wf-2012-a,2012,A,Asteroid Rangers,geometry,,mst,geometric_reasoning,count,,medium,standard,0.90,B,deepseek-v4.1-flash,v1,reviewed,El sketch usa MST cinético y eventos de cambio.
+wf-2012-b,2012,B,Curvy Little Bottles,geometry,,binary_search,math_reasoning;geometric_reasoning;algebra,compute,,medium,standard,0.95,B,deepseek-v4.1-flash,v1,reviewed,El sketch integra polinomios y usa búsqueda binaria.
+wf-2012-c,2012,C,Bus Tour,graphs,optimization,dynamic_programming,bitmask,optimize,,medium,standard,0.95,B,deepseek-v4.1-flash,v1,reviewed,El sketch usa DP tipo TSP con bitmask.
+wf-2012-d,2012,D,Fibonacci Words,strings,combinatorics,string_matching,dynamic_programming;combinatorics,count,,medium,standard,0.90,B,deepseek-v4.1-flash,v1,reviewed,El sketch usa reemplazos de strings y DP.
+wf-2012-e,2012,E,Infiltration,graphs,,brute_force,greedy;graph_reasoning,optimize,,medium,standard,0.85,B,deepseek-v4.1-flash,v1,reviewed,El sketch usa búsqueda exhaustiva y greedy para dominar el torneo.
+wf-2012-f,2012,F,Keys,graphs,,dynamic_programming,simulation,optimize,simulate,medium,standard,0.90,B,deepseek-v4.1-flash,v1,reviewed,El sketch simula anillos y usa DP para costos.
+wf-2012-g,2012,G,Minimum Cost Flow,graphs,,flow,graph_reasoning,optimize,,high,standard,0.95,B,deepseek-v4.1-flash,v1,reviewed,El sketch modela el problema como flujo/corte.
+wf-2012-h,2012,H,Room Service,geometry,,dynamic_programming,geometric_reasoning,optimize,,medium,standard,0.90,B,deepseek-v4.1-flash,v1,reviewed,El sketch usa DP y geometría para la trayectoria.
+wf-2012-i,2012,I,A Safe Bet,geometry,,simulation,hashing,decide,simulate,medium,standard,0.90,B,deepseek-v4.1-flash,v1,reviewed,El sketch simula el láser y usa hashing de posiciones.
+wf-2012-j,2012,J,Shortest Flight Path,graphs,geometry,shortest_path,geometric_reasoning,optimize,,medium,standard,0.90,B,deepseek-v4.1-flash,v1,reviewed,El sketch construye un grafo de aeropuertos e intersecciones y aplica shortest path.
+wf-2012-k,2012,K,Stacking Plates,sequences,combinatorics,sorting,dynamic_programming;greedy,optimize,,medium,standard,0.90,B,deepseek-v4.1-flash,v1,reviewed,El sketch ordena y usa DP para empates.
+wf-2012-l,2012,L,Takeover Wars,games,optimization,greedy,,optimize,,medium,standard,0.90,B,deepseek-v4.1-flash,v1,reviewed,El sketch usa greedy sobre las empresas.
+wf-2013-a,2013,A,Self-Assembly,graphs,,graph_reasoning,,decide,,medium,standard,0.95,A,deepseek-v4.1-flash,v1,reviewed,El sketch reduce las piezas a un grafo y busca ciclos.
+wf-2013-b,2013,B,"Hey, Better Bettor",probability,,ternary_search,math_reasoning;probability,optimize,,medium,standard,0.90,A,deepseek-v4.1-flash,v1,reviewed,El sketch optimiza una función de probabilidad con búsqueda ternaria.
+wf-2013-c,2013,C,Surely You Congest,graphs,,shortest_path,flow,optimize,,medium,standard,0.95,A,deepseek-v4.1-flash,v1,reviewed,El sketch combina Dijkstra con flujo.
+wf-2013-d,2013,D,Factors,number_theory,,number_theory,,count,,low,standard,0.95,A,deepseek-v4.1-flash,v1,reviewed,El sketch usa factorización y teoría de números.
+wf-2013-e,2013,E,Harvard,optimization,,brute_force,assignment,optimize,,medium,standard,0.85,A,deepseek-v4.1-flash,v1,reviewed,El sketch prueba asignaciones de variables a bancos.
+wf-2013-f,2013,F,Low Power,optimization,,binary_search,greedy,optimize,,medium,standard,0.95,A,deepseek-v4.1-flash,v1,reviewed,El sketch usa búsqueda binaria y greedy.
+wf-2013-g,2013,G,Map Tiles,geometry,,brute_force,geometric_reasoning,optimize,,low,standard,0.85,A,deepseek-v4.1-flash,v1,reviewed,El sketch prueba colocaciones de la cuadrícula.
+wf-2013-h,2013,H,Matryoshka,sequences,combinatorics,dynamic_programming,,optimize,,medium,standard,0.95,A,deepseek-v4.1-flash,v1,reviewed,El sketch usa DP sobre intervalos.
+wf-2013-i,2013,I,Pirate Chest,geometry,sequences,dynamic_programming,data_structure_design,optimize,,medium,standard,0.85,A,deepseek-v4.1-flash,v1,reviewed,El sketch usa pila y DP sobre la matriz.
+wf-2013-j,2013,J,Pollution Solution,geometry,,geometric_reasoning,,compute,,medium,standard,0.95,A,deepseek-v4.1-flash,v1,reviewed,El sketch usa geometría de polígonos.
+wf-2013-k,2013,K,Up a Tree,graphs,,dynamic_programming,brute_force;graph_reasoning,construct,,medium,standard,0.90,A,deepseek-v4.1-flash,v1,reviewed,El sketch prueba órdenes de recorrido y usa DP.
+wf-2014-a,2014,A,Baggage,sequences,,brute_force,,construct,,low,standard,0.85,C,deepseek-v4.1-flash,v1,reviewed,El código busca secuencias de movimientos y usa patrones para tamaños grandes.
+wf-2014-b,2014,B,Buffed Buffet,optimization,sequences,dynamic_programming,greedy,optimize,,medium,standard,0.90,C,deepseek-v4.1-flash,v1,reviewed,El código combina una mochila con el tratamiento continuo de los platos.
+wf-2014-c,2014,C,Crane Balancing,geometry,,geometric_reasoning,,compute,,medium,standard,0.90,C,deepseek-v4.1-flash,v1,reviewed,El código calcula el centro de masa y los límites de estabilidad.
+wf-2014-d,2014,D,Game Strategy,games,,graph_reasoning,,compute,,medium,standard,0.90,C,deepseek-v4.1-flash,v1,reviewed,El código calcula alcanzabilidad por pasos sobre el grafo de posiciones.
+wf-2014-e,2014,E,Maze Reduction,graphs,,hashing,graph_reasoning,decide,,medium,standard,0.90,C,deepseek-v4.1-flash,v1,reviewed,El código hashea los corredores y agrupa habitaciones isomorfas.
+wf-2014-f,2014,F,Messenger,geometry,,binary_search,geometric_reasoning,optimize,,medium,standard,0.90,C,deepseek-v4.1-flash,v1,reviewed,El código usa búsqueda binaria sobre la distancia y geometría de trayectorias.
+wf-2014-g,2014,G,Metal Processing Plant,graphs,,graph_reasoning,,optimize,,medium,standard,0.85,C,deepseek-v4.1-flash,v1,reviewed,El código mantiene conectividad y minimiza el máximo costo con Floyd.
+wf-2014-h,2014,H,Pachinko,probability,,dynamic_programming,probability,compute,,medium,standard,0.90,C,deepseek-v4.1-flash,v1,reviewed,El código propaga medias y varianzas por DP sobre estados.
+wf-2014-i,2014,I,Sensor Network,graphs,geometry,matching,geometric_reasoning,optimize,,high,standard,0.90,C,deepseek-v4.1-flash,v1,reviewed,El código usa matching bipartito y geometría para elegir sensores.
+wf-2014-j,2014,J,Skiing,geometry,,binary_search,geometric_reasoning,optimize,,medium,standard,0.90,C,deepseek-v4.1-flash,v1,reviewed,El código calcula intervalos de aceleración y geometría de trayectorias.
+wf-2014-k,2014,K,Surveillance,geometry,optimization,data_structure_design,greedy,optimize,,medium,standard,0.90,C,deepseek-v4.1-flash,v1,reviewed,El código usa intervalos y saltos binarios para cubrir el rango.
+wf-2014-l,2014,L,Wire Crossing,geometry,graphs,geometric_reasoning,graph_reasoning,optimize,,high,standard,0.90,C,deepseek-v4.1-flash,v1,reviewed,El código construye intersecciones y busca el cruce mínimo.
+wf-2015-a,2015,A,Amalgamated Artichokes,sequences,,simulation,direct_implementation,compute,,low,standard,0.95,A,deepseek-v4.1-flash,v1,reviewed,El sketch recorre los precios manteniendo el máximo visto.
+wf-2015-b,2015,B,Asteroids,geometry,,ternary_search,geometric_reasoning,optimize,,medium,standard,0.90,A,deepseek-v4.1-flash,v1,reviewed,El sketch usa búsqueda ternaria y geometría de polígonos.
+wf-2015-c,2015,C,Catering,optimization,,flow,matching,optimize,,high,standard,0.95,A,deepseek-v4.1-flash,v1,reviewed,El sketch lo plantea como flujo máximo/matching bipartito.
+wf-2015-d,2015,D,Cutting Cheese,geometry,algebra,binary_search,math_reasoning;algebra;geometric_reasoning,compute,,medium,standard,0.95,A,deepseek-v4.1-flash,v1,reviewed,El sketch usa búsqueda binaria sobre z y cálculo de volúmenes.
+wf-2015-e,2015,E,Evolution in Parallel,sequences,,greedy,graph_reasoning,decide,,medium,standard,0.90,A,deepseek-v4.1-flash,v1,reviewed,El sketch reduce el problema a un DAG y lo resuelve con un greedy sobre el orden topológico.
+wf-2015-f,2015,F,Keyboarding,strings,,graph_reasoning,simulation,optimize,,medium,standard,0.95,A,deepseek-v4.1-flash,v1,reviewed,El sketch construye un grafo de estados y hace BFS.
+wf-2015-g,2015,G,Pipe Stream,graphs,optimization,binary_search,,optimize,,medium,standard,0.95,A,deepseek-v4.1-flash,v1,reviewed,El sketch usa búsqueda binaria sobre la velocidad.
+wf-2015-h,2015,H,Qanat,geometry,algebra,ternary_search,algebra;geometric_reasoning,optimize,,medium,standard,0.90,A,deepseek-v4.1-flash,v1,reviewed,El sketch optimiza la posición de los pozos con geometría.
+wf-2015-i,2015,I,Ship Traffic,sequences,optimization,simulation,,compute,simulate,low,standard,0.95,A,deepseek-v4.1-flash,v1,reviewed,El sketch convierte cada barco en un intervalo de tiempo.
+wf-2015-j,2015,J,Tile Cutting,geometry,,number_theory,,count,,medium,standard,0.95,A,deepseek-v4.1-flash,v1,reviewed,El sketch reduce el corte de azulejos a teoría de números.
+wf-2015-k,2015,K,Tours,graphs,,graph_reasoning,,count,,medium,standard,0.90,A,deepseek-v4.1-flash,v1,reviewed,El sketch usa teoría de grafos y ciclos.
+wf-2015-l,2015,L,Weather Report,probability,,greedy,math_reasoning;probability,compute,,medium,standard,0.90,A,deepseek-v4.1-flash,v1,reviewed,El sketch calcula un código de Huffman.
+wf-2015-m,2015,M,Window Manager,geometry,,simulation,,simulate,,medium,standard,0.95,A,deepseek-v4.1-flash,v1,reviewed,El sketch simula las ventanas y sus operaciones.
+wf-2016-a,2016,A,Balanced Diet,optimization,sequences,greedy,simulation,decide,simulate,medium,standard,0.90,A,deepseek-v4.1-flash,v1,reviewed,El sketch simula la estrategia óptima de Danny.
+wf-2016-b,2016,B,Branch Assignment,graphs,,shortest_path,dynamic_programming,optimize,,medium,standard,0.95,A,deepseek-v4.1-flash,v1,reviewed,El sketch usa Dijkstra y DP para particionar sucursales.
+wf-2016-c,2016,C,Ceiling Function,graphs,,graph_reasoning,simulation,count,simulate,medium,standard,0.95,A,deepseek-v4.1-flash,v1,reviewed,El sketch construye árboles y compara formas.
+wf-2016-d,2016,D,Clock Breaking,logic,,brute_force,simulation,decide,simulate,low,standard,0.90,A,deepseek-v4.1-flash,v1,reviewed,El sketch identifica segmentos y prueba tiempos.
+wf-2016-e,2016,E,Forever Young,number_theory,,number_theory,brute_force;math_reasoning,optimize,,medium,standard,0.90,A,deepseek-v4.1-flash,v1,reviewed,El sketch prueba bases y usa teoría de números.
+wf-2016-f,2016,F,Longest Rivers,graphs,,greedy,graph_reasoning,optimize,,medium,standard,0.90,A,deepseek-v4.1-flash,v1,reviewed,El sketch usa árboles y greedy para los ríos.
+wf-2016-g,2016,G,Oil,geometry,,geometric_reasoning,,optimize,,medium,standard,0.95,A,deepseek-v4.1-flash,v1,reviewed,El sketch usa geometría para mover el pozo.
+wf-2016-h,2016,H,Polygonal Puzzle,geometry,,geometric_reasoning,,optimize,,high,standard,0.95,A,deepseek-v4.1-flash,v1,reviewed,El sketch prueba pares de aristas y geometría.
+wf-2016-i,2016,I,Road Times,graphs,optimization,shortest_path,math_reasoning;linear_programming,optimize,,medium,standard,0.90,A,deepseek-v4.1-flash,v1,reviewed,El sketch combina shortest paths con programación lineal.
+wf-2016-j,2016,J,Spin Doctor,geometry,,geometric_reasoning,,optimize,,medium,standard,0.90,A,deepseek-v4.1-flash,v1,reviewed,El sketch reduce el problema a geometría de puntos.
+wf-2016-k,2016,K,String Theory,strings,,parsing,greedy,decide,,medium,standard,0.95,A,deepseek-v4.1-flash,v1,reviewed,El sketch usa greedy/parsing para validar k-quotations.
+wf-2016-l,2016,L,Swap Space,optimization,,greedy,sorting,optimize,,medium,standard,0.95,A,deepseek-v4.1-flash,v1,reviewed,El sketch usa greedy y ordenamiento para reformatear.
+wf-2016-m,2016,M,What Really Happened on Mars?,general,,simulation,,simulate,,high,standard,0.95,A,deepseek-v4.1-flash,v1,reviewed,El sketch simula el procesador.
+wf-2017-a,2017,A,Airport Construction,geometry,,geometric_reasoning,,optimize,,high,standard,0.95,A,deepseek-v4.1-flash,v1,reviewed,El sketch usa geometría de polígonos y prueba vértices.
+wf-2017-b,2017,B,Get a Clue!,logic,games,brute_force,,decide,,medium,standard,0.95,A,deepseek-v4.1-flash,v1,reviewed,El sketch prueba todas las manos posibles.
+wf-2017-c,2017,C,Mission Improbable,graphs,geometry,matching,greedy;geometric_reasoning,optimize,,high,standard,0.90,A,deepseek-v4.1-flash,v1,reviewed,El sketch usa matching bipartito para combinar filas y columnas de las vistas.
+wf-2017-d,2017,D,Money for Nothing,geometry,,divide_and_conquer,geometric_reasoning,optimize,,medium,standard,0.90,A,deepseek-v4.1-flash,v1,reviewed,El sketch reduce a geometría y divide y vencerás.
+wf-2017-e,2017,E,Need for Speed,optimization,,binary_search,,optimize,,low,standard,0.95,A,deepseek-v4.1-flash,v1,reviewed,El sketch usa búsqueda binaria sobre c.
+wf-2017-f,2017,F,Posterize,optimization,,dynamic_programming,,optimize,,medium,standard,0.95,A,deepseek-v4.1-flash,v1,reviewed,El sketch usa DP para posterizar.
+wf-2017-g,2017,G,Replicate Replicate Rfplicbte,sequences,,simulation,,construct,simulate,medium,standard,0.90,A,deepseek-v4.1-flash,v1,reviewed,El sketch simula la evolución del patrón.
+wf-2017-h,2017,H,Scenery,optimization,,scheduling,greedy;sorting,optimize,,medium,standard,0.95,A,deepseek-v4.1-flash,v1,reviewed,El sketch usa greedy/scheduling para las fotos.
+wf-2017-i,2017,I,Secret Chamber at Mount Rushmore,graphs,,graph_reasoning,,decide,,medium,standard,0.95,A,deepseek-v4.1-flash,v1,reviewed,El sketch construye un grafo de traducciones.
+wf-2017-j,2017,J,Son of Pipe Stream,graphs,,flow,graph_reasoning,optimize,,high,standard,0.95,A,deepseek-v4.1-flash,v1,reviewed,El sketch lo plantea como flujo máximo.
+wf-2017-k,2017,K,Tarot Sham Boast,probability,strings,probability,string_matching;math_reasoning,compute,,medium,standard,0.90,A,deepseek-v4.1-flash,v1,reviewed,El sketch usa probabilidad y strings.
+wf-2017-l,2017,L,Visual Python++,geometry,,sweep_line,,decide,,medium,standard,0.95,A,deepseek-v4.1-flash,v1,reviewed,El sketch usa sweep line.
+wf-2018-a,2018,A,Catch the Plane,graphs,,dynamic_programming,graph_reasoning,optimize,,medium,standard,0.90,A,deepseek-v4.1-flash,v1,reviewed,El sketch usa DP hacia atrás en el tiempo.
+wf-2018-b,2018,B,Comma Sprinkler,strings,,graph_reasoning,,simulate,,medium,standard,0.95,A,deepseek-v4.1-flash,v1,reviewed,El sketch convierte las palabras en un grafo.
+wf-2018-c,2018,C,Conquer The World,graphs,,flow,graph_reasoning,optimize,,high,standard,0.95,A,deepseek-v4.1-flash,v1,reviewed,El sketch lo plantea como min-cost max-flow en un árbol.
+wf-2018-d,2018,D,Gem Island,probability,combinatorics,probability,math_reasoning;combinatorics,compute,,medium,standard,0.95,A,deepseek-v4.1-flash,v1,reviewed,El sketch usa probabilidad y combinatoria.
+wf-2018-e,2018,E,Getting a Jump on Crime,graphs,geometry,shortest_path,geometric_reasoning,optimize,,medium,standard,0.90,A,deepseek-v4.1-flash,v1,reviewed,El sketch usa shortest path y geometría.
+wf-2018-f,2018,F,Go with the Flow,strings,,simulation,,compute,simulate,medium,standard,0.95,A,deepseek-v4.1-flash,v1,reviewed,El sketch simula los anchos de línea.
+wf-2018-g,2018,G,Panda Preserve,geometry,,geometric_reasoning,,optimize,,high,standard,0.95,A,deepseek-v4.1-flash,v1,reviewed,El sketch usa geometría computacional/Voronoi.
+wf-2018-h,2018,H,Single Cut of Failure,geometry,combinatorics,two_pointers,combinatorics;geometric_reasoning,optimize,,medium,standard,0.90,A,deepseek-v4.1-flash,v1,reviewed,El sketch reduce el corte a intervalos y usa dos punteros sobre los extremos ordenados.
+wf-2018-i,2018,I,Triangles,geometry,,combinatorics,math_reasoning;geometric_reasoning,count,,low,standard,0.90,A,deepseek-v4.1-flash,v1,reviewed,El sketch cuenta triángulos con combinatoria/geometría.
+wf-2018-j,2018,J,Uncrossed Knight’s Tour,graphs,,dynamic_programming,math_reasoning;combinatorics,construct,,medium,standard,0.85,A,deepseek-v4.1-flash,v1,reviewed,El sketch usa DP/matemáticas para el recorrido.
+wf-2018-k,2018,K,Wireless is the New Fiber,graphs,,greedy,graph_reasoning,construct,,medium,standard,0.95,A,deepseek-v4.1-flash,v1,reviewed,El sketch construye un árbol con greedy.
+wf-2019-a,2019,A,Azulejos,sequences,combinatorics,greedy,sorting;data_structure_design,construct,,medium,standard,0.95,A,deepseek-v4.1-flash,v1,reviewed,El sketch usa greedy y estructuras de datos.
+wf-2019-b,2019,B,Beautiful Bridges,geometry,,dynamic_programming,geometric_reasoning,optimize,,medium,standard,0.95,A,deepseek-v4.1-flash,v1,reviewed,El sketch usa DP y geometría.
+wf-2019-c,2019,C,Checks Post Facto,games,logic,simulation,,construct,simulate,high,standard,0.90,A,deepseek-v4.1-flash,v1,reviewed,El sketch simula y reconstruye la partida.
+wf-2019-d,2019,D,Circular DNA,strings,,string_matching,,count,,medium,standard,0.90,A,deepseek-v4.1-flash,v1,reviewed,El sketch usa conteo y strings circulares.
+wf-2019-e,2019,E,Dead-End Detector,graphs,,graph_reasoning,,count,,medium,standard,0.95,A,deepseek-v4.1-flash,v1,reviewed,El sketch analiza componentes y hojas.
+wf-2019-f,2019,F,Directing Rainfall,geometry,,sweep_line,data_structure_design;geometric_reasoning,optimize,,high,standard,0.90,A,deepseek-v4.1-flash,v1,reviewed,El sketch usa sweep line y estructuras de datos.
+wf-2019-g,2019,G,First of Her Name,strings,,suffix_structures,string_matching;sorting,count,,high,standard,0.90,A,deepseek-v4.1-flash,v1,reviewed,El sketch usa suffix array/trie y búsqueda.
+wf-2019-h,2019,H,Hobson’s Trains,graphs,,graph_reasoning,,count,,medium,standard,0.90,A,deepseek-v4.1-flash,v1,reviewed,El sketch analiza ciclos y árboles.
+wf-2019-i,2019,I,Karel the Robot,strings,,parsing,simulation,simulate,,medium,standard,0.95,A,deepseek-v4.1-flash,v1,reviewed,El sketch parsea y simula programas.
+wf-2019-j,2019,J,Miniature Golf,geometry,,sweep_line,geometric_reasoning,compute,,medium,standard,0.90,A,deepseek-v4.1-flash,v1,reviewed,El sketch usa sweep line sobre intervalos.
+wf-2019-k,2019,K,Traffic Blights,probability,,divide_and_conquer,meet_in_the_middle,compute,,medium,standard,0.90,A,deepseek-v4.1-flash,v1,reviewed,El sketch usa divide y vencerás/meet in the middle.
+wf-2020-a,2020,A,Cardiology,combinatorics,,combinatorics,math_reasoning,compute,,low,standard,0.85,C,deepseek-v4.1-flash,v1,reviewed,El código analiza el ciclo de la permutación de cartas.
+wf-2020-b,2020,B,The Cost of Speed Limits,graphs,,dynamic_programming,graph_reasoning,optimize,,medium,standard,0.90,C,deepseek-v4.1-flash,v1,reviewed,El código hace DP sobre el árbol para elegir los límites de velocidad.
+wf-2020-c,2020,C,Domes,geometry,,geometric_reasoning,,compute,,medium,standard,0.90,C,deepseek-v4.1-flash,v1,reviewed,El código recorta el rectángulo con las cúpulas y calcula áreas.
+wf-2020-d,2020,D,Gene Folding,strings,,string_matching,hashing,optimize,,medium,standard,0.90,C,deepseek-v4.1-flash,v1,reviewed,El código usa hashing para detectar pliegues y reducir la cadena.
+wf-2020-e,2020,E,Landscape Generator,sequences,,prefix_sums,,compute,,low,standard,0.90,C,deepseek-v4.1-flash,v1,reviewed,El código usa diferencias para construir el paisaje.
+wf-2020-f,2020,F,Ley Lines,geometry,,sweep_line,geometric_reasoning,optimize,,medium,standard,0.90,C,deepseek-v4.1-flash,v1,reviewed,El código barre ángulos para maximizar puntos alineados.
+wf-2020-g,2020,G,Opportunity Cost,geometry,,geometric_reasoning,,optimize,,medium,standard,0.85,C,deepseek-v4.1-flash,v1,reviewed,El código maximiza distancias coordenada a coordenada en 3D.
+wf-2020-h,2020,H,QC QC,logic,,simulation,math_reasoning;brute_force,decide,,high,interactive,0.85,C,deepseek-v4.1-flash,v1,reviewed,El código mantiene creencias lógicas y las actualiza con tests.
+wf-2020-i,2020,I,Quests,optimization,,dynamic_programming,,optimize,,medium,standard,0.90,C,deepseek-v4.1-flash,v1,reviewed,El código usa una mochila booleana sobre los días disponibles.
+wf-2020-j,2020,J,’S No Problem,graphs,,dynamic_programming,graph_reasoning,optimize,,medium,standard,0.90,C,deepseek-v4.1-flash,v1,reviewed,El código hace DP de particiones sobre el árbol.
+wf-2020-k,2020,K,Space Walls,geometry,number_theory,number_theory,math_reasoning;geometric_reasoning,compute,,high,standard,0.85,C,deepseek-v4.1-flash,v1,reviewed,El código combina geometría 3D con congruencias y gcd extendido.
+wf-2020-l,2020,L,Sweep Stakes,probability,,divide_and_conquer,probability,compute,,medium,standard,0.90,C,deepseek-v4.1-flash,v1,reviewed,El código divide el espacio de sorteos y propaga distribuciones.
+wf-2020-m,2020,M,Trailing Digits,number_theory,,number_theory,,optimize,,low,standard,0.90,C,deepseek-v4.1-flash,v1,reviewed,El código usa congruencias y gcd para maximizar los dígitos finales.
+wf-2020-n,2020,N,"What’s Our Vector, Victor?",algebra,geometry,algebra,geometric_reasoning,compute,,high,standard,0.85,C,deepseek-v4.1-flash,v1,reviewed,El código interseca hiperesferas y proyecta en dimensiones altas.
+wf-2020-o,2020,O,Which Planet is This?!,geometry,,hashing,geometric_reasoning,decide,,high,standard,0.90,C,deepseek-v4.1-flash,v1,reviewed,El código hashea las superficies planetarias para compararlas.
+wf-2021-a,2021,A,Crystal Crosswind,geometry,,simulation,,construct,simulate,high,standard,0.90,C,deepseek-v4.1-flash,v1,reviewed,El código propaga la cristalización celda a celda.
+wf-2021-b,2021,B,Dungeon Crawler,graphs,,dynamic_programming,data_structure_design;graph_reasoning,optimize,,medium,standard,0.90,C,deepseek-v4.1-flash,v1,reviewed,El código usa DP y saltos binarios sobre el árbol.
+wf-2021-c,2021,C,Fair Division,number_theory,,number_theory,math_reasoning,construct,,low,standard,0.90,C,deepseek-v4.1-flash,v1,reviewed,El código busca denominadores que satisfagan la división exacta.
+wf-2021-d,2021,D,Guardians of the Gallery,geometry,,shortest_path,geometric_reasoning,optimize,,high,standard,0.90,C,deepseek-v4.1-flash,v1,reviewed,El código construye visibilidad y aplica Dijkstra.
+wf-2021-e,2021,E,Hand of the Free Marked,probability,,probability,math_reasoning,compute,,medium,standard,0.90,C,deepseek-v4.1-flash,v1,reviewed,El código enumera manos y calcula probabilidades.
+wf-2021-f,2021,F,Islands from the Sky,geometry,,binary_search,geometric_reasoning,optimize,,medium,standard,0.90,C,deepseek-v4.1-flash,v1,reviewed,El código usa búsqueda binaria sobre el ángulo y geometría de franjas.
+wf-2021-g,2021,G,Mosaic Browsing,strings,,string_matching,bitmask,count,,medium,standard,0.90,C,deepseek-v4.1-flash,v1,reviewed,El código usa bitsets para buscar el patrón en el mosaico.
+wf-2021-h,2021,H,Prehistoric Programs,strings,,parsing,greedy,construct,,medium,standard,0.90,C,deepseek-v4.1-flash,v1,reviewed,El código ordena las cadenas de paréntesis con un greedy.
+wf-2021-i,2021,I,Spider Walk,graphs,,data_structure_design,simulation,compute,simulate,medium,standard,0.90,C,deepseek-v4.1-flash,v1,reviewed,El código simula los intercambios y mantiene intervalos.
+wf-2021-j,2021,J,Splitstream,graphs,,graph_reasoning,,compute,,medium,standard,0.90,C,deepseek-v4.1-flash,v1,reviewed,El código propaga tamaños por el árbol de splitstream.
+wf-2021-k,2021,K,Take On Meme,geometry,,convex_hull,geometric_reasoning,compute,,medium,standard,0.90,C,deepseek-v4.1-flash,v1,reviewed,El código calcula la envolvente de sumas de puntos.
+wf-2021-l,2021,L,Where Am I?,general,,simulation,,compute,simulate,medium,standard,0.90,C,deepseek-v4.1-flash,v1,reviewed,El código reconstruye el espiral y las distancias en la cuadrícula.
+wf-2022-p,2022,P,Turning Red,algebra,number_theory,algebra,math_reasoning;number_theory,optimize,,medium,standard,0.90,A,deepseek-v4.1-flash,v1,reviewed,El sketch modela los botones como un sistema de ecuaciones módulo 3.
+wf-2022-q,2022,Q,Doing the Container Shuffle,sequences,,greedy,simulation,optimize,simulate,low,standard,0.90,A,deepseek-v4.1-flash,v1,reviewed,El sketch define un orden conjunto y lo usa para decidir movimientos.
+wf-2022-r,2022,R,Zoo Management,graphs,strings,graph_reasoning,string_matching,decide,,medium,standard,0.90,A,deepseek-v4.1-flash,v1,reviewed,El sketch descompone en componentes biconexas y compara ciclos como strings.
+wf-2022-s,2022,S,Bridging the Gap,general,,greedy,,construct,,low,standard,0.90,A,deepseek-v4.1-flash,v1,reviewed,El sketch construye la secuencia de cruces con observaciones estructurales.
+wf-2022-t,2022,T,Carl’s Vacation,geometry,,geometric_reasoning,,optimize,,high,standard,0.95,A,deepseek-v4.1-flash,v1,reviewed,El sketch reduce la ruta a geometría 3D entre pirámides.
+wf-2022-u,2022,U,Toy Train Tracks,geometry,,greedy,direct_implementation,construct,,medium,standard,0.90,A,deepseek-v4.1-flash,v1,reviewed,El sketch construye un circuito por casos según paridad y segmentos.
+wf-2022-v,2022,V,Three Kinds of Dice,probability,,probability,math_reasoning,optimize,,low,standard,0.95,A,deepseek-v4.1-flash,v1,reviewed,El sketch compara probabilidades de caras de dados.
+wf-2022-w,2022,W,Riddle of the Sphinx,algebra,,algebra,math_reasoning,decide,,high,interactive,0.90,A,deepseek-v4.1-flash,v1,reviewed,El sketch usa álgebra lineal/interactiva para identificar la posición.
+wf-2022-x,2022,X,Quartets,logic,,math_reasoning,,decide,,low,standard,0.90,A,deepseek-v4.1-flash,v1,reviewed,El sketch mantiene conocimiento lógico sobre las manos y verifica consistencia.
+wf-2022-y,2022,Y,Compression,strings,,string_matching,,construct,,medium,standard,0.95,A,deepseek-v4.1-flash,v1,reviewed,El sketch usa las propiedades de los extremos de la cadena.
+wf-2022-z,2022,Z,Archaeological Recovery,algebra,number_theory,algebra,math_reasoning;number_theory,decide,,medium,standard,0.85,A,deepseek-v4.1-flash,v1,reviewed,El sketch modela posiciones y palancas como vectores en Z3.
+wf-2023-a,2023,A,Riddle of the Sphinx,algebra,,algebra,math_reasoning,decide,,high,interactive,0.90,A,deepseek-v4.1-flash,v1,reviewed,El sketch usa álgebra lineal/interactiva para identificar la posición.
+wf-2023-b,2023,B,Schedule,optimization,,combinatorics,math_reasoning,optimize,,medium,standard,0.90,A,deepseek-v4.1-flash,v1,reviewed,El sketch reduce el calendario a un problema de cobertura combinatoria.
+wf-2023-c,2023,C,Three Kinds of Dice,probability,,probability,math_reasoning,optimize,,low,standard,0.95,A,deepseek-v4.1-flash,v1,reviewed,El sketch compara probabilidades de caras de dados.
+wf-2023-d,2023,D,Carl’s Vacation,geometry,,geometric_reasoning,,optimize,,high,standard,0.95,A,deepseek-v4.1-flash,v1,reviewed,El sketch reduce la ruta a geometría 3D entre pirámides.
+wf-2023-e,2023,E,A Recurring Problem,combinatorics,,dynamic_programming,combinatorics,count,,medium,standard,0.90,A,deepseek-v4.1-flash,v1,reviewed,El sketch usa DP para contar secuencias generadas.
+wf-2023-f,2023,F,Tilting Tiles,general,,simulation,,decide,simulate,medium,standard,0.90,A,deepseek-v4.1-flash,v1,reviewed,El sketch analiza configuraciones y movimientos de las fichas.
+wf-2023-g,2023,G,Turning Red,algebra,number_theory,algebra,math_reasoning;number_theory,optimize,,medium,standard,0.90,A,deepseek-v4.1-flash,v1,reviewed,El sketch modela los botones como un sistema de ecuaciones módulo 3.
+wf-2023-h,2023,H,Jet Lag,optimization,,greedy,,optimize,,low,standard,0.95,A,deepseek-v4.1-flash,v1,reviewed,El sketch usa un greedy sobre intervalos de sueño.
+wf-2023-i,2023,I,Waterworld,geometry,,geometric_reasoning,,compute,,high,standard,0.95,A,deepseek-v4.1-flash,v1,reviewed,El sketch usa áreas de bandas esféricas.
+wf-2023-j,2023,J,Bridging the Gap,general,,greedy,,construct,,low,standard,0.90,A,deepseek-v4.1-flash,v1,reviewed,El sketch construye la secuencia de cruces con observaciones estructurales.
+wf-2023-k,2023,K,Alea Iacta Est,graphs,,shortest_path,graph_reasoning,optimize,,medium,standard,0.95,A,deepseek-v4.1-flash,v1,reviewed,El sketch modela estados y aplica Dijkstra/Bellman-Ford.
+wf-2024-a,2024,A,Billboards,optimization,geometry,greedy,,optimize,,low,standard,0.90,C,deepseek-v4.1-flash,v1,reviewed,El código elige el siguiente billboard por área acumulada.
+wf-2024-b,2024,B,Bingo for the Win!,probability,,probability,math_reasoning,compute,,low,standard,0.90,C,deepseek-v4.1-flash,v1,reviewed,El código cuenta apariciones y calcula probabilidades por fila.
+wf-2024-c,2024,C,Citizenship,sequences,,simulation,,compute,simulate,medium,standard,0.90,C,deepseek-v4.1-flash,v1,reviewed,El código simula intervalos de fechas y años de residencia.
+wf-2024-d,2024,D,Doubles Horseback Wrestling,optimization,,greedy,sorting,optimize,,low,standard,0.90,C,deepseek-v4.1-flash,v1,reviewed,El código empareja intervalos con una cola de prioridad.
+wf-2024-e,2024,E,Flipping Container,geometry,optimization,brute_force,,optimize,,medium,standard,0.85,C,deepseek-v4.1-flash,v1,reviewed,El código explora estados y combinaciones de volteos.
+wf-2024-f,2024,F,Friendly Rivalry,graphs,,graph_reasoning,greedy,optimize,,medium,standard,0.85,C,deepseek-v4.1-flash,v1,reviewed,El código une componentes por distancia y verifica particiones.
+wf-2024-g,2024,G,Kindergarten,graphs,,graph_reasoning,,construct,,medium,standard,0.85,C,deepseek-v4.1-flash,v1,reviewed,El código busca ciclos en el grafo funcional de celos.
+wf-2024-h,2024,H,Maxwell’s Demon,algebra,,algebra,math_reasoning,compute,,low,standard,0.90,C,deepseek-v4.1-flash,v1,reviewed,El código resuelve un sistema lineal sobre las colisiones.
+wf-2024-i,2024,I,Steppe on It,graphs,,binary_search,dynamic_programming;graph_reasoning,optimize,,medium,standard,0.90,C,deepseek-v4.1-flash,v1,reviewed,El código usa búsqueda binaria y DP sobre el árbol.
+wf-2024-j,2024,J,The Silk Road . . . with Robots!,sequences,,segment_tree,data_structure_design;dynamic_programming,optimize,,high,standard,0.90,C,deepseek-v4.1-flash,v1,reviewed,El código usa un segment tree de matrices para actualizar el camino.
+wf-2024-k,2024,K,Tower of noiHa,combinatorics,,combinatorics,math_reasoning,compute,,low,standard,0.90,C,deepseek-v4.1-flash,v1,reviewed,El código manipula la representación binaria de la torre.
+wf-2024-l,2024,L,Where Am I Now?,general,,simulation,,decide,simulate,high,interactive,0.85,C,deepseek-v4.1-flash,v1,reviewed,El código explora el mapa de forma interactiva y compara traslaciones.
+wf-2025-a,2025,A,Skew-ed Reasoning,graphs,,graph_reasoning,,construct,,medium,standard,0.90,A,deepseek-v4.1-flash,v1,reviewed,El sketch recorre el árbol de skew heaps y construye secuencias.
+wf-2025-b,2025,B,Blackboard Game,games,graphs,sprague_grundy,matching;math_reasoning,decide,,medium,standard,0.90,A,deepseek-v4.1-flash,v1,reviewed,El sketch reduce el juego a matching máximo en un grafo de números.
+wf-2025-c,2025,C,Bride of Pipe Stream,optimization,graphs,linear_programming,math_reasoning;flow,optimize,,high,standard,0.90,A,deepseek-v4.1-flash,v1,reviewed,El sketch formula el problema como programación lineal y usa dualidad.
+wf-2025-d,2025,D,Buggy Rover,general,,brute_force,simulation,optimize,simulate,low,standard,0.90,A,deepseek-v4.1-flash,v1,reviewed,El sketch prueba las 24 ordenaciones de direcciones y filtra.
+wf-2025-e,2025,E,Delivery Service,graphs,,dsu,data_structure_design;graph_reasoning,compute,,high,standard,0.90,A,deepseek-v4.1-flash,v1,reviewed,El sketch usa componentes y small-into-large con DSU.
+wf-2025-f,2025,F,Herding Cats,optimization,combinatorics,greedy,,construct,,low,standard,0.90,A,deepseek-v4.1-flash,v1,reviewed,El sketch usa intersecciones y cotas para asignar macetas.
+wf-2025-g,2025,G,Lava Moat,geometry,,geometric_reasoning,,optimize,,high,standard,0.90,A,deepseek-v4.1-flash,v1,reviewed,El sketch analiza alturas y caminos sobre triángulos.
+wf-2025-h,2025,H,Score Values,number_theory,sequences,dynamic_programming,,optimize,,medium,standard,0.90,A,deepseek-v4.1-flash,v1,reviewed,El sketch usa DP de dígitos y módulo p.
+wf-2025-i,2025,I,Slot Machine,sequences,,simulation,greedy,construct,simulate,medium,standard,0.90,A,deepseek-v4.1-flash,v1,reviewed,El sketch manipula las ruedas y compara pares.
+wf-2025-j,2025,J,Stacking Cups,combinatorics,,combinatorics,math_reasoning,construct,,low,standard,0.90,A,deepseek-v4.1-flash,v1,reviewed,El sketch caracteriza las alturas alcanzables.
+wf-2025-k,2025,K,Treasure Map,geometry,,algebra,math_reasoning,construct,,low,standard,0.90,A,deepseek-v4.1-flash,v1,reviewed,El sketch reduce la condición a valores por fila y columna.
+wf-2025-l,2025,L,Walking on Sunshine,geometry,,sweep_line,,compute,,medium,standard,0.95,A,deepseek-v4.1-flash,v1,reviewed,El sketch ordena rectángulos y une intervalos de sombra.

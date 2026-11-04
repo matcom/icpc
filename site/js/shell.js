@@ -13,6 +13,7 @@ const NAV = [
   ["universidades", "Universidades", "⌂"],
   ["renovacion", "Renovación", "↻"],
   ["problemas", "Problemas", "✓"],
+  ["complejidad", "Complejidad", "◆"],
   ["medallas", "Medallas", "★"],
   ["competidores", "Competidores", "☺"],
   ["predicciones", "Predicciones", "◔"],

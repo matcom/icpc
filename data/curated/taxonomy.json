@@ -1,0 +1,464 @@
+{
+  "version": "v1",
+  "generated_at": "2026-11-03",
+  "dimensions": {
+    "areas": [
+      {
+        "id": "graphs",
+        "label": "Grafos",
+        "definition": "Vértices, aristas, caminos, conectividad y árboles."
+      },
+      {
+        "id": "geometry",
+        "label": "Geometría",
+        "definition": "Puntos, rectas, polígonos y configuraciones espaciales."
+      },
+      {
+        "id": "strings",
+        "label": "Strings",
+        "definition": "Secuencias de caracteres, patrones y texto."
+      },
+      {
+        "id": "number_theory",
+        "label": "Teoría de números",
+        "definition": "Enteros, divisibilidad, primos y congruencias."
+      },
+      {
+        "id": "combinatorics",
+        "label": "Combinatoria",
+        "definition": "Conteo, permutaciones, particiones y estructuras discretas."
+      },
+      {
+        "id": "algebra",
+        "label": "Álgebra",
+        "definition": "Ecuaciones, matrices, polinomios y estructuras algebraicas."
+      },
+      {
+        "id": "probability",
+        "label": "Probabilidad",
+        "definition": "Variables aleatorias, esperanza y distribuciones."
+      },
+      {
+        "id": "logic",
+        "label": "Lógica y teoría de la computación",
+        "definition": "Autómatas, gramáticas, SAT, reducciones y teoría de la computación."
+      },
+      {
+        "id": "games",
+        "label": "Juegos",
+        "definition": "Jugadores, movimientos y estrategias."
+      },
+      {
+        "id": "optimization",
+        "label": "Optimización matemática",
+        "definition": "Programación lineal, scheduling y assignment."
+      },
+      {
+        "id": "sequences",
+        "label": "Secuencias y consultas",
+        "definition": "Arreglos, intervalos y consultas sobre secuencias."
+      },
+      {
+        "id": "general",
+        "label": "General / Ad-hoc",
+        "definition": "Problemas sin un área específica; la técnica es la que discrimina."
+      }
+    ],
+    "techniques": [
+      {
+        "id": "brute_force",
+        "label": "Fuerza bruta",
+        "family": "paradigms",
+        "definition": "Búsqueda exhaustiva del espacio de soluciones."
+      },
+      {
+        "id": "backtracking",
+        "label": "Backtracking",
+        "family": "paradigms",
+        "definition": "Búsqueda con retroceso y poda."
+      },
+      {
+        "id": "dynamic_programming",
+        "label": "Programación dinámica",
+        "family": "paradigms",
+        "definition": "Estados y transiciones para reutilizar subproblemas."
+      },
+      {
+        "id": "greedy",
+        "label": "Greedy",
+        "family": "paradigms",
+        "definition": "Decisiones locales que se prueban óptimas."
+      },
+      {
+        "id": "divide_and_conquer",
+        "label": "Divide y vencerás",
+        "family": "paradigms",
+        "definition": "Dividir el problema, resolver partes y combinar."
+      },
+      {
+        "id": "binary_search",
+        "label": "Búsqueda binaria",
+        "family": "paradigms",
+        "definition": "Búsqueda sobre un predicado monótono."
+      },
+      {
+        "id": "ternary_search",
+        "label": "Búsqueda ternaria",
+        "family": "paradigms",
+        "definition": "Optimización de funciones unimodales."
+      },
+      {
+        "id": "two_pointers",
+        "label": "Two pointers",
+        "family": "paradigms",
+        "definition": "Dos índices que recorren la estructura."
+      },
+      {
+        "id": "meet_in_the_middle",
+        "label": "Meet in the middle",
+        "family": "paradigms",
+        "definition": "Partir el espacio y combinar mitades."
+      },
+      {
+        "id": "constructive",
+        "label": "Constructivo",
+        "family": "paradigms",
+        "definition": "Construir una solución paso a paso."
+      },
+      {
+        "id": "direct_implementation",
+        "label": "Implementación directa",
+        "family": "paradigms",
+        "definition": "Resolver con lógica y código directo, sin una técnica estándar."
+      },
+      {
+        "id": "simulation",
+        "label": "Simulación directa",
+        "family": "paradigms",
+        "definition": "Reproducir el proceso paso a paso."
+      },
+      {
+        "id": "parsing",
+        "label": "Parsing",
+        "family": "paradigms",
+        "definition": "Interpretar y transformar una entrada estructurada."
+      },
+      {
+        "id": "segment_tree",
+        "label": "Segment tree",
+        "family": "data_structures",
+        "definition": "Árbol de segmentos para consultas y actualizaciones."
+      },
+      {
+        "id": "fenwick",
+        "label": "Fenwick",
+        "family": "data_structures",
+        "definition": "Árbol de Fenwick para sumas prefijas dinámicas."
+      },
+      {
+        "id": "dsu",
+        "label": "DSU",
+        "family": "data_structures",
+        "definition": "Union-find para componentes disjuntas."
+      },
+      {
+        "id": "heap",
+        "label": "Heap",
+        "family": "data_structures",
+        "definition": "Cola de prioridad."
+      },
+      {
+        "id": "hashing",
+        "label": "Hashing",
+        "family": "data_structures",
+        "definition": "Hash para comparar o indexar."
+      },
+      {
+        "id": "prefix_sums",
+        "label": "Sumas prefijas",
+        "family": "data_structures",
+        "definition": "Acumulados para consultas de rango."
+      },
+      {
+        "id": "sparse_table",
+        "label": "Sparse table",
+        "family": "data_structures",
+        "definition": "Consultas idempotentes en rango."
+      },
+      {
+        "id": "data_structure_design",
+        "label": "Diseño de estructuras de datos",
+        "family": "data_structures",
+        "definition": "Diseñar una estructura a medida."
+      },
+      {
+        "id": "coordinate_compression",
+        "label": "Compresión de coordenadas",
+        "family": "data_structures",
+        "definition": "Reducir coordenadas a rangos."
+      },
+      {
+        "id": "bitmask",
+        "label": "Bitmask",
+        "family": "data_structures",
+        "definition": "Representar conjuntos con bits."
+      },
+      {
+        "id": "sorting",
+        "label": "Ordenamiento",
+        "family": "data_structures",
+        "definition": "Ordenar como paso principal."
+      },
+      {
+        "id": "graph_reasoning",
+        "label": "Modelado de grafos",
+        "family": "graphs",
+        "definition": "Modelar y razonar sobre grafos."
+      },
+      {
+        "id": "shortest_path",
+        "label": "Camino más corto",
+        "family": "graphs",
+        "definition": "Dijkstra, Bellman-Ford, Floyd-Warshall."
+      },
+      {
+        "id": "mst",
+        "label": "Árbol de expansión mínima",
+        "family": "graphs",
+        "definition": "Kruskal, Prim."
+      },
+      {
+        "id": "flow",
+        "label": "Flujo",
+        "family": "graphs",
+        "definition": "Flujo máximo y min-cost flow."
+      },
+      {
+        "id": "matching",
+        "label": "Matching",
+        "family": "graphs",
+        "definition": "Emparejamientos en grafos."
+      },
+      {
+        "id": "scc",
+        "label": "Componentes fuertemente conexas",
+        "family": "graphs",
+        "definition": "Tarjan, Kosaraju."
+      },
+      {
+        "id": "topological_sort",
+        "label": "Ordenamiento topológico",
+        "family": "graphs",
+        "definition": "Ordenar un DAG."
+      },
+      {
+        "id": "lca",
+        "label": "LCA",
+        "family": "graphs",
+        "definition": "Ancestro común más bajo."
+      },
+      {
+        "id": "string_matching",
+        "label": "Matching de strings",
+        "family": "strings",
+        "definition": "KMP, Z, búsqueda de patrones."
+      },
+      {
+        "id": "suffix_structures",
+        "label": "Estructuras de sufijos",
+        "family": "strings",
+        "definition": "Suffix array, suffix automaton."
+      },
+      {
+        "id": "palindromes",
+        "label": "Palíndromos",
+        "family": "strings",
+        "definition": "Manacher, hashing de palíndromos."
+      },
+      {
+        "id": "geometric_reasoning",
+        "label": "Modelado geométrico",
+        "family": "geometry",
+        "definition": "Modelar y calcular geometría."
+      },
+      {
+        "id": "sweep_line",
+        "label": "Sweep line",
+        "family": "geometry",
+        "definition": "Barrer eventos geométricos."
+      },
+      {
+        "id": "convex_hull",
+        "label": "Convex hull",
+        "family": "geometry",
+        "definition": "Envolvente convexa."
+      },
+      {
+        "id": "rotating_calipers",
+        "label": "Rotating calipers",
+        "family": "geometry",
+        "definition": "Distancias y diámetros en polígonos."
+      },
+      {
+        "id": "math_reasoning",
+        "label": "Modelado matemático",
+        "family": "math",
+        "definition": "Modelar y demostrar propiedades."
+      },
+      {
+        "id": "number_theory",
+        "label": "Aritmética modular",
+        "family": "math",
+        "definition": "Primos, gcd, congruencias."
+      },
+      {
+        "id": "combinatorics",
+        "label": "Conteo combinatorio",
+        "family": "math",
+        "definition": "Conteo y estructuras discretas."
+      },
+      {
+        "id": "algebra",
+        "label": "Modelado algebraico",
+        "family": "math",
+        "definition": "Ecuaciones, matrices, polinomios."
+      },
+      {
+        "id": "probability",
+        "label": "Modelado probabilístico",
+        "family": "math",
+        "definition": "Esperanza, distribuciones."
+      },
+      {
+        "id": "fft",
+        "label": "FFT",
+        "family": "math",
+        "definition": "Transformada rápida de Fourier."
+      },
+      {
+        "id": "gaussian_elimination",
+        "label": "Eliminación gaussiana",
+        "family": "math",
+        "definition": "Sistemas lineales."
+      },
+      {
+        "id": "minimax",
+        "label": "Minimax",
+        "family": "games",
+        "definition": "Juegos de dos jugadores."
+      },
+      {
+        "id": "sprague_grundy",
+        "label": "Sprague-Grundy",
+        "family": "games",
+        "definition": "Juegos imparciales."
+      },
+      {
+        "id": "sat",
+        "label": "SAT / 2-SAT",
+        "family": "logic",
+        "definition": "Satisfacibilidad booleana."
+      },
+      {
+        "id": "automata",
+        "label": "Autómatas",
+        "family": "logic",
+        "definition": "Autómatas y lenguajes formales."
+      },
+      {
+        "id": "linear_programming",
+        "label": "Programación lineal",
+        "family": "optimization",
+        "definition": "Optimización con restricciones lineales."
+      },
+      {
+        "id": "scheduling",
+        "label": "Scheduling",
+        "family": "optimization",
+        "definition": "Planificación de tareas."
+      },
+      {
+        "id": "assignment",
+        "label": "Assignment",
+        "family": "optimization",
+        "definition": "Asignación de recursos."
+      },
+      {
+        "id": "approximation",
+        "label": "Aproximación",
+        "family": "optimization",
+        "definition": "Soluciones aproximadas."
+      },
+      {
+        "id": "randomization",
+        "label": "Aleatorización",
+        "family": "optimization",
+        "definition": "Algoritmos probabilísticos."
+      }
+    ],
+    "tasks": [
+      {
+        "id": "optimize",
+        "label": "Optimizar",
+        "definition": "Minimizar o maximizar."
+      },
+      {
+        "id": "count",
+        "label": "Contar",
+        "definition": "Contar objetos o configuraciones."
+      },
+      {
+        "id": "decide",
+        "label": "Decidir",
+        "definition": "Responder sí/no o determinar existencia."
+      },
+      {
+        "id": "construct",
+        "label": "Construir",
+        "definition": "Construir un objeto que cumpla condiciones."
+      },
+      {
+        "id": "simulate",
+        "label": "Simular",
+        "definition": "Reproducir un proceso."
+      },
+      {
+        "id": "compute",
+        "label": "Calcular",
+        "definition": "Calcular un valor."
+      }
+    ],
+    "burdens": [
+      {
+        "id": "low",
+        "label": "Baja",
+        "definition": "Poco código y pocos detalles."
+      },
+      {
+        "id": "medium",
+        "label": "Media",
+        "definition": "Implementación moderada."
+      },
+      {
+        "id": "high",
+        "label": "Alta",
+        "definition": "Mucho código, detalles o estructuras complejas."
+      },
+      {
+        "id": "unknown",
+        "label": "Sin asignar",
+        "definition": "No asignada; requiere revisión."
+      }
+    ],
+    "formats": [
+      {
+        "id": "standard",
+        "label": "Estándar"
+      },
+      {
+        "id": "interactive",
+        "label": "Interactivo"
+      }
+    ]
+  }
+}

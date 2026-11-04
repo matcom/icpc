@@ -97,8 +97,8 @@ startPage({
       card(a, {
         title: "Todos los países", span: 12,
         html: table(
-          ["País", "Región", { label: "Particip.", num: 1, title: "Participaciones: cada equipo en cada final suma una" }, { label: "Univ.", num: 1 }, { label: "Ediciones", num: 1 }, { label: "Mejor", num: 1 }, { label: "Perc. medio", num: 1 }, { label: "Oro", num: 1 }, { label: "Plata", num: 1 }, { label: "Bronce", num: 1 }],
-          ordered.map((e) => [`<a href="${countryUrl(e.name)}">${esc(countryName(data, e.name))}</a>`, esc(data.regions[e.region] ?? ""), e.rows.length, e.unis.size, e.years.size, e.best === 1e9 ? "—" : Math.round(e.best), Math.round(e.avg), e.medals.gold, e.medals.silver, e.medals.bronze]),
+          ["País", "Región", { label: "Particip.", num: 1, title: "Participaciones: cada equipo en cada final suma una" }, { label: "Univ.", num: 1 }, { label: "Ediciones", num: 1 }, { label: "Mejor", num: 1 }, { label: "Perc. medio", num: 1 }, { label: "Oro", num: 1 }, { label: "Plata", num: 1 }, { label: "Bronce", num: 1 }, { label: "Total", num: 1 }],
+          ordered.map((e) => [`<a href="${countryUrl(e.name)}">${esc(countryName(data, e.name))}</a>`, esc(data.regions[e.region] ?? ""), e.rows.length, e.unis.size, e.years.size, e.best === 1e9 ? "—" : Math.round(e.best), Math.round(e.avg), e.medals.gold, e.medals.silver, e.medals.bronze, e.medals.gold + e.medals.silver + e.medals.bronze]),
         ),
       });
     };

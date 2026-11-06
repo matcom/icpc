@@ -1316,7 +1316,7 @@ def build_complexity(universities: list[dict], countries: dict, region_names: di
     def empty_profile() -> dict:
         return {
             "editions": 0, "solves": 0, "levels": [0] * 6,
-            "attempts": 0, "attemptsByLevel": [0] * 6,
+            "attempts": 0, "attemptsByLevel": [0] * 6, "attemptedRowsByLevel": [0] * 6,
             "areas": Counter(), "techniques": Counter(), "tasks": Counter(),
             "burdens": Counter(), "formats": Counter(),
             "solvedProblems": set(), "attemptedProblems": set(),
@@ -1326,6 +1326,7 @@ def build_complexity(universities: list[dict], countries: dict, region_names: di
     country_profiles = defaultdict(empty_profile)
     region_profiles = defaultdict(empty_profile)
     team_profiles = defaultdict(empty_profile)
+    world_profile = {"world": empty_profile()}
     seen_editions = {"uni": defaultdict(set), "country": defaultdict(set), "region": defaultdict(set)}
 
     for row in matrix:
@@ -1353,10 +1354,11 @@ def build_complexity(universities: list[dict], countries: dict, region_names: di
                 quartiles[q]["areas"][topic["primary_area"]] += 1
                 quartiles[q]["techniques"][topic["primary_technique"]] += 1
                 quartiles[q]["burdens"][topic["implementation_burden"]] += 1
-        for profile, key in ((uni_profiles, uni), (country_profiles, country), (region_profiles, region), (team_profiles, tkey)):
+        for profile, key in ((uni_profiles, uni), (country_profiles, country), (region_profiles, region), (team_profiles, tkey), (world_profile, "world")):
             profile[key]["attempts"] += attempts
             profile[key]["attemptsByLevel"][level - 1] += attempts
             if attempts:
+                profile[key]["attemptedRowsByLevel"][level - 1] += 1
                 profile[key]["attemptedProblems"].add(problem["id"])
             if solved:
                 profile[key]["solves"] += 1
@@ -1406,6 +1408,8 @@ def build_complexity(universities: list[dict], countries: dict, region_names: di
             "meanLevel": round(sum((i + 1) * n for i, n in enumerate(levels)) / solves, 2) if solves else None,
             "attempts": attempts,
             "attemptsByLevel": attempts_by_level,
+            "attemptedRowsByLevel": profile["attemptedRowsByLevel"],
+            "levelRates": [round(100 * s / a, 1) if a else None for s, a in zip(levels, profile["attemptedRowsByLevel"])],
             "attemptsPerSolve": round(attempts / solves, 2) if solves else None,
             "failureRate": [round((a - s) / a, 4) if a else None for a, s in zip(attempts_by_level, levels)],
             "areas": dict(profile["areas"]),
@@ -1497,6 +1501,8 @@ def build_complexity(universities: list[dict], countries: dict, region_names: di
         solved_burdens[problem["burden"]] += solved
         solved_levels[problem["level"] - 1] += solved
 
+    world_payload = finish_profile(world_profile["world"])
+
     average_edition = {
         "year": "avg",
         "label": "Promedio 2011–2025",
@@ -1537,6 +1543,7 @@ def build_complexity(universities: list[dict], countries: dict, region_names: di
         "countries": countries_payload,
         "teams": teams_payload,
         "regions": regions_payload,
+        "world": world_payload,
         "techniqueArea": technique_area,
         "totals": {
             "levels": level_counts(problems),
@@ -1693,6 +1700,8 @@ def build_complexity_search(complexity: dict) -> dict:
             "meanLevel": profile.get("meanLevel"),
             "levels": profile.get("levels", [0] * 6),
             "solves": profile.get("solves", 0),
+            "levelRates": profile.get("levelRates", [None] * 6),
+            "levelAttempts": profile.get("attemptedRowsByLevel", [0] * 6),
             "topAreas": top_areas,
             "topTechnique": top_technique,
         }
@@ -1706,6 +1715,7 @@ def build_complexity_search(complexity: dict) -> dict:
         index[f"t:{team['key']}"] = compact(team)
     for region in complexity.get("regions", []):
         index[f"r:{region['id']}"] = compact(region)
+    index["w:world"] = compact(complexity["world"])
     return index
 
 
@@ -1736,13 +1746,20 @@ def build_cuba_complexity(complexity: dict, cuba: dict) -> dict:
     matrix = [row for row in read_curated_csv("scoreboard-matrix.csv") if 2011 <= int(row["year"]) <= 2025]
     cuba_rows = [row for row in matrix if row["country"] == "Cuba"]
 
+    country_region = {country["name"]: country.get("region") for country in complexity["countries"]}
     field_levels = {level: {"rows": 0, "attempted": 0, "solved": 0} for level in range(1, 7)}
+    latam_levels = {level: {"rows": 0, "attempted": 0, "solved": 0} for level in range(1, 7)}
     for row in matrix:
         problem = problems[f'wf-{row["year"]}-{row["letter"].lower()}']
         stats = field_levels[problem["level"]]
         stats["rows"] += 1
         stats["attempted"] += 1 if int(row["attempts"] or 0) > 0 else 0
         stats["solved"] += 1 if int(row["solved"] or 0) > 0 else 0
+        if country_region.get(row["country"]) == "la":
+            lstats = latam_levels[problem["level"]]
+            lstats["rows"] += 1
+            lstats["attempted"] += 1 if int(row["attempts"] or 0) > 0 else 0
+            lstats["solved"] += 1 if int(row["solved"] or 0) > 0 else 0
 
     by_problem = defaultdict(lambda: {"teams": 0, "solved": 0, "attempts": 0})
     level_stats = {level: {"rows": 0, "attempted": 0, "solved": 0} for level in range(1, 7)}
@@ -1940,6 +1957,13 @@ def build_cuba_complexity(complexity: dict, cuba: dict) -> dict:
          "total": next(region["solves"] for region in complexity["regions"] if region["id"] == "la")},
         {"label": "Mundo", "levels": complexity["totals"]["solvedLevels"], "total": total_solves},
     ]
+    def level_rates(stats):
+        return [round(100 * stats[level]["solved"] / stats[level]["attempted"], 1) if stats[level]["attempted"] else None for level in range(1, 7)]
+    comparison_rates = [
+        {"label": "Cuba", "levelRates": level_rates(level_stats)},
+        {"label": "Latinoamérica", "levelRates": level_rates(latam_levels)},
+        {"label": "Mundo", "levelRates": level_rates(field_levels)},
+    ]
 
     edition_2025 = next((edition for edition in complexity["editions"] if edition["year"] == 2025), None)
     field_2025 = cuba_field.get(2025, {})
@@ -1975,6 +1999,7 @@ def build_cuba_complexity(complexity: dict, cuba: dict) -> dict:
         "universities": universities_payload,
         "similarCountries": similar_countries[:5],
         "comparison": comparison,
+        "comparisonRates": comparison_rates,
         "firstSolve": {
             "teams": len(first_rows), "byLevel": first_by_level,
             "byArea": dict(first_by_area), "rows": first_rows,

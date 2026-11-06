@@ -1,5 +1,5 @@
 import { avg, compareUrl, countryName, countryUrl, crest, esc, loadComplexitySearch, medalCounts, params, personUrl, uniSeries, uniUrl } from "../core.js";
-import { categoryAxis, colors, historyChart, plot, valueAxis } from "../charts.js";
+import { categoryAxis, colors, historyChart, levelRatePlot, plot, valueAxis } from "../charts.js";
 import { chipLinks, complexityPanel, ficha, forecastCallout, medalDonut, teamLink, universityFacts } from "../profile.js";
 import { card, chartCard, grid, kpis, sequenceSvg, startPage, table } from "../shell.js";
 
@@ -35,6 +35,24 @@ startPage({
     const cxBody = card(a, { title: "Complejidad y temas", span: 12, sub: "Problemas resueltos por la universidad, 2011–2025", html: '<p class="sub">Cargando perfil de complejidad…</p>' });
     loadComplexitySearch().then((index) => {
       if (cxBody.isConnected) cxBody.innerHTML = complexityPanel(index[`u:${uni.id}`]);
+    });
+    const countryMeta = data.countriesIndex.get(uni.country);
+    const region = countryMeta?.region;
+    const regionLabel = data.regions?.[region] ?? "Región";
+    const ratesBody = chartCard(a, {
+      title: "Resuelve por nivel",
+      sub: "De los problemas que enfrentó, % resueltos en cada nivel. 100 % = todos los enfrentados.",
+      span: 12, height: 300,
+    });
+    loadComplexitySearch().then((index) => {
+      if (!ratesBody.isConnected) return;
+      const own = index[`u:${uni.id}`], country = index[`c:${uni.country}`], reg = index[`r:${region}`], world = index["w:world"];
+      levelRatePlot(ratesBody, [
+        { name: uni.name, data: own?.levelRates ?? [], attempts: own?.levelAttempts, color: colors().accent },
+        { name: countryName(data, uni.country), data: country?.levelRates ?? [], attempts: country?.levelAttempts, color: colors().blue },
+        { name: regionLabel, data: reg?.levelRates ?? [], attempts: reg?.levelAttempts, color: colors().gold },
+        { name: "Mundo", data: world?.levelRates ?? [], attempts: world?.levelAttempts, color: colors().dim },
+      ]);
     });
     const similarIds = data.predictions.similar[uni.id] ?? [];
     const similar = similarIds.map((id) => ({ name: data.byId.get(id).name, series: uniSeries(data.byId.get(id)), id }));

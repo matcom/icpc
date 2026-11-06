@@ -1,5 +1,5 @@
 import { REGION_COLORS, avg, compareUrl, countryName, countrySeries, countryUrl, crest, esc, loadComplexitySearch, medalCounts, params, personUrl, uniUrl } from "../core.js";
-import { categoryAxis, colors, donut, historyChart, plot, valueAxis } from "../charts.js";
+import { categoryAxis, colors, donut, historyChart, levelRatePlot, plot, valueAxis } from "../charts.js";
 import { chipLinks, complexityPanel, forecastCallout, medalDonut, teamLink } from "../profile.js";
 import { card, chartCard, grid, kpis, startPage, table } from "../shell.js";
 
@@ -38,6 +38,20 @@ startPage({
     const cxBody = card(a, { title: "Complejidad y temas", span: 12, sub: "Problemas resueltos por el país, 2011–2025", html: '<p class="sub">Cargando perfil de complejidad…</p>' });
     loadComplexitySearch().then((index) => {
       if (cxBody.isConnected) cxBody.innerHTML = complexityPanel(index[`c:${name}`]);
+    });
+    const ratesBody = chartCard(a, {
+      title: "Resuelve por nivel",
+      sub: "De los problemas que enfrentó, % resueltos en cada nivel. 100 % = todos los enfrentados.",
+      span: 12, height: 300,
+    });
+    loadComplexitySearch().then((index) => {
+      if (!ratesBody.isConnected) return;
+      const own = index[`c:${name}`], reg = index[`r:${country.region}`], world = index["w:world"];
+      levelRatePlot(ratesBody, [
+        { name: country.es, data: own?.levelRates ?? [], attempts: own?.levelAttempts, color: colors().accent },
+        { name: data.regions[country.region] ?? "Región", data: reg?.levelRates ?? [], attempts: reg?.levelAttempts, color: colors().blue },
+        { name: "Mundo", data: world?.levelRates ?? [], attempts: world?.levelAttempts, color: colors().dim },
+      ]);
     });
     const similar = (predict?.similar ?? []).map((n) => ({ name: countryName(data, n), series: countrySeries(data.countriesIndex.get(n)), key: n }));
     const historyBody = card(a, {

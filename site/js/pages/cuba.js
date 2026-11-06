@@ -1,6 +1,6 @@
 // Cuba: the country slice, its field, its Latin-American podiums and its people.
 import { countryUrl, crest, esc, personUrl, teamUrl, uniUrl } from "../core.js";
-import { categoryAxis, colors, donut, plot, valueAxis } from "../charts.js";
+import { categoryAxis, colors, donut, levelColor, levelRatePlot, plot, valueAxis } from "../charts.js";
 import { barList, card, chartCard, grid, isDark, kpis, startPage, table } from "../shell.js";
 
 /* global echarts */
@@ -152,9 +152,6 @@ function rangeRow(row, min, span, selected, cubaTeams) {
   </div>`;
 }
 
-const LEVEL_LIGHT = ["#4f9a8c", "#7fb3e4", "#fdb830", "#d97f45", "#af3227", "#6d222e"];
-const LEVEL_DARK = ["#4f9a8c", "#7fb3e4", "#fdb830", "#d97f45", "#f0735f", "#b05a72"];
-const levelColor = (index) => (isDark() ? LEVEL_DARK : LEVEL_LIGHT)[index];
 const namedAxis = (name, extra = {}) => valueAxis({ name, nameLocation: "middle", nameGap: 38, nameRotate: 90, nameTextStyle: { color: colors().dim }, ...extra });
 
 function drawCubaAttempts(el, payload) {
@@ -843,6 +840,14 @@ function draw(view, data, cuba, cubaMap, cubaComplexity) {
       sub: "De los problemas que intentó, porcentaje que resolvió. En N3 el campo convierte 78%; Cuba, 31%.",
     });
     drawCubaConditional(conditional, cubaComplexity);
+
+    const rates = chartCard(d, {
+      title: "Resuelve por nivel", span: 7, height: 320,
+      sub: "De los problemas que enfrentó, % resueltos en cada nivel. 100 % = todos los enfrentados.",
+    });
+    levelRatePlot(rates, cubaComplexity.comparisonRates.map((row, i) => ({
+      name: row.label, data: row.levelRates, color: [colors().accent, colors().blue, colors().dim][i],
+    })));
 
     const mix = card(d, {
       title: "La mezcla de lo resuelto", span: 5,

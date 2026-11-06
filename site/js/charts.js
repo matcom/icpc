@@ -6,6 +6,12 @@ const observers = new Map();
 
 const css = (name) => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
 
+const LIGHT_LEVELS = ["#4f9a8c", "#7fb3e4", "#fdb830", "#d97f45", "#af3227", "#6d222e"];
+const DARK_LEVELS = ["#4f9a8c", "#7fb3e4", "#fdb830", "#d97f45", "#f0735f", "#b05a72"];
+
+// One palette for every N1–N6 visualization in the site.
+export const levelColor = (index) => (document.documentElement.dataset.theme === "vino" ? DARK_LEVELS : LIGHT_LEVELS)[index];
+
 export const colors = () => ({
   ink: css("--ink"), dim: css("--dim"), line: css("--line"), panel: css("--panel"), panel2: css("--panel2"),
   accent: css("--accent"), blue: css("--blue-t"), red: css("--red-t"), gold: css("--gold"), land: css("--land"),
@@ -179,5 +185,33 @@ export function historyChart(el, { name, series, similar, forecast, nextYear, fi
     xAxis: categoryAxis(years.map(String), { boundaryGap: false }),
     yAxis: valueAxis({ min: 0, max: 100, name: "Percentil", nameTextStyle: { color: c.dim } }),
     series: options,
+  });
+}
+
+// Shared grouped bars: percentage of faced problems solved in each level, 2011–2025.
+export function levelRatePlot(el, series) {
+  const c = colors();
+  const dense = series.length >= 5;
+  plot(el, {
+    legend: { top: 0, left: 0, textStyle: { color: c.dim, fontSize: 13 } },
+    tooltip: {
+      trigger: "axis",
+      formatter: (params) => params.map((p) => {
+        const attempts = p.data && typeof p.data === "object" ? p.data.attempts : null;
+        return `${p.marker}${p.seriesName}: ${p.value == null ? "—" : `${p.value}%`}${attempts == null ? "" : ` · ${attempts} intentos`}`;
+      }).join("<br>"),
+    },
+    grid: { top: 38, left: 8, right: 42, bottom: 8, containLabel: true },
+    xAxis: valueAxis({ min: 0, max: 100, axisLabel: { color: c.dim, fontSize: 12, formatter: "{value}%" } }),
+    yAxis: categoryAxis(["N1", "N2", "N3", "N4", "N5", "N6"], { inverse: true, axisLabel: { color: c.ink, fontSize: 14, interval: 0 } }),
+    series: series.map((s) => ({
+      name: s.name,
+      type: "bar",
+      barMaxWidth: dense ? 9 : 12,
+      barGap: dense ? "8%" : "12%",
+      itemStyle: { color: s.color, borderRadius: [0, 3, 3, 0] },
+      label: { show: true, position: "right", color: c.ink, fontSize: dense ? 10 : 11, formatter: (p) => (p.value == null ? "" : `${Math.round(p.value)}%`) },
+      data: s.data.map((value, index) => ({ value, attempts: s.attempts ? s.attempts[index] : null })),
+    })),
   });
 }

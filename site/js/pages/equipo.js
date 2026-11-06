@@ -1,5 +1,5 @@
 import { countryName, countryUrl, crest, esc, fold, loadComplexitySearch, medalCounts, params, personUrl, teamKey, teamUrl, uniUrl } from "../core.js";
-import { categoryAxis, colors, plot, valueAxis } from "../charts.js";
+import { categoryAxis, colors, levelRatePlot, plot, valueAxis } from "../charts.js";
 import { complexityPanel, ficha, medalDonut, teamFacts } from "../profile.js";
 import { card, chartCard, grid, kpis, startPage, table } from "../shell.js";
 
@@ -35,6 +35,25 @@ startPage({
     const cxBody = card(a, { title: "Complejidad y temas", span: 12, sub: "Problemas resueltos por el equipo, 2011–2025", html: '<p class="sub">Cargando perfil de complejidad…</p>' });
     loadComplexitySearch().then((index) => {
       if (cxBody.isConnected) cxBody.innerHTML = complexityPanel(index[`t:${teamKey(uni.id, name)}`]);
+    });
+    const countryMeta = data.countriesIndex.get(uni.country);
+    const region = countryMeta?.region;
+    const regionLabel = data.regions?.[region] ?? "Región";
+    const ratesBody = chartCard(a, {
+      title: "Resuelve por nivel",
+      sub: "De los problemas que enfrentó, % resueltos en cada nivel. Muestra pequeña: orientativo.",
+      span: 12, height: 360,
+    });
+    loadComplexitySearch().then((index) => {
+      if (!ratesBody.isConnected) return;
+      const own = index[`t:${teamKey(uni.id, name)}`], university = index[`u:${uni.id}`], country = index[`c:${uni.country}`], reg = index[`r:${region}`], world = index["w:world"];
+      levelRatePlot(ratesBody, [
+        { name, data: own?.levelRates ?? [], attempts: own?.levelAttempts, color: colors().accent },
+        { name: uni.name, data: university?.levelRates ?? [], attempts: university?.levelAttempts, color: colors().blue },
+        { name: countryName(data, uni.country), data: country?.levelRates ?? [], attempts: country?.levelAttempts, color: colors().gold },
+        { name: regionLabel, data: reg?.levelRates ?? [], attempts: reg?.levelAttempts, color: "#4f9a8c" },
+        { name: "Mundo", data: world?.levelRates ?? [], attempts: world?.levelAttempts, color: colors().dim },
+      ]);
     });
     const c = colors();
     plot(chartCard(a, { title: "Su trayectoria", sub: "Percentil en cada final (100 es el campeón)", span: 6, height: 300 }), {

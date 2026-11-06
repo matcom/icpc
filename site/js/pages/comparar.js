@@ -3,7 +3,7 @@ import {
   medalCounts, params, personUrl, quantile, teamKey, teamSeries, teamUrl,
   uniSeries, uniUrl,
 } from "../core.js";
-import { categoryAxis, colors, dispose, palette, plot, valueAxis } from "../charts.js";
+import { categoryAxis, colors, dispose, levelColor, palette, plot, valueAxis } from "../charts.js";
 import { bestResult } from "../profile.js";
 import { card, chartCard, grid, isDark, startPage } from "../shell.js";
 
@@ -13,7 +13,6 @@ const CLASS = {
   c: { label: "Países", one: "País", defaults: ["Cuba", "Mexico"] },
   t: { label: "Equipos", one: "Equipo" },
 };
-const LEVEL_COLORS = ["#d9c9a3", "#c9a86a", "#d97f45", "#af3227", "#8e3b5c", "#4a1520"];
 
 let complexityPromise = null;
 
@@ -400,7 +399,7 @@ startPage({
         yAxis: valueAxis({ min: 0, max: 100, axisLabel: { formatter: "{value}%" } }),
         series: levelNames.map((name, level) => ({
           name, type: "bar", stack: "levels", barMaxWidth: 42,
-          itemStyle: { color: LEVEL_COLORS[level] },
+          itemStyle: { color: levelColor(level) },
           data: levelStats.map((s) => {
             const total = s.levels.reduce((sum, value) => sum + value, 0);
             return total ? +(100 * s.levels[level] / total).toFixed(1) : 0;

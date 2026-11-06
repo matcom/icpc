@@ -1,5 +1,6 @@
 // Parts shared by the university, country, team and competitor profiles.
 import { MEDAL_NAMES, TITLE_NAMES, esc, fold, medalIcon, personUrl, teamUrl, uniUrl } from "./core.js";
+import { levelColor } from "./charts.js";
 
 export const forecastCallout = (forecast, field, year) => (forecast?.pct != null
   ? `<div class="callout">Proyección ${year}: <b>puesto ${forecast.rank}</b> de ${field} (la mitad de las simulaciones entre ${forecast.rank_best} y ${forecast.rank_worst})${forecast.kind === "presumed" ? `, si asiste; su plaza es supuesta (${Math.round(forecast.attend * 100)} %)` : ""}. <a href="predicciones.html">Ver probabilidades</a>.</div>`
@@ -15,14 +16,12 @@ export function medalDonut(el, counts) {
 
 export const chipLinks = (items) => `<div class="chips">${items.map((i) => `<a class="chip" href="${esc(i.url)}">${i.mark ?? ""}${esc(i.label)}</a>`).join("")}</div>`;
 
-const LEVEL_COLORS = ["#d9c9a3", "#c9a86a", "#d97f45", "#af3227", "#8e3b5c", "#4a1520"];
-
 export function complexityPanel(profile) {
   if (!profile) return '<p class="sub">Sin perfil de complejidad para 2011–2025.</p>';
   const total = (profile.levels ?? []).reduce((sum, value) => sum + value, 0);
   if (!total) return '<p class="sub">Sin solves de complejidad para 2011–2025.</p>';
   const levels = profile.levels.map((value, index) => (value
-    ? `<i style="width:${(100 * value / total).toFixed(1)}%;background:${LEVEL_COLORS[index]}" title="N${index + 1}: ${value}"></i>`
+    ? `<i style="width:${(100 * value / total).toFixed(1)}%;background:${levelColor(index)}" title="N${index + 1}: ${value}"></i>`
     : "")).join("");
   const areas = (profile.topAreas ?? []).map((area) => `${esc(area.label)}${area.share == null ? "" : ` ${Math.round(area.share)}%`}`).join(" · ");
   const technique = profile.topTechnique ? `${esc(profile.topTechnique.label)}${profile.topTechnique.share == null ? "" : ` ${Math.round(profile.topTechnique.share)}%`}` : "—";

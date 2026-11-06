@@ -1,7 +1,7 @@
 import { crest, esc, fold } from "../core.js";
 import { fuzzyFilter } from "../fuzzy.js";
-import { categoryAxis, colors, plot, valueAxis } from "../charts.js";
-import { card, grid, isDark, kpis, startPage } from "../shell.js";
+import { categoryAxis, colors, levelColor, levelRatePlot, plot, valueAxis } from "../charts.js";
+import { card, grid, kpis, startPage } from "../shell.js";
 
 const complexity = await fetch("data/complexity.json", { cache: "no-cache" })
   .then((response) => (response.ok ? response.json() : null))
@@ -22,8 +22,6 @@ if (!complexity) {
     .filter(([id, label]) => id && label)
     .sort((left, right) => left[1].localeCompare(right[1], "es"));
 
-  const LIGHT_LEVELS = ["#4f9a8c", "#7fb3e4", "#fdb830", "#d97f45", "#af3227", "#6d222e"];
-  const DARK_LEVELS = ["#4f9a8c", "#7fb3e4", "#fdb830", "#d97f45", "#f0735f", "#b05a72"];
   const QUARTILE_COLORS = ["#6d222e", "#2f6aa3", "#d97f45", "#8a8a8a"];
   const TECH_SHORT = {
     dynamic_programming: "DP",
@@ -35,8 +33,6 @@ if (!complexity) {
     brute_force: "Fuerza bruta",
     algebra: "Álgebra",
   };
-  const levelColors = () => (isDark() ? DARK_LEVELS : LIGHT_LEVELS);
-  const levelColor = (index) => levelColors()[index];
   const levelName = (level) => {
     const item = complexity.levels[level - 1];
     return `N${item.level} · ${item.label}`;
@@ -1274,9 +1270,32 @@ if (!complexity) {
           <h3>Técnicas</h3>
           ${specBlock(entity, "techniques")}
         </div>
+        <div class="profile-block" style="grid-column:1/-1">
+          <h3>Resuelve por nivel</h3>
+          <div class="plot" id="profile-level-rates" style="height:300px"></div>
+          <p class="profile-note">De los problemas que enfrentó, % resueltos en cada nivel. 100 % = todos los enfrentados.</p>
+        </div>
       </div>
       <div class="profile-similar">${similarHtml(entity, kind)}</div>`;
 
+    const ratesEl = body.querySelector("#profile-level-rates");
+    if (ratesEl) {
+      const regionProfile = complexity.regions.find((region) => region.id === entity.region);
+      const country = countryProfile || countryByName.get(entity.country);
+      const series = isCountry
+        ? [
+            { name: entity.label, data: entity.levelRates ?? [], color: colors().accent },
+            { name: entity.regionLabel || regionProfile?.label || "Región", data: regionProfile?.levelRates ?? [], color: colors().blue },
+            { name: "Mundo", data: complexity.world?.levelRates ?? [], color: colors().dim },
+          ]
+        : [
+            { name: entity.name, data: entity.levelRates ?? [], color: colors().accent },
+            { name: country?.label || country?.name || "País", data: country?.levelRates ?? [], color: colors().blue },
+            { name: entity.regionLabel || regionProfile?.label || "Región", data: regionProfile?.levelRates ?? [], color: colors().gold },
+            { name: "Mundo", data: complexity.world?.levelRates ?? [], color: colors().dim },
+          ];
+      levelRatePlot(ratesEl, series);
+    }
     if (state.profile.compare) {
       const other = state.profile.compare.kind === "country"
         ? countryByName.get(state.profile.compare.id)

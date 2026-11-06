@@ -1,6 +1,6 @@
 // Page frame: navigation, search, theme, cards, KPIs and shared filters.
 import { crest, esc, loadComplexitySearch, loadData } from "./core.js";
-import { disposeAll } from "./charts.js";
+import { disposeAll, levelColor } from "./charts.js";
 import { watchSelects } from "./combobox.js";
 import { fuzzyFilter } from "./fuzzy.js";
 import { searchEntries } from "./search.js";
@@ -78,8 +78,6 @@ function wireTheme(draw) {
   });
 }
 
-const SEARCH_LEVEL_COLORS = ["#d9c9a3", "#c9a86a", "#d97f45", "#af3227", "#8e3b5c", "#4a1520"];
-
 function wireSearch(data) {
   const input = document.getElementById("q");
   const box = document.getElementById("res");
@@ -105,7 +103,7 @@ function wireSearch(data) {
     const total = profile.levels.reduce((sum, value) => sum + value, 0);
     if (!total) return '<span class="search-complexity empty">Sin solves de complejidad 2011–2025</span>';
     const bar = profile.levels.map((value, index) => (value
-      ? `<i style="width:${(100 * value / total).toFixed(1)}%;background:${SEARCH_LEVEL_COLORS[index]}" title="N${index + 1}: ${value}"></i>`
+      ? `<i style="width:${(100 * value / total).toFixed(1)}%;background:${levelColor(index)}" title="N${index + 1}: ${value}"></i>`
       : "")).join("");
     const topics = [
       ...(profile.topAreas ?? []).map((area) => `${esc(area.label)}${area.share == null ? "" : ` ${Math.round(area.share)}%`}`),
